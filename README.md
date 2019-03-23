@@ -1,6 +1,6 @@
 # ppiclF Documentation
 
-This is the official docuemtation of [ppiclF](https://github.com/dpzwick/ppiclF/) written with [Sphinx](http://www.sphinx-doc.org/).
+This is the official documentation of [ppiclF](https://github.com/dpzwick/ppiclF/) written with [Sphinx](http://www.sphinx-doc.org/).
 
 ## Editing the GitHub Page
 
