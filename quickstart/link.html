@@ -25,6 +25,7 @@
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
         <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -35,6 +36,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../examples.html" />
     <link rel="prev" title="Installing" href="install.html" /> 
 </head>
 
@@ -85,6 +87,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Linking to External Code</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 </ul>
 
             
@@ -153,14 +156,14 @@
             
   <div class="section" id="linking-to-external-code">
 <span id="linking"></span><h1>Linking to External Code<a class="headerlink" href="#linking-to-external-code" title="Permalink to this headline">¶</a></h1>
-<p>In order to use the ppiclF library that was built in the last step (see <a class="reference internal" href="install.html#installing"><span class="std std-ref">Installing</span></a>), the library file source/libppiclF.a must be linked to your existing code. This will be specific to your exisiting code compilation. However, ppiclF may be used on its own as well. An example of this is given in the simple MPI driver program in examples/stokes. We will use this to test the linking.</p>
+<p>In order to use the ppiclF library that was built in the last step (see <a class="reference internal" href="install.html#installing"><span class="std std-ref">Installing</span></a>), the library file source/libppiclF.a must be linked to your existing code. This will be specific to your exisiting code compilation. However, ppiclF may be used on its own as well. An example of this is given in the simple MPI driver program in examples/stokes_2d. We will use this to test the linking.</p>
 <p>First, create a working directory to run a case. We will call this TestCaseDir, and it should be located outside of the cloned GitHub repository ppiclF:</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">TestCaseDir</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir TestCaseDir
 </pre></div>
 </div>
 <p>The example case can then be copied from the cloned GitHub code to TestCaseDir</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">LocalCodeDir</span><span class="o">/</span><span class="n">ppiclF</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">stokes</span><span class="o">/*</span> <span class="n">TestCaseDir</span><span class="o">/</span>
-<span class="n">cd</span> <span class="n">TestCaseDir</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp -r LocalCodeDir/ppiclF/examples/stokes/* TestCaseDir/
+<span class="nb">cd</span> TestCaseDir
 </pre></div>
 </div>
 <p>Included in this test case is a simple Makefile, a driver program called test.f, and the user_source that was already compiled when we installed the library (see <a class="reference internal" href="install.html#installing"><span class="std std-ref">Installing</span></a>).</p>
@@ -176,6 +179,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="install.html" class="btn btn-neutral float-left" title="Installing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
