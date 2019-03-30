@@ -16,8 +16,8 @@ Then, set the appropriate properties in the files source/ppiclf_user.f and sourc
 
 .. code:: bash
 
-    cp examples/stokes/user_source/ppiclf_user.f source/
-    cp examples/stokes/user_source/ppiclf_user.h source/
+    cp examples/stokes_2d/user_source/ppiclf_user.f source/
+    cp examples/stokes_2d/user_source/ppiclf_user.h source/
 
 Now, set the appropriate parameters in the Makefile. For now, the only compiler supported is mpif77. Note that mpicc is also required for a 3rd party library. Due to this, the current Makefile does not need to be modified can the ppiclF library can be built by:
 

@@ -4,7 +4,7 @@
 Linking to External Code
 ------------------------
 
-In order to use the ppiclF library that was built in the last step (see :ref:`installing`), the library file source/libppiclF.a must be linked to your existing code. This will be specific to your exisiting code compilation. However, ppiclF may be used on its own as well. An example of this is given in the simple MPI driver program in examples/stokes. We will use this to test the linking. 
+In order to use the ppiclF library that was built in the last step (see :ref:`installing`), the library file source/libppiclF.a must be linked to your existing code. This will be specific to your exisiting code compilation. However, ppiclF may be used on its own as well. An example of this is given in the simple MPI driver program in examples/stokes_2d. We will use this to test the linking. 
 
 First, create a working directory to run a case. We will call this TestCaseDir, and it should be located outside of the cloned GitHub repository ppiclF:
 
