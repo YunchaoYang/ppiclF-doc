@@ -5,5 +5,5 @@ Quick Start Guide
 .. toctree::
    :maxdepth: 2
 
-   quickstart/install
+   quickstart/build
    quickstart/link
