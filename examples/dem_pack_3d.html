@@ -1,0 +1,685 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dem_pack_3d &mdash; ppiclF Documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Nek5000" href="Nek5000.html" />
+    <link rel="prev" title="stokes_2d" href="stokes_2d.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ppiclF
+          
+
+          
+            
+            <img src="../_static/ppiclF.gif" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="stokes_2d.html">stokes_2d</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">dem_pack_3d</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-h-file-ppiclf-user-h">The H-File (PPICLF_USER.h)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-f-file-ppiclf-user-f">The F-File (ppiclf_user.f)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-calls">External Calls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#boundary-specification">Boundary Specification</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Nek5000.html">Nek5000</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ppiclF</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../examples.html">Examples</a> &raquo;</li>
+        
+      <li>dem_pack_3d</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/examples/dem_pack_3d.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dem-pack-3d">
+<span id="dem3d"></span><h1>dem_pack_3d<a class="headerlink" href="#dem-pack-3d" title="Permalink to this headline">¶</a></h1>
+<div style="position: relative; padding-bottom: 10.00%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+   <iframe width="560" height="315" src="https://www.youtube.com/embed/0VSfiedYaCI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div><div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>This is an example that illustrates a particle packing in a realistic geometry. To accomplish this, an efficient neighbor search is performed along with reading in of external boundary conditions. The following system of equations is solved for the i particle</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}\dfrac{d \mathbf{X}^{(i)}}{d t} &amp;= \mathbf{V}^{(i)}, \\ M_p^{(i)} \dfrac{d \mathbf{V}^{(i)}}{d t} &amp;= \mathbf{F}_{c}^{(i)} + \mathbf{F}_b^{(i)}, \end{align}\end{split}\]</div>
+<p>where, for each particle we have the position vector <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>, the velocity vector <span class="math notranslate nohighlight">\(\mathbf{V}\)</span>, the collision force <span class="math notranslate nohighlight">\(\mathbf{F}_{c}\)</span>, and the weight force <span class="math notranslate nohighlight">\(\mathbf{F}_{b}\)</span>, defined by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{X}^{(i)} = \begin{bmatrix}X^{(i)} \\ Y^{(i)} \\ Z^{(i)} \end{bmatrix},\quad \mathbf{V}^{(i)} = \begin{bmatrix}V_x^{(i)} \\ V_y^{(i)} \\ V_z^{(i)} \end{bmatrix},\quad \mathbf{F}_{c}^{(i)} = \begin{bmatrix}F_{cx}^{(i)} \\ F_{cy}^{(i)} \\ F_{cz}^{(i)} \end{bmatrix} = \sum_{j=1}^{N_p^{(i)}}-k_c \delta^{(i,j)}\mathbf{n}^{(i,j)} - \eta \mathbf{V}^{(i,j)},\quad \mathbf{F}_{b} = M_p^{(i)} \begin{bmatrix}0 \\ g \\ 0\end{bmatrix}.\end{split}\]</div>
+<p>Here, we have used the mass of each particle, <span class="math notranslate nohighlight">\(M_p\)</span> and the gravitational acceleration <span class="math notranslate nohighlight">\(g\)</span>. Additionally, the collision force is a soft-sphere normal force which only acts on physically overlapping particles. Due to this, the particle must add the forces from all j overlapping nearby particles. The variable <span class="math notranslate nohighlight">\(N_p^{(i)}\)</span> is the number of nearby overlapping particles, which is local to the i particle itself.</p>
+<p>For the collision model, the user must specify the two numerical constants, which are the spring stiffness <span class="math notranslate nohighlight">\(k_c\)</span> and the coefficient of restitution <span class="math notranslate nohighlight">\(e_n\)</span>. The distance between two particle’s center locations is</p>
+<div class="math notranslate nohighlight">
+\[d^{(i,j)} = |\mathbf{X}^{(j)} - \mathbf{X}^{(i)}|.\]</div>
+<p>The unit normal vector between nearby particles is computed by</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{n}^{(i,j)} = (\mathbf{X}^{(j)} - \mathbf{X}^{(i)})/d^{(i,j)}.\]</div>
+<p>Two particles are said to be overlapping, and thus have a non-zero collision force, when the overlap <span class="math notranslate nohighlight">\(\delta^{(i,j)} &gt; 0\)</span>. The overlap is computed by</p>
+<div class="math notranslate nohighlight">
+\[\delta^{(i,j)} = \dfrac{1}{2} (D_p^{(i)} + D_p^{(j)}) - d^{(i,j)},\]</div>
+<p>where <span class="math notranslate nohighlight">\(D_p\)</span> is the particle’s diameter.</p>
+<p>Additionally, the particles dissipate energy when they collide. Thus, the collision force also includes the damping coefficient <span class="math notranslate nohighlight">\(\eta\)</span>, computed by</p>
+<div class="math notranslate nohighlight">
+\[\eta = -2 \sqrt{M^{(i,j)}k_c} \dfrac{\ln e_n}{\sqrt{\ln^2 e_n + \pi^2}},\]</div>
+<p>where <span class="math notranslate nohighlight">\(M^{(i,j)} = (1/M_p^{(i)} + 1/M_p^{(j)})^{-1}\)</span>. Additionally, we have the normal relative velocity which is</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{V}^{(i,j)} = ((\mathbf{V}^{(i)} - \mathbf{V}^{(j)}) \cdot \mathbf{n}^{(i,j)}) \mathbf{n}^{(i,j)}.\]</div>
+<p>Note that the time in collision can be computed by</p>
+<div class="math notranslate nohighlight">
+\[t_c = \sqrt{\dfrac{M^{(i,j)}}{k_c} (\ln^2 e_n + \pi^2)}.\]</div>
+<p>This time scale must be resolved in the simulation. As we will see, this sets practical limitations on the simulation time step.</p>
+<p>Thus, for each particle we can write the following system of equations</p>
+<div class="math notranslate nohighlight">
+\[\dfrac{d \mathbf{Y}^{(i)}}{d t} = \dot{\mathbf{Y}^{(i)}},\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{Y}^{(i)} = \begin{bmatrix}X^{(i)} \\ Y^{(i)} \\ Z^{(i)} \\ V_x^{(i)} \\ V_y^{(i)} \\ V_z^{(i)} \end{bmatrix},\quad \dot{\mathbf{Y}}^{(i)} = \begin{bmatrix}V_x \\ V_y \\ V_z \\ (F_{cx}^{(i)} + 0)/M_p^{(i)}\\ (F_{cy}^{(i)} + M_p^{(i)}g)/M_p^{(i)} \\ (F_{cz}^{(i)} + 0)/M_p^{(i)} \end{bmatrix}.\end{split}\]</div>
+</div>
+<div class="section" id="the-h-file-ppiclf-user-h">
+<h2>The H-File (PPICLF_USER.h)<a class="headerlink" href="#the-h-file-ppiclf-user-h" title="Permalink to this headline">¶</a></h2>
+<p>As is demonstrated above, for each particle we are solving a system of 6 equations, which is the length of the vectors <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. We will order each equation as they appear in the array above. Note that the actual ordering of equations is up to the user, but it is required that the positions <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> (3D only) must be the first equations when ordering the vector. Accordinging we call the solution variables</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_JX</span>
+<span class="n">PPICLF_JY</span>
+<span class="n">PPICLF_JZ</span>
+<span class="n">PPICLF_JVX</span>
+<span class="n">PPICLF_JVY</span>
+<span class="n">PPICLF_JVZ</span>
+</pre></div>
+</div>
+<p>Additionally, we allow three properties to vary for each particle. These are the particle density <span class="math notranslate nohighlight">\(\rho_p\)</span>, the particle diameter <span class="math notranslate nohighlight">\(D_p\)</span>, and the particle volume <span class="math notranslate nohighlight">\(V_p\)</span>. As a result, each particle has 3 properties associated with it. We name the properties</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_R_JRHOP</span>
+<span class="n">PPICLF_R_JDP</span>
+<span class="n">PPICLF_R_JVOLP</span>
+</pre></div>
+</div>
+<p>For this example then, the PPICLF_USER.h header file is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRS 6</span>
+<span class="cp">#define PPICLF_JX  1</span>
+<span class="cp">#define PPICLF_JY  2</span>
+<span class="cp">#define PPICLF_JZ  3</span>
+<span class="cp">#define PPICLF_JVX 4</span>
+<span class="cp">#define PPICLF_JVY 5</span>
+<span class="cp">#define PPICLF_JVZ 6</span>
+
+<span class="cp">#define PPICLF_LRP 3</span>
+<span class="cp">#define PPICLF_R_JRHOP 1</span>
+<span class="cp">#define PPICLF_R_JDP   2</span>
+<span class="cp">#define PPICLF_R_JVOLP 3</span>
+
+<span class="cp">#define PPICLF_LWALL 800</span>
+</pre></div>
+</div>
+<p>It is seen that the number of equations is specified (PPICLF_LRS), the equation names are ordered from 1 to PPICLF_LRS with the position being first, the number of properties is specified (PPICLF_LRP), and the properties are ordered from 1 to PPICLF_LRP.</p>
+<p>Additionally, for reasons that we will seen later, the value PPICLF_LWALL is specified to be 800. This declares memory for a max of 800 walls to be read in.</p>
+</div>
+<div class="section" id="the-f-file-ppiclf-user-f">
+<h2>The F-File (ppiclf_user.f)<a class="headerlink" href="#the-f-file-ppiclf-user-f" title="Permalink to this headline">¶</a></h2>
+<p>The values set in the PPICLF_USER.h file are used to access array values in the ppiclf_user.f file.</p>
+<p>Specifically, the arrays ppiclf_y(j,i) and ppiclf_ydot(j,i) correspond to <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. The arrays are arranged by the j equation number (max PPICLF_LRS) for the i particle. The property array ppiclf_rprop(j,i) stores the j (max PPICLF_LRP) properties of the j particle.</p>
+<p>The user is required to define the ppiclf_user.f file. The main purpose of this file is to set <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. Due to this, the subroutine ppiclf_user_SetYdot() sets <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span> and for this case is given as</p>
+<div class="highlight-fortran notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42</pre></div></td><td class="code"><div class="highlight"><pre><span></span>      <span class="k">subroutine </span><span class="n">ppiclf_user_SetYdot</span>
+<span class="c">!</span>
+      <span class="k">implicit none</span>
+<span class="c">!</span>
+<span class="cp">#include &quot;PPICLF.h&quot;</span>
+<span class="c">!</span>
+<span class="c">! Internal:</span>
+<span class="c">!</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rmass</span><span class="p">,</span><span class="n">fbx</span><span class="p">,</span><span class="n">fby</span><span class="p">,</span><span class="n">fbz</span><span class="p">,</span><span class="n">fcx</span><span class="p">,</span><span class="n">fcy</span><span class="p">,</span><span class="n">fcz</span>
+      <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">i</span>
+<span class="c">!</span>
+<span class="c">! evaluate ydot</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">ppiclf_npart</span>
+         <span class="c">! Particle mass</span>
+         <span class="n">rmass</span> <span class="o">=</span> <span class="n">ppiclf_rprop</span><span class="p">(</span><span class="n">PPICLF_R_JVOLP</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+     <span class="o">&gt;</span>          <span class="o">*</span><span class="n">ppiclf_rprop</span><span class="p">(</span><span class="n">PPICLF_R_JRHOP</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+
+         <span class="c">! Gravity</span>
+         <span class="n">fbx</span>  <span class="o">=</span> <span class="mf">0.0d0</span>
+         <span class="n">fby</span>  <span class="o">=</span> <span class="o">-</span><span class="mf">9.8d0</span><span class="o">*</span><span class="n">rmass</span>
+         <span class="n">fbz</span>  <span class="o">=</span> <span class="mf">0.0d0</span>
+
+         <span class="c">! Collision search</span>
+         <span class="k">call </span><span class="n">ppiclf_solve_NearestNeighbor</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+         <span class="c">! User implemented collision force from EvalNearestNeighbor()</span>
+         <span class="n">fcx</span>  <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+         <span class="n">fcy</span>  <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+         <span class="n">fcz</span>  <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+
+         <span class="c">! set ydot for all PPICLF_LRS number of equations</span>
+         <span class="n">ppiclf_ydot</span><span class="p">(</span><span class="n">PPICLF_JX</span> <span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_y</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+         <span class="n">ppiclf_ydot</span><span class="p">(</span><span class="n">PPICLF_JY</span> <span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_y</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+         <span class="n">ppiclf_ydot</span><span class="p">(</span><span class="n">PPICLF_JZ</span> <span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_y</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+         <span class="n">ppiclf_ydot</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">fbx</span><span class="o">+</span><span class="n">fcx</span><span class="p">)</span><span class="o">/</span><span class="n">rmass</span>
+         <span class="n">ppiclf_ydot</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">fby</span><span class="o">+</span><span class="n">fcy</span><span class="p">)</span><span class="o">/</span><span class="n">rmass</span>
+         <span class="n">ppiclf_ydot</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">fbz</span><span class="o">+</span><span class="n">fcz</span><span class="p">)</span><span class="o">/</span><span class="n">rmass</span>
+      <span class="n">enddo</span>
+<span class="c">! evaluate ydot</span>
+
+      <span class="k">return</span>
+<span class="k">      end</span>
+</pre></div>
+</td></tr></table></div>
+<p>In this example, the do-loop loops through the total number of particles on each processor, which is the variable ppiclf_npart. The user computes the total collision force (see below) and weight in each direction for each particle. Then, the 6 equations are specified according to the system of equations defined in this case.</p>
+<p>As given in the governing equations, a collision search results in many computed values for each particle pair that overlapps. The ppiclF library uses a special algorithm (<strong>here</strong>) so that the user does not have to deal with the complications, and a parallel neighbor search is performed behind the scenes. In the external calls (see below in the next section), a distance, which for now we will call <code class="code docutils literal notranslate"><span class="pre">W</span></code>, is specified. By invoking the optional subroutine ppiclf_solve_NearestNeighbor() in line 24, the routine ppiclf_user_EvalNearestNeighbor() is called.</p>
+<p>The routine ppiclf_user_EvalNearestNeighbor(i,j,yi,rpropi,yj,rpropj) has six arguements. For the i particle, this routine will call all the j neighboring particles and boundaries that are within <code class="code docutils literal notranslate"><span class="pre">W</span></code> of the i particle’s location. The current <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> vector of the i and j particles may be accessed through the dummy input arguement yi(k) and yj(k), where k is one of the PPICLF_LRS values declared in the PPICLF_USER.h file. Similarly, the properties of the i and j particles may be accessed through the dummy input arguements rpropi(k) and rpropj(k), where k is one of the PPICLF_LRP values declared in the PPICLF_USER.h file.</p>
+<p>While i corresponds to the i particle in the do-loop in the routine ppiclf_user_SetYdot(), the actual value of index j can be positive, negiative, or zero. <strong>The user should not attempt to use index j in any calculation.</strong> The index j <strong>CAN</strong> be used as a conditional check though, as it is in this example. When j is zero, it corresponds to the point on a nearby boundary surface (see section below). When j is not zero, a distance can be used between the coordinates of yi and yj to see if the two particles overlap. If they do, a collision force is computed and stored in a vector ppiclf_ydotc which is then used to compute the collision force in the above routine ppiclf_user_SetYdot().</p>
+<p>When j is zero, a collision force is still computed with the same soft sphere model, with the assumption that the boundary is a particle of infinite mass. The corresponding coordinates in the yj array in the case of a boundary then gives the closest point on a nearby boundary. The subroutine ppiclf_user_EvalNearestNeighbor() is given below for this case.</p>
+<div class="highlight-fortran notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120</pre></div></td><td class="code"><div class="highlight"><pre><span></span>      <span class="k">subroutine </span><span class="n">ppiclf_user_EvalNearestNeighbor</span>
+     <span class="o">&gt;</span>                                        <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">yi</span><span class="p">,</span><span class="n">rpropi</span><span class="p">,</span><span class="n">yj</span><span class="p">,</span><span class="n">rpropj</span><span class="p">)</span>
+<span class="c">!</span>
+      <span class="k">implicit none</span>
+<span class="c">!</span>
+<span class="cp">#include &quot;PPICLF.h&quot;</span>
+<span class="c">!</span>
+<span class="c">! Input:</span>
+<span class="c">!</span>
+      <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">i</span>
+      <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">j</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">yi</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>     <span class="c">! PPICLF_LRS</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rpropi</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="c">! PPICLF_LRP</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">yj</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>     <span class="c">! PPICLF_LRS</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rpropj</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="c">! PPICLF_LRP</span>
+<span class="c">!</span>
+<span class="c">! Internal:</span>
+<span class="c">!</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">ksp</span><span class="p">,</span><span class="n">erest</span>
+      <span class="k">common</span> <span class="o">/</span><span class="n">ucollision</span><span class="o">/</span> <span class="n">ksp</span><span class="p">,</span><span class="n">erest</span>
+<span class="cp">#ifdef PPICLC</span>
+      <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ucollision&quot;</span><span class="p">)</span> <span class="kd">::</span> <span class="o">/</span><span class="n">ucollision</span><span class="o">/</span> <span class="c">! c binding</span>
+<span class="cp">#endif</span>
+
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rpi2</span><span class="p">,</span> <span class="n">rthresh</span><span class="p">,</span> <span class="n">rxdiff</span><span class="p">,</span> <span class="n">rydiff</span><span class="p">,</span> <span class="n">rzdiff</span><span class="p">,</span> <span class="n">rdiff</span><span class="p">,</span> <span class="n">rm1</span><span class="p">,</span> <span class="n">rm2</span><span class="p">,</span>
+     <span class="o">&gt;</span>       <span class="n">rmult</span><span class="p">,</span> <span class="n">eta</span><span class="p">,</span> <span class="n">rbot</span><span class="p">,</span> <span class="n">rn_12x</span><span class="p">,</span> <span class="n">rn_12y</span><span class="p">,</span> <span class="n">rn_12z</span><span class="p">,</span> <span class="n">rdelta12</span><span class="p">,</span>
+     <span class="o">&gt;</span>       <span class="n">rv12_mag</span><span class="p">,</span> <span class="n">rv12_mage</span><span class="p">,</span> <span class="n">rksp_max</span><span class="p">,</span> <span class="n">rnmag</span><span class="p">,</span> <span class="n">rksp_wall</span><span class="p">,</span> <span class="n">rextra</span>
+<span class="c">!</span>
+      <span class="n">rpi2</span>  <span class="o">=</span>  <span class="mf">9.869604401089358d0</span>
+
+      <span class="c">! other particles</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="p">.</span><span class="n">ne</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">         </span><span class="n">rthresh</span>  <span class="o">=</span> <span class="mf">0.5d0</span><span class="o">*</span><span class="p">(</span><span class="n">rpropi</span><span class="p">(</span><span class="n">PPICLF_R_JDP</span><span class="p">)</span> <span class="o">+</span> <span class="n">rpropj</span><span class="p">(</span><span class="n">PPICLF_R_JDP</span><span class="p">))</span>
+
+         <span class="n">rxdiff</span> <span class="o">=</span> <span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JX</span><span class="p">)</span> <span class="o">-</span> <span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JX</span><span class="p">)</span>
+         <span class="n">rydiff</span> <span class="o">=</span> <span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JY</span><span class="p">)</span> <span class="o">-</span> <span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JY</span><span class="p">)</span>
+         <span class="n">rzdiff</span> <span class="o">=</span> <span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JZ</span><span class="p">)</span> <span class="o">-</span> <span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JZ</span><span class="p">)</span>
+
+         <span class="n">rdiff</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="n">rxdiff</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">rydiff</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">rzdiff</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+         <span class="k">if</span> <span class="p">(</span><span class="n">rdiff</span> <span class="p">.</span><span class="n">gt</span><span class="p">.</span> <span class="n">rthresh</span><span class="p">)</span> <span class="k">return</span>
+
+<span class="k">         </span><span class="n">rm1</span> <span class="o">=</span> <span class="n">rpropi</span><span class="p">(</span><span class="n">PPICLF_R_JRHOP</span><span class="p">)</span><span class="o">*</span><span class="n">rpropi</span><span class="p">(</span><span class="n">PPICLF_R_JVOLP</span><span class="p">)</span>
+         <span class="n">rm2</span> <span class="o">=</span> <span class="n">rpropj</span><span class="p">(</span><span class="n">PPICLF_R_JRHOP</span><span class="p">)</span><span class="o">*</span><span class="n">rpropj</span><span class="p">(</span><span class="n">PPICLF_R_JVOLP</span><span class="p">)</span>
+
+         <span class="n">rmult</span> <span class="o">=</span> <span class="mf">1.0d0</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">1.0d0</span><span class="o">/</span><span class="n">rm1</span><span class="o">+</span><span class="mf">1.0d0</span><span class="o">/</span><span class="n">rm2</span><span class="p">)</span>
+         <span class="n">eta</span>   <span class="o">=</span> <span class="mf">2.0d0</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">ksp</span><span class="p">)</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="n">erest</span><span class="p">)</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="nb">log</span><span class="p">(</span><span class="n">erest</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">rpi2</span><span class="p">)</span>
+     <span class="o">&gt;</span>           <span class="o">*</span><span class="n">rmult</span>
+
+         <span class="n">rbot</span> <span class="o">=</span> <span class="mf">1.0d0</span><span class="o">/</span><span class="n">rdiff</span>
+         <span class="n">rn_12x</span> <span class="o">=</span> <span class="n">rxdiff</span><span class="o">*</span><span class="n">rbot</span>
+         <span class="n">rn_12y</span> <span class="o">=</span> <span class="n">rydiff</span><span class="o">*</span><span class="n">rbot</span>
+         <span class="n">rn_12z</span> <span class="o">=</span> <span class="n">rzdiff</span><span class="o">*</span><span class="n">rbot</span>
+
+         <span class="n">rdelta12</span> <span class="o">=</span> <span class="n">rthresh</span> <span class="o">-</span> <span class="n">rdiff</span>
+
+         <span class="n">rv12_mag</span> <span class="o">=</span> <span class="p">(</span><span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">)</span><span class="o">-</span><span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">))</span><span class="o">*</span><span class="n">rn_12x</span> <span class="o">+</span>
+     <span class="o">&gt;</span>              <span class="p">(</span><span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">)</span><span class="o">-</span><span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">))</span><span class="o">*</span><span class="n">rn_12y</span> <span class="o">+</span>
+     <span class="o">&gt;</span>              <span class="p">(</span><span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">)</span><span class="o">-</span><span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">))</span><span class="o">*</span><span class="n">rn_12z</span>
+
+         <span class="n">rv12_mage</span> <span class="o">=</span> <span class="n">rv12_mag</span><span class="o">*</span><span class="n">eta</span>
+         <span class="n">rksp_max</span>  <span class="o">=</span> <span class="n">ksp</span><span class="o">*</span><span class="n">rdelta12</span>
+         <span class="n">rnmag</span>     <span class="o">=</span> <span class="o">-</span><span class="n">rksp_max</span> <span class="o">-</span> <span class="n">rv12_mage</span>
+
+         <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+     <span class="o">&gt;</span>                              <span class="o">+</span> <span class="n">rnmag</span><span class="o">*</span><span class="n">rn_12x</span>
+         <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+     <span class="o">&gt;</span>                              <span class="o">+</span> <span class="n">rnmag</span><span class="o">*</span><span class="n">rn_12y</span>
+         <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+     <span class="o">&gt;</span>                              <span class="o">+</span> <span class="n">rnmag</span><span class="o">*</span><span class="n">rn_12z</span>
+
+      <span class="c">! boundaries</span>
+      <span class="n">elseif</span> <span class="p">(</span><span class="n">j</span> <span class="p">.</span><span class="n">eq</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+
+<span class="k">         </span><span class="n">rksp_wall</span> <span class="o">=</span> <span class="n">ksp</span>
+
+         <span class="c">! give a bit larger collision threshold for walls</span>
+         <span class="n">rextra</span>   <span class="o">=</span> <span class="mf">0.5d0</span>
+         <span class="n">rthresh</span>  <span class="o">=</span> <span class="p">(</span><span class="mf">0.5d0</span><span class="o">+</span><span class="n">rextra</span><span class="p">)</span><span class="o">*</span><span class="n">rpropi</span><span class="p">(</span><span class="n">PPICLF_R_JDP</span><span class="p">)</span>
+
+         <span class="n">rxdiff</span> <span class="o">=</span> <span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JX</span><span class="p">)</span> <span class="o">-</span> <span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JX</span><span class="p">)</span>
+         <span class="n">rydiff</span> <span class="o">=</span> <span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JY</span><span class="p">)</span> <span class="o">-</span> <span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JY</span><span class="p">)</span>
+         <span class="n">rzdiff</span> <span class="o">=</span> <span class="n">yj</span><span class="p">(</span><span class="n">PPICLF_JZ</span><span class="p">)</span> <span class="o">-</span> <span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JZ</span><span class="p">)</span>
+
+         <span class="n">rdiff</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="n">rxdiff</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">rydiff</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">rzdiff</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+         <span class="k">if</span> <span class="p">(</span><span class="n">rdiff</span> <span class="p">.</span><span class="n">gt</span><span class="p">.</span> <span class="n">rthresh</span><span class="p">)</span> <span class="k">return</span>
+
+<span class="k">         </span><span class="n">rm1</span> <span class="o">=</span> <span class="n">rpropi</span><span class="p">(</span><span class="n">PPICLF_R_JRHOP</span><span class="p">)</span><span class="o">*</span><span class="n">rpropi</span><span class="p">(</span><span class="n">PPICLF_R_JVOLP</span><span class="p">)</span>
+
+         <span class="n">rmult</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="n">rm1</span><span class="p">)</span>
+         <span class="n">eta</span>   <span class="o">=</span> <span class="mf">2.0d0</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">rksp_wall</span><span class="p">)</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="n">erest</span><span class="p">)</span>
+     <span class="o">&gt;</span>           <span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="nb">log</span><span class="p">(</span><span class="n">erest</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="n">rpi2</span><span class="p">)</span><span class="o">*</span><span class="n">rmult</span>
+
+         <span class="n">rbot</span> <span class="o">=</span> <span class="mf">1.0d0</span><span class="o">/</span><span class="n">rdiff</span>
+         <span class="n">rn_12x</span> <span class="o">=</span> <span class="n">rxdiff</span><span class="o">*</span><span class="n">rbot</span>
+         <span class="n">rn_12y</span> <span class="o">=</span> <span class="n">rydiff</span><span class="o">*</span><span class="n">rbot</span>
+         <span class="n">rn_12z</span> <span class="o">=</span> <span class="n">rzdiff</span><span class="o">*</span><span class="n">rbot</span>
+
+         <span class="n">rdelta12</span> <span class="o">=</span> <span class="n">rthresh</span> <span class="o">-</span> <span class="n">rdiff</span>
+
+         <span class="n">rv12_mag</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0d0</span><span class="o">*</span><span class="p">(</span><span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">)</span><span class="o">*</span><span class="n">rn_12x</span> <span class="o">+</span>
+     <span class="o">&gt;</span>                      <span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">)</span><span class="o">*</span><span class="n">rn_12y</span> <span class="o">+</span>
+     <span class="o">&gt;</span>                      <span class="n">yi</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">)</span><span class="o">*</span><span class="n">rn_12z</span><span class="p">)</span>
+
+         <span class="n">rv12_mage</span> <span class="o">=</span> <span class="n">rv12_mag</span><span class="o">*</span><span class="n">eta</span>
+         <span class="n">rksp_max</span>  <span class="o">=</span> <span class="n">rksp_wall</span><span class="o">*</span><span class="n">rdelta12</span>
+         <span class="n">rnmag</span>     <span class="o">=</span> <span class="o">-</span><span class="n">rksp_max</span> <span class="o">-</span> <span class="n">rv12_mage</span>
+
+         <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+     <span class="o">&gt;</span>                              <span class="o">+</span> <span class="n">rnmag</span><span class="o">*</span><span class="n">rn_12x</span>
+         <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+     <span class="o">&gt;</span>                              <span class="o">+</span> <span class="n">rnmag</span><span class="o">*</span><span class="n">rn_12y</span>
+         <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVZ</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+     <span class="o">&gt;</span>                              <span class="o">+</span> <span class="n">rnmag</span><span class="o">*</span><span class="n">rn_12z</span>
+
+      <span class="n">endif</span>
+
+      <span class="k">return</span>
+<span class="k">      end</span>
+</pre></div>
+</td></tr></table></div>
+<p>Note that the additional subroutine ppiclf_user_MapProjPart() is delcared as well. Since it is not used in this example, it is left empty but still delcared.</p>
+<p>The two user files PPICLF_USER.h and ppiclf_user.f are then copied to the LocalCodeDir/ppiclF/source/ directory and the library can be built using make.</p>
+</div>
+<div class="section" id="external-calls">
+<h2>External Calls<a class="headerlink" href="#external-calls" title="Permalink to this headline">¶</a></h2>
+<p>In order to solve the system of equations, a driver program is used. In this case, a simple fortran MPI program in the example file test.f is used for this purpose (the library can instead be linked as a static library, as decribed in the <a class="reference internal" href="../quickstart/link.html#linking"><span class="std std-ref">Link</span></a> section). Specifically, the driver program is responsible for setting the initial conditions of the solution variables <span class="math notranslate nohighlight">\(\mathbf{Y}_0 = \mathbf{Y} (t = 0)\)</span>, specifying solver options, and looping through time.</p>
+<p>The program in test.f for this case is nearly identical as the <a class="reference internal" href="stokes_2d.html#stokes2d"><span class="std std-ref">stokes_2d</span></a> example case. However, there are a few key differences. These differences are:</p>
+<ol class="arabic simple">
+<li>Particles are initialized with a random diameter between the variables dp_min and dp_max.</li>
+<li>The subroutine ppiclf_solve_InitNeighborBin(dp_max) is called directly after the particles are initialized. The input to this routine is the 8-byte real variable <code class="code docutils literal notranslate"><span class="pre">W</span></code>. In this cases, a collision only happens when particles overlap, so it is sufficient to pass in the largest possible particle diameter dp_max.</li>
+<li>The subroutine ppiclf_io_ReadWallVTK() is called to specify the boundary conditions (see next section).</li>
+<li>The time step is limited by the collision time scale given previously.</li>
+<li>The collision spring stiffness and coefficient of restitituion are save in the common block /ucollision/ so they can be specified at run time after the library has been built.</li>
+</ol>
+</div>
+<div class="section" id="boundary-specification">
+<h2>Boundary Specification<a class="headerlink" href="#boundary-specification" title="Permalink to this headline">¶</a></h2>
+<p>As previously mentioned, the subroutine ppiclf_io_ReadWallVTK() is called to specify the boundary conditions. The input to this routine is a character string and specifies the file with VTK format that will be read in to specifiy the boundary conditions.</p>
+<p>The format of the file is a minimized ascii VTK format as shown below.</p>
+<p>In 3D:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">POINTS</span> <span class="n">npoints</span>
+<span class="n">p1x</span> <span class="n">p1y</span> <span class="n">p1z</span>
+<span class="n">p2x</span> <span class="n">p2y</span> <span class="n">p2z</span>
+<span class="o">...</span>
+<span class="n">CELLS</span> <span class="n">ncells</span>
+<span class="n">n1ip1</span> <span class="n">n1ip2</span> <span class="n">n1ip3</span>
+<span class="n">n2ip1</span> <span class="n">n2ip2</span> <span class="n">n2ip3</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>and in 2D:</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">POINTS</span> <span class="n">npoints</span>
+<span class="n">p1x</span> <span class="n">p1y</span> <span class="n">p1z</span>
+<span class="n">p2x</span> <span class="n">p2y</span> <span class="n">p2z</span>
+<span class="o">...</span>
+<span class="n">CELLS</span> <span class="n">ncells</span>
+<span class="n">n1ip1</span> <span class="n">n1ip2</span>
+<span class="n">n2ip1</span> <span class="n">n2ip2</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li>a tri-element surface mesh is required in 3D problems,</li>
+<li>a line-element surface mesh is required in 2D problems,</li>
+<li>npoints is total number of points that follow,</li>
+<li>pab is point a coordinate in b dimension,</li>
+<li>nwalls is total number of walls that follow,</li>
+<li>ncipd is the index of the points from 0 to npoints-1 that make up the wall with c being the wall number and d being the arbitrary ordering of points.</li>
+</ul>
+<p>This format can actually be output using the free finite element mesh generator <a class="reference external" href="https://gmsh.info">Gmsh</a>. The process is to create the appropriate mesh, export as a VTK file, and then remove everything except the format as specified above. <strong>Please make sure there are no blank lines.</strong></p>
+<p>In the present example, a cylindrical tank with an opening at the bottom which feeds into a box is used.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Nek5000.html" class="btn btn-neutral float-right" title="Nek5000" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="stokes_2d.html" class="btn btn-neutral float-left" title="stokes_2d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, David Zwick
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
