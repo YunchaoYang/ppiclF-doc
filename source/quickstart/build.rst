@@ -9,7 +9,7 @@ To install ppiclF, checkout the master branch from the `offical GitHub repositor
 .. code:: bash
 
     cd LocalCodeDir
-    git clone https://github.com/dpzwick/ppiclF 
+    git clone https://github.com/dpzwick/ppiclF.git
     cd ppiclF
 
 Then, set the appropriate properties in the files source/ppiclf_user.f and source/PPICLF_USER.h (see **here**). For now, we will copy these files from an existing example:

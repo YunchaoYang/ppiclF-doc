@@ -19,7 +19,10 @@ This is an example that illustrates a particle packing in a realistic geometry. 
 where, for each particle we have the position vector :math:`\mathbf{X}`, the velocity vector :math:`\mathbf{V}`, the collision force :math:`\mathbf{F}_{c}`, and the weight force :math:`\mathbf{F}_{b}`, defined by
 
 .. math::
-   \mathbf{X}^{(i)} = \begin{bmatrix}X^{(i)} \\ Y^{(i)} \\ Z^{(i)} \end{bmatrix},\quad \mathbf{V}^{(i)} = \begin{bmatrix}V_x^{(i)} \\ V_y^{(i)} \\ V_z^{(i)} \end{bmatrix},\quad \mathbf{F}_{c}^{(i)} = \begin{bmatrix}F_{cx}^{(i)} \\ F_{cy}^{(i)} \\ F_{cz}^{(i)} \end{bmatrix} = \sum_{j=1}^{N_p^{(i)}}-k_c \delta^{(i,j)}\mathbf{n}^{(i,j)} - \eta \mathbf{V}^{(i,j)},\quad \mathbf{F}_{b} = M_p^{(i)} \begin{bmatrix}0 \\ g \\ 0\end{bmatrix}.
+   \mathbf{X}^{(i)} = \begin{bmatrix}X^{(i)} \\ Y^{(i)} \\ Z^{(i)} \end{bmatrix},\quad \mathbf{V}^{(i)} = \begin{bmatrix}V_x^{(i)} \\ V_y^{(i)} \\ V_z^{(i)} \end{bmatrix},
+
+.. math::
+   \mathbf{F}_{c}^{(i)} = \begin{bmatrix}F_{cx}^{(i)} \\ F_{cy}^{(i)} \\ F_{cz}^{(i)} \end{bmatrix} = \sum_{j=1}^{N_p^{(i)}}-k_c \delta^{(i,j)}\mathbf{n}^{(i,j)} - \eta \mathbf{V}^{(i,j)},\quad \mathbf{F}_{b} = M_p^{(i)} \begin{bmatrix}0 \\ g \\ 0\end{bmatrix}.
    
 Here, we have used the mass of each particle, :math:`M_p` and the gravitational acceleration :math:`g`. Additionally, the collision force is a soft-sphere normal force which only acts on physically overlapping particles. Due to this, the particle must add the forces from all j overlapping nearby particles. The variable :math:`N_p^{(i)}` is the number of nearby overlapping particles, which is local to the i particle itself.
 
@@ -170,11 +173,13 @@ In this example, the do-loop loops through the total number of particles on each
 
 As given in the governing equations, a collision search results in many computed values for each particle pair that overlapps. The ppiclF library uses a special algorithm (**here**) so that the user does not have to deal with the complications, and a parallel neighbor search is performed behind the scenes. In the external calls (see below in the next section), a distance, which for now we will call :code:`W`, is specified. By invoking the optional subroutine ppiclf_solve_NearestNeighbor() in line 24, the routine ppiclf_user_EvalNearestNeighbor() is called. 
 
-The routine ppiclf_user_EvalNearestNeighbor(i,j,yi,rpropi,yj,rpropj) has six arguements. For the i particle, this routine will call all the j neighboring particles and boundaries that are within :code:`W` of the i particle's location. The current :math:`\mathbf{Y}` vector of the i and j particles may be accessed through the dummy input arguement yi(k) and yj(k), where k is one of the PPICLF_LRS values declared in the PPICLF_USER.h file. Similarly, the properties of the i and j particles may be accessed through the dummy input arguements rpropi(k) and rpropj(k), where k is one of the PPICLF_LRP values declared in the PPICLF_USER.h file.
+The routine ppiclf_user_EvalNearestNeighbor(i,j,yi,rpropi,yj,rpropj) has six arguements. For the i particle, this routine will call all the j neighboring particles and boundaries that are within :code:`W` of the i particle's location. The current :math:`\mathbf{Y}` vector of the i and j particles may be accessed through the dummy input arguement yi(k) and yj(k), where k is one of the PPICLF_LRS values declared in the PPICLF_USER.h file. Similarly, the properties of the i and j particles may be accessed through the dummy input arguements rpropi(k) and rpropj(k), where k is one of the PPICLF_LRP values declared in the PPICLF_USER.h file. Note that the input arguements are dummy arguements, so the user should not attempt to alter their values.
 
 While i corresponds to the i particle in the do-loop in the routine ppiclf_user_SetYdot(), the actual value of index j can be positive, negiative, or zero. **The user should not attempt to use index j in any calculation.** The index j **CAN** be used as a conditional check though, as it is in this example. When j is zero, it corresponds to the point on a nearby boundary surface (see section below). When j is not zero, a distance can be used between the coordinates of yi and yj to see if the two particles overlap. If they do, a collision force is computed and stored in a vector ppiclf_ydotc which is then used to compute the collision force in the above routine ppiclf_user_SetYdot().
 
-When j is zero, a collision force is still computed with the same soft sphere model, with the assumption that the boundary is a particle of infinite mass. The corresponding coordinates in the yj array in the case of a boundary then gives the closest point on a nearby boundary. The subroutine ppiclf_user_EvalNearestNeighbor() is given below for this case.
+When j is zero, a collision force is still computed with the same soft sphere model, with the assumption that the boundary is a particle of infinite mass. The corresponding coordinates in the yj array in the case of a boundary then gives the closest point on a nearby boundary. 
+
+The subroutine ppiclf_user_EvalNearestNeighbor() is given below for this case.
 
 .. code-block:: fortran
  :linenos:
@@ -190,10 +195,10 @@ When j is zero, a collision force is still computed with the same soft sphere mo
  !
        integer*4 i
        integer*4 j
-       real*8 yi(*)     ! PPICLF_LRS
-       real*8 rpropi(*) ! PPICLF_LRP
-       real*8 yj(*)     ! PPICLF_LRS
-       real*8 rpropj(*) ! PPICLF_LRP
+       real*8 yi    (PPICLF_LRS)    
+       real*8 rpropi(PPICLF_LRP)
+       real*8 yj    (PPICLF_LRS)    
+       real*8 rpropj(PPICLF_LRP)
  !
  ! Internal:
  !
@@ -302,8 +307,6 @@ When j is zero, a collision force is still computed with the same soft sphere mo
  
 Note that the additional subroutine ppiclf_user_MapProjPart() is delcared as well. Since it is not used in this example, it is left empty but still delcared.
 
-The two user files PPICLF_USER.h and ppiclf_user.f are then copied to the LocalCodeDir/ppiclF/source/ directory and the library can be built using make.
-
 External Calls
 ^^^^^^^^^^^^^^
 In order to solve the system of equations, a driver program is used. In this case, a simple fortran MPI program in the example file test.f is used for this purpose (the library can instead be linked as a static library, as decribed in the :ref:`linking` section). Specifically, the driver program is responsible for setting the initial conditions of the solution variables :math:`\mathbf{Y}_0 = \mathbf{Y} (t = 0)`, specifying solver options, and looping through time. 
@@ -366,3 +369,23 @@ This format can actually be output using the free finite element mesh generator 
 .. _Gmsh: https://gmsh.info
 
 In the present example, a cylindrical tank with an opening at the bottom which feeds into a box is used.
+
+Compiling and Running
+^^^^^^^^^^^^^^^^^^^^^
+This example can be tested by issuing the following commands:
+
+.. code-block:: bash
+
+   cd ~
+   git clone https://github.com/dpzwick/ppiclF.git       # clone ppiclF
+   mkdir TestCase                                        # make test directory
+   cd TestCase
+   cp ../ppiclF/examples/dem_pack_3d/fortran/* .         # copy example files to test case
+   cp -r ../ppiclF/examples/dem_pack_3d/user_routines/ . # copy example files to test case
+   cp -r ../ppiclF/examples/dem_pack_3d/geometry/*.vtk . # copy example files to test case
+   cd ../ppiclF                                          # go to ppiclF code
+   cp ../TestCase/user_routines/* source/                # copy ppiclf_user.f and PPICLF_USER.h to source
+   make                                                  # build ppiclF
+   cd ../TestCase
+   make                                                  # build test case and link with ppiclF
+   mpirun -np 4 test.out                                 # run case with 4 processors

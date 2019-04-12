@@ -189,13 +189,24 @@ The routine ppiclf_solve_InitParticle(imethod,ndim,iendian,npart,y,rprop) is the
 
 Following this, a dummy time loop is iterated. At each step, the subroutine ppiclf_solve_IntegrateParticle(istep,iostep,dt,time) is called. This routine will advance the system of equations in time. Here, we pass in the current time step (4-byte integer istep), the time step file output frequency (4-byte integer iostep), the time step (8-byte real dt), and the current time (8-byte real time). Whenever ppiclf_solve_IntegrateParticle() is called, it will advance the solution ppiclf_y with a time step of dt and a forcing ppiclf_ydot which was specified in the ppiclf_user.f file.
 
-The makefile includes an example of linking the static library to the test.f file in compilation. This driver program can compiled and run on <#> processors using your systems MPI compiler. For example
+Compiling and Running
+^^^^^^^^^^^^^^^^^^^^^
+This example can be tested by issuing the following commands:
 
 .. code-block:: bash
 
-   make
-   mpirun -np <#> test.out
-
+   cd ~
+   git clone https://github.com/dpzwick/ppiclF.git     # clone ppiclF
+   mkdir TestCase                                      # make test directory
+   cd TestCase
+   cp ../ppiclF/examples/stokes_2d/fortran/* .         # copy example files to test case
+   cp -r ../ppiclF/examples/stokes_2d/user_routines/ . # copy example files to test case
+   cd ../ppiclF                                        # go to ppiclF code
+   cp ../TestCase/user_routines/* source/              # copy ppiclf_user.f and PPICLF_USER.h to source
+   make                                                # build ppiclF
+   cd ../TestCase
+   make                                                # build test case and link with ppiclF
+   mpirun -np 4 test.out                               # run case with 4 processors
 
 Simulation Output
 ^^^^^^^^^^^^^^^^^
@@ -211,3 +222,4 @@ In the user code above, :math:`g = 9.8` and the driver program runs for a total 
 In this case, third order Runge-Kutta time integration was used with a time step of :math:`10^{-4}`, resulting in error of the order :math:`10^{-8}` when compounded over 1000 time steps. Since ppiclF outputs only 4-byte precision on the real numbers which is accurate to 7 digits, we expect the precision to be more important than the third order trunacation error. To test this, the difference between the simulation output and analytic solution is :math:`0.00000003739`, reflecting the larger byte precision.
 
 If instead we change the time step to :math:`10^{-2}` and the number of time steps to 10, we expect the new truncation error of order :math:`10^{-5}` to be larger than byte precision. To confirm this, the simulation with these parameters give :math:`V_y = -0.62470448017`. The difference between the simulation output and analytic solution is :math:`0.00001557903`, reflecting the larger truncation error.
+
