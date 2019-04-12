@@ -31,3 +31,4 @@ Contents
 
    quickstart
    examples
+   theory

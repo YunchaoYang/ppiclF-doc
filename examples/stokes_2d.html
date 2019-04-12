@@ -92,6 +92,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#the-h-file-ppiclf-user-h">The H-File (PPICLF_USER.h)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-f-file-ppiclf-user-f">The F-File (ppiclf_user.f)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#external-calls">External Calls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-and-running">Compiling and Running</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simulation-output">Simulation Output</a></li>
 </ul>
 </li>
@@ -99,6 +100,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Nek5000.html">Nek5000</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../theory.html">Theory</a></li>
 </ul>
 
             
@@ -420,9 +422,22 @@
 <p>Following this, the user initializes the initial conditions <span class="math notranslate nohighlight">\(\mathbf{Y}_0\)</span> and properties for npart local particles. This is accomplished in the loop from lines 33-41. For each particle initialized, the PPICLF_LRS initial condtions are set in the array y(j,i). The positions of each particle in <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are set with a random number generator to be between 0 and 1. The initial velocities are set to zero. The property <span class="math notranslate nohighlight">\(\tau_p\)</span> is specified to be <span class="math notranslate nohighlight">\(g^{-1}\)</span> in the array rprop(j,i). Here, y and rprop are defiend to be 8-byte real arrays of size (PPICLF_LRS,PPICLF_LPART) and (PPICLF_LRP,PPICLF_LPART), respectfully. These are temporary arrays which are copied to the internal arrays ppiclf_y and ppiclf_rprop upon initialization.</p>
 <p>The routine ppiclf_solve_InitParticle(imethod,ndim,iendian,npart,y,rprop) is then called. The inputs are the time integration method (4-byte integer imethod), the problem dimension (4-byte integer ndim), the byte ordering (4-byte integer iendian), the local number of particles on this processor (4-byte integer npart), and the first location of the temporary arrays y and rprop.</p>
 <p>Following this, a dummy time loop is iterated. At each step, the subroutine ppiclf_solve_IntegrateParticle(istep,iostep,dt,time) is called. This routine will advance the system of equations in time. Here, we pass in the current time step (4-byte integer istep), the time step file output frequency (4-byte integer iostep), the time step (8-byte real dt), and the current time (8-byte real time). Whenever ppiclf_solve_IntegrateParticle() is called, it will advance the solution ppiclf_y with a time step of dt and a forcing ppiclf_ydot which was specified in the ppiclf_user.f file.</p>
-<p>The makefile includes an example of linking the static library to the test.f file in compilation. This driver program can compiled and run on &lt;#&gt; processors using your systems MPI compiler. For example</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make
-mpirun -np &lt;<span class="c1">#&gt; test.out</span>
+</div>
+<div class="section" id="compiling-and-running">
+<h2>Compiling and Running<a class="headerlink" href="#compiling-and-running" title="Permalink to this headline">¶</a></h2>
+<p>This example can be tested by issuing the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
+git clone https://github.com/dpzwick/ppiclF.git     <span class="c1"># clone ppiclF</span>
+mkdir TestCase                                      <span class="c1"># make test directory</span>
+<span class="nb">cd</span> TestCase
+cp ../ppiclF/examples/stokes_2d/fortran/* .         <span class="c1"># copy example files to test case</span>
+cp -r ../ppiclF/examples/stokes_2d/user_routines/ . <span class="c1"># copy example files to test case</span>
+<span class="nb">cd</span> ../ppiclF                                        <span class="c1"># go to ppiclF code</span>
+cp ../TestCase/user_routines/* source/              <span class="c1"># copy ppiclf_user.f and PPICLF_USER.h to source</span>
+make                                                <span class="c1"># build ppiclF</span>
+<span class="nb">cd</span> ../TestCase
+make                                                <span class="c1"># build test case and link with ppiclF</span>
+mpirun -np <span class="m">4</span> test.out                               <span class="c1"># run case with 4 processors</span>
 </pre></div>
 </div>
 </div>

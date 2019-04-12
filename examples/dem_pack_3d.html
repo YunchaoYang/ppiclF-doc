@@ -94,11 +94,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#the-f-file-ppiclf-user-f">The F-File (ppiclf_user.f)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#external-calls">External Calls</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#boundary-specification">Boundary Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-and-running">Compiling and Running</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Nek5000.html">Nek5000</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../theory.html">Theory</a></li>
 </ul>
 
             
@@ -176,7 +178,9 @@
 \[\begin{split}\begin{align}\dfrac{d \mathbf{X}^{(i)}}{d t} &amp;= \mathbf{V}^{(i)}, \\ M_p^{(i)} \dfrac{d \mathbf{V}^{(i)}}{d t} &amp;= \mathbf{F}_{c}^{(i)} + \mathbf{F}_b^{(i)}, \end{align}\end{split}\]</div>
 <p>where, for each particle we have the position vector <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>, the velocity vector <span class="math notranslate nohighlight">\(\mathbf{V}\)</span>, the collision force <span class="math notranslate nohighlight">\(\mathbf{F}_{c}\)</span>, and the weight force <span class="math notranslate nohighlight">\(\mathbf{F}_{b}\)</span>, defined by</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\mathbf{X}^{(i)} = \begin{bmatrix}X^{(i)} \\ Y^{(i)} \\ Z^{(i)} \end{bmatrix},\quad \mathbf{V}^{(i)} = \begin{bmatrix}V_x^{(i)} \\ V_y^{(i)} \\ V_z^{(i)} \end{bmatrix},\quad \mathbf{F}_{c}^{(i)} = \begin{bmatrix}F_{cx}^{(i)} \\ F_{cy}^{(i)} \\ F_{cz}^{(i)} \end{bmatrix} = \sum_{j=1}^{N_p^{(i)}}-k_c \delta^{(i,j)}\mathbf{n}^{(i,j)} - \eta \mathbf{V}^{(i,j)},\quad \mathbf{F}_{b} = M_p^{(i)} \begin{bmatrix}0 \\ g \\ 0\end{bmatrix}.\end{split}\]</div>
+\[\begin{split}\mathbf{X}^{(i)} = \begin{bmatrix}X^{(i)} \\ Y^{(i)} \\ Z^{(i)} \end{bmatrix},\quad \mathbf{V}^{(i)} = \begin{bmatrix}V_x^{(i)} \\ V_y^{(i)} \\ V_z^{(i)} \end{bmatrix},\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{F}_{c}^{(i)} = \begin{bmatrix}F_{cx}^{(i)} \\ F_{cy}^{(i)} \\ F_{cz}^{(i)} \end{bmatrix} = \sum_{j=1}^{N_p^{(i)}}-k_c \delta^{(i,j)}\mathbf{n}^{(i,j)} - \eta \mathbf{V}^{(i,j)},\quad \mathbf{F}_{b} = M_p^{(i)} \begin{bmatrix}0 \\ g \\ 0\end{bmatrix}.\end{split}\]</div>
 <p>Here, we have used the mass of each particle, <span class="math notranslate nohighlight">\(M_p\)</span> and the gravitational acceleration <span class="math notranslate nohighlight">\(g\)</span>. Additionally, the collision force is a soft-sphere normal force which only acts on physically overlapping particles. Due to this, the particle must add the forces from all j overlapping nearby particles. The variable <span class="math notranslate nohighlight">\(N_p^{(i)}\)</span> is the number of nearby overlapping particles, which is local to the i particle itself.</p>
 <p>For the collision model, the user must specify the two numerical constants, which are the spring stiffness <span class="math notranslate nohighlight">\(k_c\)</span> and the coefficient of restitution <span class="math notranslate nohighlight">\(e_n\)</span>. The distance between two particle’s center locations is</p>
 <div class="math notranslate nohighlight">
@@ -334,9 +338,10 @@
 </td></tr></table></div>
 <p>In this example, the do-loop loops through the total number of particles on each processor, which is the variable ppiclf_npart. The user computes the total collision force (see below) and weight in each direction for each particle. Then, the 6 equations are specified according to the system of equations defined in this case.</p>
 <p>As given in the governing equations, a collision search results in many computed values for each particle pair that overlapps. The ppiclF library uses a special algorithm (<strong>here</strong>) so that the user does not have to deal with the complications, and a parallel neighbor search is performed behind the scenes. In the external calls (see below in the next section), a distance, which for now we will call <code class="code docutils literal notranslate"><span class="pre">W</span></code>, is specified. By invoking the optional subroutine ppiclf_solve_NearestNeighbor() in line 24, the routine ppiclf_user_EvalNearestNeighbor() is called.</p>
-<p>The routine ppiclf_user_EvalNearestNeighbor(i,j,yi,rpropi,yj,rpropj) has six arguements. For the i particle, this routine will call all the j neighboring particles and boundaries that are within <code class="code docutils literal notranslate"><span class="pre">W</span></code> of the i particle’s location. The current <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> vector of the i and j particles may be accessed through the dummy input arguement yi(k) and yj(k), where k is one of the PPICLF_LRS values declared in the PPICLF_USER.h file. Similarly, the properties of the i and j particles may be accessed through the dummy input arguements rpropi(k) and rpropj(k), where k is one of the PPICLF_LRP values declared in the PPICLF_USER.h file.</p>
+<p>The routine ppiclf_user_EvalNearestNeighbor(i,j,yi,rpropi,yj,rpropj) has six arguements. For the i particle, this routine will call all the j neighboring particles and boundaries that are within <code class="code docutils literal notranslate"><span class="pre">W</span></code> of the i particle’s location. The current <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> vector of the i and j particles may be accessed through the dummy input arguement yi(k) and yj(k), where k is one of the PPICLF_LRS values declared in the PPICLF_USER.h file. Similarly, the properties of the i and j particles may be accessed through the dummy input arguements rpropi(k) and rpropj(k), where k is one of the PPICLF_LRP values declared in the PPICLF_USER.h file. Note that the input arguements are dummy arguements, so the user should not attempt to alter their values.</p>
 <p>While i corresponds to the i particle in the do-loop in the routine ppiclf_user_SetYdot(), the actual value of index j can be positive, negiative, or zero. <strong>The user should not attempt to use index j in any calculation.</strong> The index j <strong>CAN</strong> be used as a conditional check though, as it is in this example. When j is zero, it corresponds to the point on a nearby boundary surface (see section below). When j is not zero, a distance can be used between the coordinates of yi and yj to see if the two particles overlap. If they do, a collision force is computed and stored in a vector ppiclf_ydotc which is then used to compute the collision force in the above routine ppiclf_user_SetYdot().</p>
-<p>When j is zero, a collision force is still computed with the same soft sphere model, with the assumption that the boundary is a particle of infinite mass. The corresponding coordinates in the yj array in the case of a boundary then gives the closest point on a nearby boundary. The subroutine ppiclf_user_EvalNearestNeighbor() is given below for this case.</p>
+<p>When j is zero, a collision force is still computed with the same soft sphere model, with the assumption that the boundary is a particle of infinite mass. The corresponding coordinates in the yj array in the case of a boundary then gives the closest point on a nearby boundary.</p>
+<p>The subroutine ppiclf_user_EvalNearestNeighbor() is given below for this case.</p>
 <div class="highlight-fortran notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
   2
   3
@@ -467,10 +472,10 @@
 <span class="c">!</span>
       <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">i</span>
       <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">j</span>
-      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">yi</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>     <span class="c">! PPICLF_LRS</span>
-      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rpropi</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="c">! PPICLF_LRP</span>
-      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">yj</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>     <span class="c">! PPICLF_LRS</span>
-      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rpropj</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="c">! PPICLF_LRP</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">yi</span>    <span class="p">(</span><span class="n">PPICLF_LRS</span><span class="p">)</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rpropi</span><span class="p">(</span><span class="n">PPICLF_LRP</span><span class="p">)</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">yj</span>    <span class="p">(</span><span class="n">PPICLF_LRS</span><span class="p">)</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rpropj</span><span class="p">(</span><span class="n">PPICLF_LRP</span><span class="p">)</span>
 <span class="c">!</span>
 <span class="c">! Internal:</span>
 <span class="c">!</span>
@@ -579,7 +584,6 @@
 </pre></div>
 </td></tr></table></div>
 <p>Note that the additional subroutine ppiclf_user_MapProjPart() is delcared as well. Since it is not used in this example, it is left empty but still delcared.</p>
-<p>The two user files PPICLF_USER.h and ppiclf_user.f are then copied to the LocalCodeDir/ppiclF/source/ directory and the library can be built using make.</p>
 </div>
 <div class="section" id="external-calls">
 <h2>External Calls<a class="headerlink" href="#external-calls" title="Permalink to this headline">¶</a></h2>
@@ -630,6 +634,25 @@
 </ul>
 <p>This format can actually be output using the free finite element mesh generator <a class="reference external" href="https://gmsh.info">Gmsh</a>. The process is to create the appropriate mesh, export as a VTK file, and then remove everything except the format as specified above. <strong>Please make sure there are no blank lines.</strong></p>
 <p>In the present example, a cylindrical tank with an opening at the bottom which feeds into a box is used.</p>
+</div>
+<div class="section" id="compiling-and-running">
+<h2>Compiling and Running<a class="headerlink" href="#compiling-and-running" title="Permalink to this headline">¶</a></h2>
+<p>This example can be tested by issuing the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
+git clone https://github.com/dpzwick/ppiclF.git       <span class="c1"># clone ppiclF</span>
+mkdir TestCase                                        <span class="c1"># make test directory</span>
+<span class="nb">cd</span> TestCase
+cp ../ppiclF/examples/dem_pack_3d/fortran/* .         <span class="c1"># copy example files to test case</span>
+cp -r ../ppiclF/examples/dem_pack_3d/user_routines/ . <span class="c1"># copy example files to test case</span>
+cp -r ../ppiclF/examples/dem_pack_3d/geometry/*.vtk . <span class="c1"># copy example files to test case</span>
+<span class="nb">cd</span> ../ppiclF                                          <span class="c1"># go to ppiclF code</span>
+cp ../TestCase/user_routines/* source/                <span class="c1"># copy ppiclf_user.f and PPICLF_USER.h to source</span>
+make                                                  <span class="c1"># build ppiclF</span>
+<span class="nb">cd</span> ../TestCase
+make                                                  <span class="c1"># build test case and link with ppiclF</span>
+mpirun -np <span class="m">4</span> test.out                                 <span class="c1"># run case with 4 processors</span>
+</pre></div>
+</div>
 </div>
 </div>
 

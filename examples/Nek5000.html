@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Theory" href="../theory.html" />
     <link rel="prev" title="dem_pack_3d" href="dem_pack_3d.html" /> 
 </head>
 
@@ -93,11 +94,13 @@
 <li class="toctree-l3"><a class="reference internal" href="#the-h-file-ppiclf-user-h">The H-File (PPICLF_USER.h)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-f-file-ppiclf-user-f">The F-File (ppiclf_user.f)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#external-calls">External Calls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#simulation-output">Simulation Output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#overlapping-mesh">Overlapping Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-and-running">Compiling and Running</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../theory.html">Theory</a></li>
 </ul>
 
             
@@ -165,23 +168,465 @@
            <div itemprop="articleBody">
             
   <div class="section" id="nek5000">
-<span id="id1"></span><h1>Nek5000<a class="headerlink" href="#nek5000" title="Permalink to this headline">¶</a></h1>
+<span id="nek5000-example"></span><h1>Nek5000<a class="headerlink" href="#nek5000" title="Permalink to this headline">¶</a></h1>
 <div style="position: relative; padding-bottom: 10.00%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
    <iframe width="560" height="315" src="https://www.youtube.com/embed/xaH7ub68S7k" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div><div class="section" id="background">
 <h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>This is an example that illustrates a two-dimensional fluidized bed example. This example is linked to the incompressible, spectral element, fluid solver <a class="reference external" href="https://nek5000.mcs.anl.gov">Nek5000</a>.</p>
+<p>The core particle equations being solved in this case are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}\dfrac{d \mathbf{X}}{d t} &amp;= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &amp;= \mathbf{F}_{qs} + \mathbf{F}_{c} + \mathbf{F}_b, \end{align}\end{split}\]</div>
+<p>where, for each particle we have the position vector <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>, the velocity vector <span class="math notranslate nohighlight">\(\mathbf{V}\)</span>, the drag force <span class="math notranslate nohighlight">\(\mathbf{F}_{qs}\)</span>, the collision force <span class="math notranslate nohighlight">\(\mathbf{F}_{c}\)</span>, and the weight force <span class="math notranslate nohighlight">\(\mathbf{F}_{b}\)</span>, defined by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{X} = \begin{bmatrix}X \\ Y \end{bmatrix},\quad \mathbf{V} = \begin{bmatrix}V_x \\ V_y \end{bmatrix},\end{split}\]</div>
+<p>and the same weight and collision forces as in the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">dem_pack_3d</span></a> example are used. For the drag force, the Gidaspow drag model has been used, which is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{F}_{qs} = \beta V_p (\mathbf{U} - \mathbf{V}) = \beta V_p \begin{bmatrix} U_x - V_x \\ U_y - V_y \end{bmatrix},\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{U}\)</span> is the fluid velocity vector at the particle’s coordinates (see interpolation overlap mesh section below), <span class="math notranslate nohighlight">\(V_p\)</span> is each particle’s volume, and <span class="math notranslate nohighlight">\(\beta\)</span> is a drag coefficient, computed by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\beta = \begin{cases}150 \dfrac{\phi_p}{\phi_f} \dfrac{\mu_f}{D_p^2} + 1.75 \dfrac{\rho_f}{D_p} |\mathbf{U} - \mathbf{V}| &amp; \phi_p &gt; 0.2, \\ 0.75 C^*_D \dfrac{\phi_f}{D_p} \rho_f |\mathbf{U} - \mathbf{V}| \phi_f^{-2.65} &amp; \phi_p \leq 0.2. \end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(C^*_D\)</span> is another drag coefficient, <span class="math notranslate nohighlight">\(Re_p^* = \phi_f |\mathbf{U}-\mathbf{V}|D_p/ \nu_f\)</span> is the volume weighted Reynolds number, and <span class="math notranslate nohighlight">\(\nu_f = \mu_f/\rho_f\)</span> is the fluid kinematic viscosity. The equation for <span class="math notranslate nohighlight">\(C^*_D\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}C^*_D = \begin{cases} \dfrac{24}{Re_p^*} \left( 1 + 0.15 (Re_p^*)^{0.687} \right) &amp; Re_p^* \leq 10^3, \\ 0.44 &amp; Re_p^* &gt; 10^3 . \end{cases}\end{split}\]</div>
+<p>The fluid equations that Nek5000 solves in this example are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}\nabla \cdot \mathbf{u} &amp;= - \dfrac{1}{\phi_f} \dfrac{D \phi_f}{D t}, \\ \rho_f \dfrac{D \mathbf{u}}{D t} &amp;= \nabla \cdot \mathbf{\sigma}_f + \dfrac{\mathbf{f}_{pf}}{\phi_f}, \end{align}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is the fluid velocity, <span class="math notranslate nohighlight">\(\rho_f\)</span> is the fluid density, <span class="math notranslate nohighlight">\(\mathbf{\sigma}_f\)</span> is the Navier-Stokes fluid stress tensor, <span class="math notranslate nohighlight">\(\phi_f\)</span> is the fluid volume fraction, and <span class="math notranslate nohighlight">\(\phi_p\)</span> is the particle volume fraction field (<span class="math notranslate nohighlight">\(\phi_f + \phi_p = 1\)</span>), and <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}\)</span> is a particle-fluid coupling force.</p>
+<p>The solution to these equations reside on a mesh within Nek5000. Since the particles are solved in the Lagrangian reference frame, their contributions on the mesh must be accounted for. Most notably, the explicit particle contributions are <span class="math notranslate nohighlight">\(\phi_p\)</span> (and as a result <span class="math notranslate nohighlight">\(\phi_f\)</span>) and <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}\)</span>. The method by which these are obtained is explained in the overlap mesh section below.</p>
 </div>
 <div class="section" id="the-h-file-ppiclf-user-h">
 <h2>The H-File (PPICLF_USER.h)<a class="headerlink" href="#the-h-file-ppiclf-user-h" title="Permalink to this headline">¶</a></h2>
+<p>As is demonstrated above, for each particle we are solving a system of 4 equations, which is the length of the vectors <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. We will order each equation as they appear in the array above. Note that the actual ordering of equations is up to the user, but it is required that the positions <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> (3D only) must be the first equations when ordering the vector. Accordinging we call the solution variables</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_JX</span>
+<span class="n">PPICLF_JY</span>
+<span class="n">PPICLF_JVX</span>
+<span class="n">PPICLF_JVY</span>
+</pre></div>
+</div>
+<p>Additionally, we allow six properties to vary for each particle. These are the particle density <span class="math notranslate nohighlight">\(\rho_p\)</span>, the particle diameter <span class="math notranslate nohighlight">\(D_p\)</span>, the particle volume <span class="math notranslate nohighlight">\(V_p\)</span>, and the interpolated quantities at each particle location <span class="math notranslate nohighlight">\(\phi_p\)</span>, <span class="math notranslate nohighlight">\(U_x\)</span>, and <span class="math notranslate nohighlight">\(U_y\)</span>. As a result, each particle has 6 properties associated with it. We name the properties</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_R_JRHOP</span>
+<span class="n">PPICLF_R_JDP</span>
+<span class="n">PPICLF_R_JVOLP</span>
+<span class="n">PPICLF_R_JPHIP</span>
+<span class="n">PPICLF_R_JUX</span>
+<span class="n">PPICLF_R_JUY</span>
+</pre></div>
+</div>
+<p>For this example then, the PPICLF_USER.h header file is</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRS 4</span>
+<span class="cp">#define PPICLF_JX 1</span>
+<span class="cp">#define PPICLF_JY 2</span>
+<span class="cp">#define PPICLF_JVX 3</span>
+<span class="cp">#define PPICLF_JVY 4</span>
+
+<span class="cp">#define PPICLF_LRP 6</span>
+<span class="cp">#define PPICLF_R_JRHOP 1</span>
+<span class="cp">#define PPICLF_R_JDP 2</span>
+<span class="cp">#define PPICLF_R_JVOLP 3</span>
+<span class="cp">#define PPICLF_R_JPHIP 4</span>
+<span class="cp">#define PPICLF_R_JUX 5</span>
+<span class="cp">#define PPICLF_R_JUY 6</span>
+
+<span class="cp">#define PPICLF_LEX 6</span>
+<span class="cp">#define PPICLF_LEY 6</span>
+<span class="cp">#define PPICLF_LEE 1000</span>
+
+<span class="cp">#define PPICLF_LRP_INT 3</span>
+
+<span class="cp">#define PPICLF_LRP_PRO 3</span>
+<span class="cp">#define PPICLF_P_JPHIP 1</span>
+<span class="cp">#define PPICLF_P_JFX 2</span>
+<span class="cp">#define PPICLF_P_JFY 3</span>
+</pre></div>
+</div>
+<p>It is seen that the number of equations is specified (PPICLF_LRS), the equation names are ordered from 1 to PPICLF_LRS with the position being first, the number of properties is specified (PPICLF_LRP), and the properties are ordered from 1 to PPICLF_LRP.</p>
+<p>Additionally, the remaining parameters specify memory allocations for the overlapping mesh. These will be described in the overlap mesh section below.</p>
 </div>
 <div class="section" id="the-f-file-ppiclf-user-f">
 <h2>The F-File (ppiclf_user.f)<a class="headerlink" href="#the-f-file-ppiclf-user-f" title="Permalink to this headline">¶</a></h2>
+<p>The values set in the PPICLF_USER.h file are used to access array values in the ppiclf_user.f file.</p>
+<p>Specifically, the arrays ppiclf_y(j,i) and ppiclf_ydot(j,i) correspond to <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. The arrays are arranged by the j equation number (max PPICLF_LRS) for the i particle. The property array ppiclf_rprop(j,i) stores the j (max PPICLF_LRP) properties of the j particle.</p>
+<p>The user is required to define the ppiclf_user.f file. The main purpose of this file is to set <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. Due to this, the subroutine ppiclf_user_SetYdot() sets <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. This routine is similar to that of the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">dem_pack_3d</span></a> example with a few additions. First, the drag model has been updated to the previously given Gidaspow drag model. In addition, there are the following lines</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">fqsx</span>
+<span class="n">ppiclf_ydotc</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">fqsy</span>
+</pre></div>
+</div>
+<p>which sets the array ppiclf_ydotc(j,i) to the equal and opposite Gidaspow drag force of each particle. Recall that in the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">dem_pack_3d</span></a> example, ppiclf_ydotc(j,i) was used to store the collision force for each particle inside the ppiclf_user_EvalNearestNeighbor() subroutine. In a similar way, after ppiclf_ydot(j,i) has been set for a particle in this example, we use ppiclf_ydot(j,i) to temporarily store the equal and opposite drag force on each particle.</p>
+<p>Note that two other subroutines are declared in ppiclf_user.f. While the subroutine ppiclf_user_EvalNearestNeighbor() is similar to the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">dem_pack_3d</span></a> example and is used for computing the collision force on each particle, the routine ppiclf_user_MapProjPart() is also used. This routine will be described in more detail in the following overlap section.</p>
 </div>
 <div class="section" id="external-calls">
 <h2>External Calls<a class="headerlink" href="#external-calls" title="Permalink to this headline">¶</a></h2>
+<p>In order to solve the system of equations, Nek5000 is used as driver program. In this case, the following three lines in the included makenek file link the ppiclf library:</p>
+<div class="highlight-make notranslate"><div class="highlight"><pre><span></span><span class="nv">SOURCE_ROOT_PPICLF</span><span class="o">=</span><span class="nv">$HOME</span>/libraries/ppiclF/source
+<span class="nv">FFLAGS</span><span class="o">=</span><span class="s2">&quot; -I</span><span class="nv">$SOURCE_ROOT_PPICLF</span><span class="s2">&quot;</span>
+<span class="nv">USR_LFLAGS</span><span class="o">+=</span><span class="s2">&quot; -L</span><span class="nv">$SOURCE_ROOT_PPICLF</span><span class="s2"> -lppiclF&quot;</span>
+</pre></div>
 </div>
-<div class="section" id="simulation-output">
-<h2>Simulation Output<a class="headerlink" href="#simulation-output" title="Permalink to this headline">¶</a></h2>
+<p>The first line specifies the source code directory (i.e., LocalCodeDir/ppiclF/source). The second and third lines specify the location of the ppiclF code for building and linking to Nek5000 at compile time.</p>
+<p>The initialization of the ppiclF calls are found in the file uniform.usr in the subroutine usrdat2(). This routine is found below.</p>
+<div class="highlight-fortran notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101</pre></div></td><td class="code"><div class="highlight"><pre><span></span>      <span class="k">subroutine </span><span class="n">usrdat2</span>
+      <span class="k">include</span> <span class="s1">&#39;SIZE&#39;</span>
+      <span class="k">include</span> <span class="s1">&#39;TOTAL&#39;</span>
+<span class="cp">#include &quot;PPICLF.h&quot;</span>
+
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">ksp</span><span class="p">,</span><span class="n">erest</span>
+      <span class="k">common</span> <span class="o">/</span><span class="n">ucollision</span><span class="o">/</span> <span class="n">ksp</span><span class="p">,</span><span class="n">erest</span>
+      <span class="k">data </span><span class="n">ksp</span>   <span class="o">/</span><span class="mi">1</span><span class="mf">0.0</span><span class="o">/</span> <span class="c">! note: this limits dt, whcih we explicity set in .par file</span>
+      <span class="k">data </span><span class="n">erest</span> <span class="o">/</span><span class="mf">0.8</span><span class="o">/</span>
+
+      <span class="k">common</span> <span class="o">/</span><span class="n">nekmpi</span><span class="o">/</span> <span class="n">mid</span><span class="p">,</span><span class="n">mp</span><span class="p">,</span><span class="n">nekcomm</span><span class="p">,</span><span class="n">nekgroup</span><span class="p">,</span><span class="n">nekreal</span>
+
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_LRS</span>    <span class="p">,</span> <span class="n">PPICLF_LPART</span><span class="p">)</span> <span class="c">! Normal ordering</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_LRP</span><span class="p">,</span> <span class="n">PPICLF_LPART</span><span class="p">)</span> <span class="c">! Normal ordering</span>
+
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">dp</span><span class="p">,</span><span class="n">rhop</span><span class="p">,</span><span class="n">rlx</span><span class="p">,</span><span class="n">rrx</span><span class="p">,</span><span class="n">rly</span><span class="p">,</span><span class="n">rry</span><span class="p">,</span><span class="n">rspace</span>
+      <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">imethod</span><span class="p">,</span><span class="n">iendian</span><span class="p">,</span><span class="n">nmain</span><span class="p">,</span><span class="n">noff</span><span class="p">,</span><span class="n">nrow</span><span class="p">,</span><span class="n">npart</span>
+
+      <span class="c">! Pass to library to Init MPI</span>
+      <span class="k">call </span><span class="n">ppiclf_comm_InitMPI</span><span class="p">(</span><span class="n">nekcomm</span><span class="p">,</span>
+     <span class="o">&gt;</span>                         <span class="n">nid</span>    <span class="p">,</span> <span class="c">! nid already defined in Nek5000</span>
+     <span class="o">&gt;</span>                         <span class="n">np</span>     <span class="p">)</span> <span class="c">! np already defined in Nek5000</span>
+
+      <span class="c">! Set initial conditions and parameters for particles</span>
+      <span class="n">dp</span>      <span class="o">=</span> <span class="mf">1.2E-3</span>
+      <span class="n">rhop</span>    <span class="o">=</span> <span class="mi">100</span><span class="mf">0.0D0</span>
+      <span class="n">rdp</span>     <span class="o">=</span> <span class="mf">1.01</span><span class="o">*</span><span class="n">dp</span> <span class="c">! extra threshold when initially placed</span>
+      <span class="n">rlx</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">0.022</span>
+      <span class="n">rrx</span>     <span class="o">=</span>  <span class="mf">0.022</span>
+      <span class="n">rly</span>     <span class="o">=</span>  <span class="mf">0.000</span><span class="o">+</span><span class="n">rdp</span><span class="o">/</span><span class="mf">2.0</span>
+      <span class="n">rry</span>     <span class="o">=</span>  <span class="mf">0.030</span>
+      <span class="n">nmain</span>   <span class="o">=</span> <span class="nb">floor</span><span class="p">((</span><span class="n">rrx</span><span class="o">-</span><span class="n">rlx</span><span class="p">)</span><span class="o">/</span><span class="n">rdp</span><span class="p">)</span>
+      <span class="n">noff</span>    <span class="o">=</span> <span class="n">nmain</span>
+      <span class="n">rspace</span>  <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="mf">0.75d0</span><span class="p">)</span><span class="o">*</span><span class="n">rdp</span>
+      <span class="n">nrow</span>    <span class="o">=</span> <span class="mi">0</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">nid</span> <span class="p">.</span><span class="n">eq</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span>
+     <span class="o">&gt;</span><span class="n">nrow</span> <span class="o">=</span> <span class="nb">floor</span><span class="p">((</span><span class="n">rry</span><span class="o">-</span><span class="n">rly</span><span class="p">)</span><span class="o">/</span><span class="n">rspace</span><span class="p">)</span>
+      <span class="n">npart</span>   <span class="o">=</span> <span class="mi">0</span>
+      <span class="c">! the loop below will place particles in a nearly bcc packing</span>
+      <span class="c">! on nid == 0. We could have done in parallel but for the few</span>
+      <span class="c">! particles in this case rank 0 is fine</span>
+      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">nrow</span>
+         <span class="c">! main rows</span>
+         <span class="k">if</span> <span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="p">.</span><span class="n">eq</span><span class="p">.</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">            do </span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">nmain</span>
+               <span class="n">npart</span> <span class="o">=</span> <span class="n">npart</span> <span class="o">+</span> <span class="mi">1</span>
+               <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JX</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span>  <span class="o">=</span> <span class="n">rlx</span> <span class="o">+</span> <span class="n">rdp</span>    <span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+               <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JY</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span>  <span class="o">=</span> <span class="n">rly</span> <span class="o">+</span> <span class="n">rspace</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+               <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0d0</span>
+               <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0d0</span>
+
+               <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JRHOP</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhop</span>
+               <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JDP</span>  <span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="n">dp</span>
+               <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JVOLP</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="n">pi</span><span class="o">/</span><span class="mf">6.0D0</span><span class="o">*</span><span class="n">dp</span><span class="o">**</span><span class="mi">3</span>
+            <span class="n">enddo</span>
+         <span class="c">! off rows</span>
+         <span class="k">else</span>
+<span class="k">            do </span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">noff</span>
+               <span class="n">npart</span> <span class="o">=</span> <span class="n">npart</span> <span class="o">+</span> <span class="mi">1</span>
+               <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JX</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span>  <span class="o">=</span> <span class="n">rlx</span> <span class="o">+</span> <span class="n">rdp</span><span class="o">/</span><span class="mf">2.0d0</span>     <span class="o">+</span> <span class="n">rdp</span>    <span class="o">*</span><span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+               <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JY</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span>  <span class="o">=</span> <span class="n">rly</span> <span class="o">+</span> <span class="n">rspace</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+               <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0d0</span>
+               <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0d0</span>
+
+               <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JRHOP</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhop</span>
+               <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JDP</span>  <span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="n">dp</span>
+               <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JVOLP</span><span class="p">,</span><span class="n">npart</span><span class="p">)</span> <span class="o">=</span> <span class="n">pi</span><span class="o">/</span><span class="mf">6.0D0</span><span class="o">*</span><span class="n">dp</span><span class="o">**</span><span class="mi">3</span>
+            <span class="n">enddo</span>
+         <span class="n">endif</span>
+      <span class="n">enddo</span>
+      <span class="n">imethod</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="n">iendian</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c">!     ndim    = 2 ! ndim already defined in Nek5000</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_InitParticle</span><span class="p">(</span><span class="n">imethod</span>   <span class="p">,</span>
+     <span class="o">&gt;</span>                               <span class="n">ndim</span>      <span class="p">,</span>
+     <span class="o">&gt;</span>                               <span class="n">iendian</span>   <span class="p">,</span>
+     <span class="o">&gt;</span>                               <span class="n">npart</span>     <span class="p">,</span>
+     <span class="o">&gt;</span>                               <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>    <span class="p">,</span>
+     <span class="o">&gt;</span>                               <span class="n">rprop</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+
+      <span class="c">! Specify Gaussian filter</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_InitGaussianFilter</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">dp</span><span class="p">,</span><span class="mf">1E-3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+      <span class="c">! Specify Overlap Mesh</span>
+      <span class="k">call </span><span class="n">ppiclf_comm_InitOverlapMesh</span><span class="p">(</span><span class="n">nelt</span><span class="p">,</span><span class="n">lx1</span><span class="p">,</span><span class="n">ly1</span><span class="p">,</span><span class="n">lz1</span><span class="p">,</span><span class="n">xm1</span><span class="p">,</span><span class="n">ym1</span><span class="p">,</span><span class="n">zm1</span><span class="p">)</span>
+
+      <span class="c">! Specify neighbor bin size</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_InitNeighborBin</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span>
+
+      <span class="c">! Add a bottom wall boundary</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_InitWall</span><span class="p">(</span>
+     <span class="o">&gt;</span>                 <span class="p">(</span><span class="o">/-</span><span class="mf">0.022</span><span class="p">,</span><span class="mf">0.0</span><span class="o">/</span><span class="p">),</span>
+     <span class="o">&gt;</span>                 <span class="p">(</span><span class="o">/</span> <span class="mf">0.022</span><span class="p">,</span><span class="mf">0.0</span><span class="o">/</span><span class="p">),</span>
+     <span class="o">&gt;</span>                 <span class="p">(</span><span class="o">/</span> <span class="mf">0.0</span>  <span class="p">,</span><span class="mf">0.0</span><span class="o">/</span><span class="p">))</span>
+
+      <span class="c">! Set left and right boundaries to periodic</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_InitPeriodicX</span><span class="p">(</span><span class="n">rlx</span><span class="p">,</span><span class="n">rrx</span><span class="p">)</span>
+
+      <span class="k">return</span>
+<span class="k">      end</span>
+</pre></div>
+</td></tr></table></div>
+<p>This routine is called once at the beginning of the simulation. Similar to the initialization in the standalone driver program in <a class="reference internal" href="stokes_2d.html#stokes2d"><span class="std std-ref">stokes_2d</span></a>, ppiclf_comm_InitMPI() is called. Following this, the initial conditions of the solution variables <span class="math notranslate nohighlight">\(\mathbf{Y}_0 = \mathbf{Y} (t = 0)\)</span> are set, and the particle properties are initialized. In this case, the particles are initially lined in rows in a packed arrangement. The particles all of the same diameter and density.</p>
+<p>Following the call to ppiclf_solve_InitParticle(), the routine ppiclf_solve_InitGaussianFilter() is called. this routine is described in the overlap mesh section below.</p>
+<p>Following this, the routine ppiclf_comm_InitOverlapMesh(ne, lx, ly,lz, x, y, z) is called. This will be described in more detail in the overlap mesh section below.</p>
+<p>After this, ppiclf_solve_InitNeighborBin(w) is called to set up the particle neighbor search distance (refer to <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">dem_pack_3d</span></a> example).</p>
+<p>Following this, the routine ppiclf_solve_InitWall(a,b,c) is called. This initializes a boundary between points a, b, and c. Note that point c is used in 3D only for a triangluar element. In 2D, a and b are 8-byte real arrays of length 2 and store the (x,y) coordinates of the points. In 3D, a, b, and c are 8-byte real arrays of length 3 which store the (x,y,z) coordinates of the points. When only a small number of boundaries are needed, they can be set in this way by subsequent calls to ppiclf_solve_InitWall(). However, for more complicated boundaries we suggest a boundary file be read in as in the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">dem_pack_3d</span></a> example.</p>
+<p>To complete initialization, the x boundaries of the domain are set to be periodic with the call to the subroutine ppiclf_solve_InitPeriodicX(a,b). The inputs are 8-byte reals a and b, which specify the low and high points at which particles crossing lower/higher than will be moved to the opposite boundary. While not required in this problem, Y and Z routines are also available and may be called instead or in addition to other periodic conditions.</p>
+<p>Following the initialization, particles are advanced in time. This can be found in the uniform.usr file in the subroutine userchk(), which is shown below.</p>
+<div class="highlight-fortran notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34</pre></div></td><td class="code"><div class="highlight"><pre><span></span>      <span class="k">subroutine </span><span class="n">userchk</span>
+      <span class="k">include</span> <span class="s1">&#39;SIZE&#39;</span>
+      <span class="k">include</span> <span class="s1">&#39;TOTAL&#39;</span>
+<span class="cp">#include &quot;PPICLF.h&quot;</span>
+
+      <span class="c">! Set divergence equal to -1/phi_f * D/Dt( phi_f )</span>
+      <span class="k">call </span><span class="n">qtl_pvol</span><span class="p">(</span><span class="n">usrdiv</span><span class="p">,</span>
+     <span class="o">&gt;</span>              <span class="n">ppiclf_pro_fld</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">PPICLF_P_JPHIP</span><span class="p">))</span>
+      <span class="c">! Set divergence at outflow elements so that characteristics go out</span>
+      <span class="k">call </span><span class="n">fill_div</span><span class="p">(</span><span class="n">usrdiv</span><span class="p">)</span>
+
+      <span class="c">! Interpolate fields to particle positions</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_InterpFieldUser</span><span class="p">(</span><span class="n">PPICLF_R_JPHIP</span>
+     <span class="o">&gt;</span>                          <span class="p">,</span><span class="n">ppiclf_pro_fld</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">PPICLF_P_JPHIP</span><span class="p">))</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_InterpFieldUser</span><span class="p">(</span><span class="n">PPICLF_R_JUX</span>
+     <span class="o">&gt;</span>                          <span class="p">,</span><span class="n">vx</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_InterpFieldUser</span><span class="p">(</span><span class="n">PPICLF_R_JUY</span>
+     <span class="o">&gt;</span>                          <span class="p">,</span><span class="n">vy</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+      <span class="c">! Integrate particles</span>
+      <span class="k">call </span><span class="n">ppiclf_solve_IntegrateParticle</span><span class="p">(</span><span class="n">istep</span> <span class="p">,</span>
+     <span class="o">&gt;</span>                                    <span class="n">iostep</span><span class="p">,</span>
+     <span class="o">&gt;</span>                                    <span class="n">dt</span>    <span class="p">,</span>
+     <span class="o">&gt;</span>                                    <span class="nb">time</span>  <span class="p">)</span>
+
+      <span class="k">if</span> <span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">istep</span><span class="p">,</span><span class="n">iostep</span><span class="p">)</span> <span class="p">.</span><span class="n">eq</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span>
+     <span class="o">&gt;</span>   <span class="k">call </span><span class="n">outpost2</span><span class="p">(</span><span class="n">ppiclf_pro_fld</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">PPICLF_P_JFX</span><span class="p">)</span>
+     <span class="o">&gt;</span>                <span class="p">,</span><span class="n">ppiclf_pro_fld</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">PPICLF_P_JFY</span><span class="p">)</span>
+     <span class="o">&gt;</span>                <span class="p">,</span><span class="n">ppiclf_pro_fld</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">PPICLF_P_JPHIP</span><span class="p">)</span>
+     <span class="o">&gt;</span>                <span class="p">,</span><span class="n">ppiclf_pro_fld</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">PPICLF_P_JPHIP</span><span class="p">)</span>
+     <span class="o">&gt;</span>                <span class="p">,</span><span class="n">ppiclf_pro_fld</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">PPICLF_P_JPHIP</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;ptw&#39;</span><span class="p">)</span>
+
+      <span class="k">return</span>
+<span class="k">      end</span>
+</pre></div>
+</td></tr></table></div>
+<p>The userchk() routine is called at every simulation time step. The first call to qtl_pvol() specifies the non-zero velocity divergence of the governing equations and is specific to this application. The second routine fill_div() specifies the divergence at outflow elements to be facing outward and is standard in Nek5000 cases with outflows.</p>
+<p>In lines 13-18, three fields are mapped to be interpolated by the time ppiclf_solve_IntegrateParticle() is called. More information on this is given in the following overlap mesh section</p>
+<p>The time integration is then performed in lines 21-24 by calling the routine ppiclf_solve_IntegrateParticle() as in the other examples.</p>
+<p>Finally, the Nek5000 routine outpost2() is called to output native Nek5000 field files with the projected variables.</p>
+</div>
+<div class="section" id="overlapping-mesh">
+<h2>Overlapping Mesh<a class="headerlink" href="#overlapping-mesh" title="Permalink to this headline">¶</a></h2>
+<p>As has been previously mentioned, an overlap mesh is used. The term “overlap” refers to the external grid, which in this case is provided by Nek5000, which overlaps the region spanned by the particles. We can define two key operations that can be used when an overlap mesh is used:</p>
+<ol class="arabic simple">
+<li>Grid-to-particle interaction (<em>interpolation</em>)</li>
+<li>Particle-to-grid interaction (<em>projection</em>)</li>
+</ol>
+<p>Both of these operations require the user to initially specify the coordinates of the overlap grid. This was done previously in the current example with the subroutine ppiclf_comm_InitOverlapMesh() at initialization. Nek5000 stores an element based hexagonal grid with each element having a sub-grid resolution of lx, ly, and lz (lz = 1 in 2D). On each MPI processor, there are ne local elements (or cells), which make up a portion of the entire domain. Note that ne, lx, ly, and lz are 4-byte integers. The grid coordinates are stored in the 8-byte real arrays x(lx1,ly,lz,ne), y(lx,ly,lz,ne), and z(lx,ly,lz,ne). For standard hexagonal elements with no sub-grid resolution (i.e., most finite volume methods), lx = ly = lz = 2 so that only the nodes of the overlap mesh are stored. The user must also specify the maximum grid sizes in the PPICLF_USER.h file. That entails setting the parameters PPICLF_LEX, PPICLF_LEY, PPICLF_LEZ (3D only), and PPICLF_LEE. Note that ne must be less than PPICLF_LEE. In some cases, PPICLF_LEE must be larger than ne and will be determined by a specific problem’s geometry.</p>
+<p>Interpolation is the operation of using the Eulerian field values on the external grid which surrounds a particle to evaluate the field values at the particle’s position. The user interface for interpolation in ppiclF includes:</p>
+<ul class="simple">
+<li>Specifying the number of fields to be interpolated for each particle</li>
+<li>Specifying the mapping of interpolated fields to interpolated particle values in the property array</li>
+</ul>
+<p>The number of fields to be interpolated is set in the PPICLF_USER.h file as the parameter PPICLF_LRP_INT. The mapping of interpolated fields to particle properties is performed at each step and is performed by the calls to the routine ppiclf_solve_InterpFieldUser(j,fld). The first input is a 4-byte integer j which specifies the index in which ppiclf_rprop(j,i) will store the interpolated field value from fld. The input fld is an 8-byte real array that is stored in the same ordering as the overlap mesh coordinates, so fld(lx,ly,lz,ne). Since ppiclf_solve_InterpFieldUser() is called directly before ppiclf_solve_IntegrateParticle(), which means the interpolated values ppiclf_rprop(j,i) for the i particle is updated whenever ppiclf_user_SetYdot() is called.</p>
+<p>Projection on the other hand is the operation of filtering the particles to the surrounding Eulerian grid. The user interface for projection in ppiclF includes:</p>
+<ul class="simple">
+<li>Specifying the number of fields to be projected for each particle</li>
+<li>Specifying the projection filter</li>
+<li>Specifying the mapping of particle quantities to projected fields</li>
+</ul>
+<p>The number of projected fields is set in the PPICLF_USER.h file as the parameter PPICLF_LRP_PRO. The projection filter is initialized by calling ppiclf_solve_InitGaussianFilter(w, a, n). This sets up a Gaussian filtering of particles to the surrounding overlapped mesh. The inputs are an 8-byte real filter width w, an 8-byte real cut-off percent a, and a 4-byte integer n which specifies how particles near boundarys are filtered.</p>
+<p>In the ppiclf_user.f file, the subroutine ppiclf_user_MapProjPart(map,y,ydot,ydotc,rprop). The inputs to this routine are 8-byte real arrays of lengths map(PPICLF_LRP_PRO), y(PPICLF_LRS), ydot(PPICLF_LRS), ydotc(PPICLF_LRS), and rprop(PPICLF_LRP). The input arguments are the dummy variables y, ydot, ydotc, and rprop. These are dummy arguements for each particle which store the values for the i particle which calls this routine. They correspond exactly to ppiclf_y(j,i), ppiclf_ydot(j,i), ppiclf_ydotc(j,i), and ppiclf_rprop(j,i). The map value must be set when projection is used, which corresponds to the value which is projected to fields. The projected values outside this routine are then stored in the array ppiclf_pro_fld(PPICLF_LEX,PPICLF_LEY,PPICLF_LEZ,PPICLF_LEE,j), where j may be 1 to PPICLF_LRP_PRO. For convenience, in this case we have defined the projected field names in the PPICLF_USER.h file as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_P_JPHIP</span>
+<span class="n">PPICLF_P_JFX</span>
+<span class="n">PPICLF_P_JFY</span>
+</pre></div>
+</div>
+<p>Thus, in the present example, the routine is shown below.</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span>      <span class="k">subroutine </span><span class="n">ppiclf_user_MapProjPart</span><span class="p">(</span><span class="n">map</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ydot</span><span class="p">,</span><span class="n">ydotc</span><span class="p">,</span><span class="n">rprop</span><span class="p">)</span>
+<span class="c">!</span>
+      <span class="k">implicit none</span>
+<span class="c">!</span>
+<span class="c">! Input:</span>
+<span class="c">!</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">y</span>    <span class="p">(</span><span class="n">PPICLF_LRS</span><span class="p">)</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">ydot</span> <span class="p">(</span><span class="n">PPICLF_LRS</span><span class="p">)</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">ydotc</span><span class="p">(</span><span class="n">PPICLF_LRS</span><span class="p">)</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_LRP</span><span class="p">)</span>
+<span class="c">!</span>
+<span class="c">! Output:</span>
+<span class="c">!</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">map</span>  <span class="p">(</span><span class="n">PPICLF_LRP_PRO</span><span class="p">)</span>
+<span class="c">!</span>
+<span class="c">! Internal:</span>
+<span class="c">!</span>
+      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">dp_norm</span>
+<span class="c">!</span>
+
+      <span class="c">! particle volume divided by particle diameter for 2d</span>
+      <span class="n">dp_norm</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JDP</span><span class="p">)</span>
+      <span class="n">map</span><span class="p">(</span><span class="n">PPICLF_P_JPHIP</span><span class="p">)</span> <span class="o">=</span> <span class="n">dp_norm</span><span class="o">*</span><span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JVOLP</span><span class="p">)</span>
+      <span class="n">map</span><span class="p">(</span><span class="n">PPICLF_P_JFX</span><span class="p">)</span>   <span class="o">=</span> <span class="n">dp_norm</span><span class="o">*</span><span class="n">ydotc</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">)</span>
+      <span class="n">map</span><span class="p">(</span><span class="n">PPICLF_P_JFY</span><span class="p">)</span>   <span class="o">=</span> <span class="n">dp_norm</span><span class="o">*</span><span class="n">ydotc</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">)</span>
+
+      <span class="k">return</span>
+<span class="k">      end</span>
+</pre></div>
+</div>
+<p>It can be seen that the first mapped value is PPICLF_P_JPHIP which tells ppiclF to store the volume fraction <span class="math notranslate nohighlight">\(\phi_p\)</span> on the overlap mesh by projecting <span class="math notranslate nohighlight">\(V_p/D_p\)</span>. The second and third projected values are PPICLF_P_JFX and PPICLF_P_JFY which tell ppiclF to store projected Gidaspow drag force <span class="math notranslate nohighlight">\(\mathbf{f}_{qs}\)</span> on the overlap mesh by projecting <span class="math notranslate nohighlight">\(\mathbf{F}_{qs}/D_p\)</span>. Note that in this 2D example, the diamter normalizes the projection but would not be there in a 3D case.</p>
+</div>
+<div class="section" id="compiling-and-running">
+<h2>Compiling and Running<a class="headerlink" href="#compiling-and-running" title="Permalink to this headline">¶</a></h2>
+<p>This example can be tested with Nek5000 by issuing the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
+git clone https://github.com/dpzwick/ppiclF.git            <span class="c1"># clone ppiclF</span>
+git clone https://github.com/Nek5000/Nek5000.git           <span class="c1"># clone Nek5000</span>
+mkdir TestCase                                             <span class="c1"># make test directory</span>
+<span class="nb">cd</span> TestCase
+cp -r ../ppiclF/examples/Nek5000/* .                       <span class="c1"># copy example files to test case</span>
+<span class="nb">cd</span> ../ppiclF                                               <span class="c1"># go to ppiclF code</span>
+cp ../TestCase/user_routines/* source/                     <span class="c1"># copy ppiclf_user.f and PPICLF_USER.h to source</span>
+make                                                       <span class="c1"># build ppiclF</span>
+<span class="nb">cd</span> ../TestCase
+./makenek uniform                                          <span class="c1"># build Nek5000 and link with ppiclF</span>
+<span class="nb">echo</span> uniform &gt; SESSION.NAME <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/ &gt;&gt; SESSION.NAME <span class="c1"># create Nek5000 necessary file</span>
+mpirun -np <span class="m">4</span> nek5000                                       <span class="c1"># run case with 4 processors</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -192,6 +637,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../theory.html" class="btn btn-neutral float-right" title="Theory" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="dem_pack_3d.html" class="btn btn-neutral float-left" title="dem_pack_3d" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
