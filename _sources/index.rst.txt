@@ -31,4 +31,4 @@ Contents
 
    quickstart
    examples
-   theory
+   algorithms
