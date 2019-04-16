@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Time Integration" href="time_integration.html" /> 
+    <link rel="prev" title="Particle Storage" href="particle_storage.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,8 +92,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../algorithms.html">Algorithms</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="particle_storage.html">Particle Storage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="time_integration.html">Time Integration</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Overlap Mesh</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Overlap Mesh</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -162,6 +164,19 @@
             
   <div class="section" id="overlap-mesh">
 <span id="id1"></span><h1>Overlap Mesh<a class="headerlink" href="#overlap-mesh" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>In particle-in-cell simulations, the particles are often required to interact with an Eulerian mesh. Since the particle are tracked individually at discrete locations that do not necessarily coincide with a mesh, interactions between the particles and mesh must be handled carefully. We define two key opperations between the particles and the mesh:</p>
+<ol class="arabic simple">
+<li>Interpolation - field quantities on the mesh are evaulated at the particle’s coordinates,</li>
+<li>Projection - particle quantities are filtered from the particle’s coordinates to the mesh.</li>
+</ol>
+<p>Both of these operations require the user to initially specify the coordinates of the mesh. In the current version of ppiclF, only element based hexahedral meshes are supported.</p>
+<div class="align-center figure" id="id2">
+<img alt="../_images/bin_map.png" src="../_images/bin_map.png" />
+<p class="caption"><span class="caption-text">Illustration of mapping overlapping mesh to bins</span></p>
+</div>
+</div>
 </div>
 
 
@@ -173,7 +188,7 @@
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="time_integration.html" class="btn btn-neutral float-left" title="Time Integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="particle_storage.html" class="btn btn-neutral float-left" title="Particle Storage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
