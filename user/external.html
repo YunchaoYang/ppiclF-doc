@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>External Interface &mdash; ppiclF Documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="prev" title="The F-File" href="ffile.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ppiclF
+          
+
+          
+            
+            <img src="../_static/ppiclF.gif" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../user.html">User Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hfile.html">The H-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ffile.html">The F-File</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">External Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ppiclF</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../user.html">User Interface</a> &raquo;</li>
+        
+      <li>External Interface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="external-interface">
+<span id="external"></span><h1>External Interface<a class="headerlink" href="#external-interface" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="docutils" id="id1">
+<caption><span class="caption-text">Initialization subroutines</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Subroutine</th>
+<th class="head">Variables</th>
+<th class="head">Possible Values</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_comm_InitMPI</span></code></td>
+<td><div class="first last line-block">
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">comm</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">id</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">np</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">–</div>
+<div class="line">–</div>
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user inputs the current MPI</div>
+<div class="line">communicator <code class="docutils literal notranslate"><span class="pre">comm</span></code> where the current</div>
+<div class="line">MPI rank is <code class="docutils literal notranslate"><span class="pre">id</span></code> and there are <code class="docutils literal notranslate"><span class="pre">np</span></code></div>
+<div class="line">total ranks.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_comm_InitOverlapMesh</span></code></td>
+<td><div class="first last line-block">
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">ncell</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">lx</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">ly</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">lz</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">xgrid</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">ygrid</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">zgrid</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line"><span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LEE</div>
+<div class="line">PPICLF_LEX</div>
+<div class="line">PPICLF_LEY</div>
+<div class="line">PPICLF_LEZ</div>
+<div class="line">–</div>
+<div class="line">–</div>
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user inputs the element based mesh.</div>
+<div class="line">The arrays <code class="docutils literal notranslate"><span class="pre">xgrid</span></code>, <code class="docutils literal notranslate"><span class="pre">ygrid</span></code>, and</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">zgrid</span></code> are of size (<code class="docutils literal notranslate"><span class="pre">lx,ly,lz,ncell</span></code>)</div>
+<div class="line">and stores the mesh coordinates. Here,</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">ncell</span></code> is the number of local</div>
+<div class="line">hexahedral elements on rank <code class="docutils literal notranslate"><span class="pre">id</span></code>,</div>
+<div class="line">with <code class="docutils literal notranslate"><span class="pre">lx,ly,lz</span></code> points in each dimension.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_io_ReadParticleVTU</span></code></td>
+<td><div class="first last line-block">
+<div class="line">char*1 <code class="docutils literal notranslate"><span class="pre">filein(132)</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user specifies <code class="docutils literal notranslate"><span class="pre">filein</span></code> with .vtu</div>
+<div class="line">extension to use as the initial conditions</div>
+<div class="line">for particles.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_io_ReadWallVTK</span></code></td>
+<td><div class="first last line-block">
+<div class="line">char*1 <code class="docutils literal notranslate"><span class="pre">filein(132)</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user specifies <code class="docutils literal notranslate"><span class="pre">filein</span></code> with .vtk</div>
+<div class="line">extension to use as triangular plane</div>
+<div class="line">boundaries.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InitNeighborBin</span></code></td>
+<td><div class="first last line-block">
+<div class="line">real*8  <code class="docutils literal notranslate"><span class="pre">W</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">NA</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user specifies <code class="docutils literal notranslate"><span class="pre">W</span></code> as the minimum</div>
+<div class="line">interaction distance to resolve. See</div>
+<div class="line"><a class="reference internal" href="../algorithms/particle_storage.html#part-storage"><span class="std std-ref">Particle Storage (Bins)</span></a>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InitSuggestedDir</span></code></td>
+<td><div class="first last line-block">
+<div class="line">char*1 <code class="docutils literal notranslate"><span class="pre">dir</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">‘x’, ‘y’, ‘z’</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user inputs <code class="docutils literal notranslate"><span class="pre">dir</span></code> (either x, y, or z)</div>
+<div class="line">which lets the bin generation algorithm</div>
+<div class="line">attempt to create more bins in chosen</div>
+<div class="line">dimension.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InitPeriodicX</span></code></td>
+<td><div class="first last line-block">
+<div class="line">real*8 <code class="docutils literal notranslate"><span class="pre">a</span></code></div>
+<div class="line">real*8 <code class="docutils literal notranslate"><span class="pre">b</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">–</div>
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user sets periodicity in the y-z</div>
+<div class="line">planes at x = <code class="docutils literal notranslate"><span class="pre">a</span></code> and x = <code class="docutils literal notranslate"><span class="pre">b</span></code>. Note</div>
+<div class="line">that a &lt; b.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InitPeriodicY</span></code></td>
+<td><div class="first last line-block">
+<div class="line">real*8 <code class="docutils literal notranslate"><span class="pre">a</span></code></div>
+<div class="line">real*8 <code class="docutils literal notranslate"><span class="pre">b</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">–</div>
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user sets periodicity in the x-z</div>
+<div class="line">planes at y = <code class="docutils literal notranslate"><span class="pre">a</span></code> and y = <code class="docutils literal notranslate"><span class="pre">b</span></code>. Note</div>
+<div class="line">that a &lt; b.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InitPeriodicZ</span></code></td>
+<td><div class="first last line-block">
+<div class="line">real*8 <code class="docutils literal notranslate"><span class="pre">a</span></code></div>
+<div class="line">real*8 <code class="docutils literal notranslate"><span class="pre">b</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">–</div>
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user sets periodicity in the x-y</div>
+<div class="line">planes at z = <code class="docutils literal notranslate"><span class="pre">a</span></code> and z = <code class="docutils literal notranslate"><span class="pre">b</span></code>. Note</div>
+<div class="line">that a &lt; b.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InitGaussianFilter</span></code></td>
+<td><div class="first last line-block">
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">f</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">a</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">iflg</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">–</div>
+<div class="line">&lt; 1</div>
+<div class="line">0 (no mirror), 1 (mirror)</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The Gaussian filter half-width for</div>
+<div class="line">projection <span class="math notranslate nohighlight">\(\delta_f\)</span> is <code class="docutils literal notranslate"><span class="pre">f</span></code></div>
+<div class="line">(see <a class="reference internal" href="../algorithms/overlap_mesh.html#overlap-mesh"><span class="std std-ref">Overlap Mesh</span></a>). The value <code class="docutils literal notranslate"><span class="pre">a</span></code></div>
+<div class="line">is the percent of the r = 0 value that</div>
+<div class="line">the Gaussian filter is computationally</div>
+<div class="line">allowed to decay to. The flag <code class="docutils literal notranslate"><span class="pre">iflg</span></code></div>
+<div class="line">sets if particles should be mirrored and</div>
+<div class="line">then projected across boundarees.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InitBoxFilter</span></code></td>
+<td><div class="first last line-block">
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">f</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">iflg</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">–</div>
+<div class="line">0 (no mirror), 1 (mirror)</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The box filter half-width for</div>
+<div class="line">projection <span class="math notranslate nohighlight">\(\delta_f\)</span> is <code class="docutils literal notranslate"><span class="pre">f</span></code></div>
+<div class="line">(see <a class="reference internal" href="../algorithms/overlap_mesh.html#overlap-mesh"><span class="std std-ref">Overlap Mesh</span></a>). The flag</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">iflg</span></code> sets if particles should be</div>
+<div class="line">mirrored and then projected across</div>
+<div class="line">boundaries.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InitParticle</span></code></td>
+<td><div class="first last line-block">
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">imethod</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">ndim</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">iendian</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">npart</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">y</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">rprop</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">+/-1 (RK3)</div>
+<div class="line">2, 3</div>
+<div class="line">0 (little endian), 1 (big endian)</div>
+<div class="line">–</div>
+<div class="line">–</div>
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user also initializes</div>
+<div class="line"><span class="math notranslate nohighlight">\(\mathbf{Y}_0\)</span>, which is the initial</div>
+<div class="line">condition of <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> for the</div>
+<div class="line">system of equations. The user also sets</div>
+<div class="line">any properties associated with each</div>
+<div class="line">particle in rprop. The user also sets</div>
+<div class="line">the integration method <code class="docutils literal notranslate"><span class="pre">imethod</span></code>, the</div>
+<div class="line">problem dimension <code class="docutils literal notranslate"><span class="pre">ndim</span></code>, the byte</div>
+<div class="line">ordering <code class="docutils literal notranslate"><span class="pre">iendian</span></code>, and the number of</div>
+<div class="line">particles being initializied on the</div>
+<div class="line">current rank <code class="docutils literal notranslate"><span class="pre">npart</span></code>. When <code class="docutils literal notranslate"><span class="pre">imethod</span></code></div>
+<div class="line">is negative, the user is in chage of</div>
+<div class="line">looping through both steps <strong>AND</strong> stages.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils" id="id2">
+<caption><span class="caption-text">Solve subroutines</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+<col width="25%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Subroutine</th>
+<th class="head">Variables</th>
+<th class="head">Possible Values</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_InterpFieldUser</span></code></td>
+<td><div class="first last line-block">
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">ifld</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">fld</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line"><span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LRP</div>
+<div class="line">–</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">The user sets which field array <code class="docutils literal notranslate"><span class="pre">fld</span></code></div>
+<div class="line">of same dimensions set in initialization</div>
+<div class="line">call to ppiclf_comm_InitOverlapMesh routine</div>
+<div class="line">is used to interpolate to index in</div>
+<div class="line">property array ppiclf_rprop(<code class="docutils literal notranslate"><span class="pre">ifld</span></code>,i) for</div>
+<div class="line">the j particle.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal notranslate"><span class="pre">ppiclf_solve_IntegrateParticle</span></code></td>
+<td><div class="first last line-block">
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">istep</span></code></div>
+<div class="line">integer*4 <code class="docutils literal notranslate"><span class="pre">iostep</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">dt</span></code></div>
+<div class="line">real*8    <code class="docutils literal notranslate"><span class="pre">time</span></code></div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line"><span class="math notranslate nohighlight">\(\geq\)</span> 0</div>
+<div class="line"><span class="math notranslate nohighlight">\(\geq\)</span> 0</div>
+<div class="line"><span class="math notranslate nohighlight">\(\geq\)</span> 0.0</div>
+<div class="line"><span class="math notranslate nohighlight">\(\geq\)</span> 0.0</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">This routine must be called every time</div>
+<div class="line">step and uses the initial integration</div>
+<div class="line">method to advance <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> in</div>
+<div class="line">time. The inputs are the current <code class="docutils literal notranslate"><span class="pre">time</span></code>,</div>
+<div class="line">the current time step <code class="docutils literal notranslate"><span class="pre">dt</span></code> to advance</div>
+<div class="line">by, the current time step number <code class="docutils literal notranslate"><span class="pre">istep</span></code>,</div>
+<div class="line">and will output solution files every</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">iostep</span></code> number of time steps. Note that</div>
+<div class="line">the user must call this routine every time</div>
+<div class="line">step for the system to be integrated. When</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">imethod</span></code> is initialized to be a negative</div>
+<div class="line">number, this routine must also be called</div>
+<div class="line">every stage/iteration as well.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ffile.html" class="btn btn-neutral float-left" title="The F-File" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, David Zwick
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

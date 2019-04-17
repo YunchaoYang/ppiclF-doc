@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Quick Start Guide" href="quickstart.html" /> 
+    <link rel="next" title="Quick Start" href="quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,9 +88,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
 </ul>
 
             
@@ -165,7 +167,7 @@
 <ul class="simple">
 <li>Open MPI parallelization allows millions of equations to be solved.</li>
 <li>Load balances equations based on spatial position of particles.</li>
-<li>Links with both Fortran and C++.</li>
+<li>Links with both Fortran and C++ external code.</li>
 <li>Allows simple user input of external overlapping mesh for interactions between particles and external mesh, including interpolation and projection.</li>
 <li>Includes optional fast binned parallel nearest neighbor search between particles within a user defined distance.</li>
 </ul>
@@ -174,9 +176,22 @@
 <h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start Guide</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart/depend.html">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart/build.html">Build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart/link.html">Link</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithms/particle_storage.html">Particle Storage (Bins)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms/overlap_mesh.html">Overlap Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms/ghosts.html">Ghost Particles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">User Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/hfile.html">The H-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/ffile.html">The F-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/external.html">External Interface</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
@@ -185,11 +200,7 @@
 <li class="toctree-l2"><a class="reference internal" href="examples/Nek5000.html">Nek5000</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="algorithms/particle_storage.html">Particle Storage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithms/overlap_mesh.html">Overlap Mesh</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
 </ul>
 </div>
 </div>
@@ -203,7 +214,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quick Start Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quick Start" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

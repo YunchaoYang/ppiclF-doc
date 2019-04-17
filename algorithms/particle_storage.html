@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Particle Storage &mdash; ppiclF Documentation</title>
+  <title>Particle Storage (Bins) &mdash; ppiclF Documentation</title>
   
 
   
@@ -89,17 +89,20 @@
             
             
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../algorithms.html">Algorithms</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Particle Storage</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Particle Storage (Bins)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#bin-generation">Bin Generation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#bin-to-rank-mapping">Bin-to-Rank Mapping</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="overlap_mesh.html">Overlap Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ghosts.html">Ghost Particles</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../user.html">User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
 </ul>
 
             
@@ -147,7 +150,7 @@
         
           <li><a href="../algorithms.html">Algorithms</a> &raquo;</li>
         
-      <li>Particle Storage</li>
+      <li>Particle Storage (Bins)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -164,8 +167,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="particle-storage">
-<span id="part-storage"></span><h1>Particle Storage<a class="headerlink" href="#particle-storage" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="particle-storage-bins">
+<span id="part-storage"></span><h1>Particle Storage (Bins)<a class="headerlink" href="#particle-storage-bins" title="Permalink to this headline">¶</a></h1>
 <p>Based on the coordinates (<span class="math notranslate nohighlight">\(\mathbf{X}\)</span>) of each individual particle, the particle domain may be decomposed into rectangular prisms in 3D (or simply rectangles in 2D). These rectangular prisms are called <strong>bins</strong>. The particles with coordinates inside each bin are stored together on the same processor in memory. Additionally, we make the following key assumption: <em>the total number of bins does not exceed the total number of processors</em>.</p>
 <div class="section" id="bin-generation">
 <h2>Bin Generation<a class="headerlink" href="#bin-generation" title="Permalink to this headline">¶</a></h2>
@@ -193,7 +196,7 @@
 </ul>
 <p>In 2D, an example of this is shown in the figure below.</p>
 <div class="align-center figure" id="id1">
-<img alt="../_images/bin_generation.svg" src="../_images/bin_generation.svg" /><p class="caption"><span class="caption-text">Example of bin generation through recursive planar cutting</span></p>
+<img alt="../_images/bin_generation.svg" src="../_images/bin_generation.svg" /><p class="caption"><span class="caption-text">Example of bin generation through recursive planar cutting.</span></p>
 </div>
 <p>As is shown in the figure, the bin generation begins by bounding the particle domain, which is the region occupied by the rectangular prism whose planes are determined by the global maximum and minimum coordinates of the particles. Following this, the bins, which are demarcated by the dashed lines, are generated through the recursive planar cutting algorithm above. At the end of the process, different bin configurations are realized based on the number of processing ranks used. The resulting bin configurations are shown in the bottom of the figure above.</p>
 <p>Additionally, below each bin distribution, the number of particles :math:’N_p’ per processing rank :math:’R’ is compared between the different cases. Note that since we have required there to only be one bin stored on each processor, <span class="math notranslate nohighlight">\(N_p/R\)</span> also refers to the number of particles per bin. Ideally, there would be exactly <span class="math notranslate nohighlight">\(N_p/R\)</span> particles on a processor. In the current method, the ideal number of particles per rank is relaxed to allow nearby particles to be locally grouped together in the same rank (or bin). Thus, in the current method we have a deviation from the ideal number of particles on each rank, with ranks having varying numbers of particles. In the figure, the maximum and minimum number of particles on each rank in the BBGP method is shown.</p>

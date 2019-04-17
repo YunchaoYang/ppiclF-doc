@@ -7,3 +7,4 @@ Algorithms
 
    algorithms/particle_storage
    algorithms/overlap_mesh
+   algorithms/ghosts

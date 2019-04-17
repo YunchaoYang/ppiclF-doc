@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The H-File &mdash; ppiclF Documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The F-File" href="ffile.html" />
+    <link rel="prev" title="User Interface" href="../user.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ppiclF
+          
+
+          
+            
+            <img src="../_static/ppiclF.gif" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../user.html">User Interface</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The H-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ffile.html">The F-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="external.html">External Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ppiclF</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../user.html">User Interface</a> &raquo;</li>
+        
+      <li>The H-File</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="the-h-file">
+<span id="hfile"></span><h1>The H-File<a class="headerlink" href="#the-h-file" title="Permalink to this headline">¶</a></h1>
+<p>The H-File (PPICLF_USER.h) is required for each case and specifies the maximum size of different arrays used in the code. These sizes are defined by C pre-processor directives.</p>
+<p>In order to understand the naming convention, we recall that we solve the following system of equations for each particle</p>
+<div class="math notranslate nohighlight">
+\[\dfrac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}},\]</div>
+<p>where, for example, each particle may have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{Y} = \begin{bmatrix}Y_1 \\ Y_2 \\ Y_3 \\ Y_4 \end{bmatrix},\quad \dot{\mathbf{Y}} = \begin{bmatrix}\dot{Y}_1 \\ \dot{Y}_2 \\ \dot{Y}_3 \\ \dot{Y}_3 \end{bmatrix}.\end{split}\]</div>
+<p>As is demonstrated above, for each particle in this case we are solving a system of 4 equations, which is the length of the vectors <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. We will order each equation as they appear in the array above. Note that the actual ordering of equations is up to the user, but it is required that the positions <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> (3D only) must be the first equations when ordering the vector. Accordinging we call the solution variables</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_JY1</span>
+<span class="n">PPICLF_JY2</span>
+<span class="n">PPICLF_JY3</span>
+<span class="n">PPICLF_JY4</span>
+</pre></div>
+</div>
+<p>For this example then, the PPICLF_USER.h header file would define</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRS 4</span>
+<span class="cp">#define PPICLF_JY1 1</span>
+<span class="cp">#define PPICLF_JY2 2</span>
+<span class="cp">#define PPICLF_JY3 3</span>
+<span class="cp">#define PPICLF_JY4 4</span>
+</pre></div>
+</div>
+<p>It is seen that the number of equations is specified (PPICLF_LRS) and the equation names are ordered from 1 to PPICLF_LRS with the position being first. Note that you are not required to define PPICLF_JY1, PPICLF_JY2, PPICLF_JY3, and PPICLF_JY4, as these are user defined and only used in <a class="reference internal" href="ffile.html#ffile"><span class="std std-ref">The F-File</span></a>. However, PPICLF_LRS must be defined based on the number of equations being solved.</p>
+<p>Similarly, each particle may have a number of properties associated with them. For demonstration, lets say that each particle has properties PROPA and PROPB. We will name them accordingly</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_R_JPROPA</span>
+<span class="n">PPICLF_R_JPROPB</span>
+</pre></div>
+</div>
+<p>Then, in the PPICLF_USER.h header file we would define</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRP 2</span>
+<span class="cp">#define PPICLF_R_JPROPA 1</span>
+<span class="cp">#define PPICLF_R_JPROPB 2</span>
+</pre></div>
+</div>
+<p>meaning that the number of properties is PPICLF_LRP and the property names are ordered from 1 to PPICLF_LRP. Note that you are not required to define PPICLF_R_JPROPA and PPICLF_R_JPROPB, as these are user determined and only used in <a class="reference internal" href="ffile.html#ffile"><span class="std std-ref">The F-File</span></a>. However, PPICLF_LRP must be defined if any properties are to be used.</p>
+<p>When an overlap mesh is specified, the size of the mesh must be specified. These varaibles must be named as follows</p>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_LEX</span>
+<span class="n">PPICLF_LEY</span>
+<span class="n">PPICLF_LEZ</span>
+<span class="n">PPICLF_LEE</span>
+</pre></div>
+</div>
+<p>where PPICLF_LEZ does not need to be defined in 2D. Here, PPICLF_LEE is the maximum number of elements allowed on each rank. PPICLF_LEX, PPICLF_LEY, and PPICLF_LEZ specify the overlap mesh element coordinates in respecitve dimension. For example, in finite volume methods we would have</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LEX 2</span>
+<span class="cp">#define PPICLF_LEY 2</span>
+<span class="cp">#define PPICLF_LEZ 2</span>
+<span class="cp">#define PPICLF_LEE 1000</span>
+</pre></div>
+</div>
+<p>where the number 1000 should be replaced with an appropriate number of elements per processor on your application.</p>
+<p>When used, the number of interpolated fields to interpolate must be set in PPICLF_USER.h. For 3 fields to interpolate, we would have</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRP_INT 3</span>
+</pre></div>
+</div>
+<p>Additionally, when used, the number of projected fields must be set in PPICLF_USER.h. For 6 projected fields, we would have</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRP_PRO 6</span>
+</pre></div>
+</div>
+<p>For ease of user access, we can name the fields similar to how the solution vector and property arrays were named but are not required to.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="ffile.html" class="btn btn-neutral float-right" title="The F-File" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../user.html" class="btn btn-neutral float-left" title="User Interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, David Zwick
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
