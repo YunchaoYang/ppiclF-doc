@@ -14,7 +14,7 @@ Capabilities
 								           
 * Load balances equations based on spatial position of particles.
 
-* Links with both Fortran and C++.
+* Links with both Fortran and C++ external code.
 									            
 * Allows simple user input of external overlapping mesh for interactions between particles and external mesh, including interpolation and projection.
 											       
@@ -32,5 +32,7 @@ Contents
    :maxdepth: 2
 
    quickstart
-   examples
    algorithms
+   user
+   examples
+   contribute

@@ -1,8 +1,8 @@
 .. _part-storage:
 
-----------------
-Particle Storage
-----------------
+-----------------------
+Particle Storage (Bins)
+-----------------------
 Based on the coordinates (:math:`\mathbf{X}`) of each individual particle, the particle domain may be decomposed into rectangular prisms in 3D (or simply rectangles in 2D). These rectangular prisms are called **bins**. The particles with coordinates inside each bin are stored together on the same processor in memory. Additionally, we make the following key assumption: *the total number of bins does not exceed the total number of processors*.
 
 Bin Generation
@@ -40,7 +40,7 @@ In 2D, an example of this is shown in the figure below.
    :align: center
    :figclass: align-center
 
-   Example of bin generation through recursive planar cutting
+   Example of bin generation through recursive planar cutting.
 
 As is shown in the figure, the bin generation begins by bounding the particle domain, which is the region occupied by the rectangular prism whose planes are determined by the global maximum and minimum coordinates of the particles. Following this, the bins, which are demarcated by the dashed lines, are generated through the recursive planar cutting algorithm above. At the end of the process, different bin configurations are realized based on the number of processing ranks used. The resulting bin configurations are shown in the bottom of the figure above.
 
