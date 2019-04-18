@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>stokes_2d &mdash; ppiclF Documentation</title>
+  <title>Stokes 2D &mdash; ppiclF Documentation</title>
   
 
   
@@ -20,12 +20,21 @@
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'v1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -36,7 +45,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="dem_pack_3d" href="dem_pack_3d.html" />
+    <link rel="next" title="DEM Packing 3D" href="dem_pack_3d.html" />
     <link rel="prev" title="Examples" href="../examples.html" /> 
 </head>
 
@@ -88,24 +97,30 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../user.html">User Interface</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">stokes_2d</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Stokes 2D</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#background">Background</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-h-file-ppiclf-user-h">The H-File (PPICLF_USER.h)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#the-f-file-ppiclf-user-f">The F-File (ppiclf_user.f)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#external-calls">External Calls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-interface">User Interface</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#compiling-and-running">Compiling and Running</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#simulation-output">Simulation Output</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="dem_pack_3d.html">dem_pack_3d</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Nek5000.html">Nek5000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dem_pack_3d.html">DEM Packing 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Nek5000.html">Nek5000 Case</a></li>
 </ul>
 </li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
 </ul>
 
@@ -154,7 +169,7 @@
         
           <li><a href="../examples.html">Examples</a> &raquo;</li>
         
-      <li>stokes_2d</li>
+      <li>Stokes 2D</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,13 +186,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="stokes-2d">
-<span id="stokes2d"></span><h1>stokes_2d<a class="headerlink" href="#stokes-2d" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="stokes2d">
+<span id="id1"></span><h1><a class="reference external" href="https://github.com/dpzwick/ppiclF/tree/master/examples/stokes_2d">Stokes 2D</a><a class="headerlink" href="#stokes2d" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="background">
 <h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
 <p>This is a simple example that illustrates Stokes drag on solid spherical particles. This can be illustrated by the following system of equations. For each particle, we have</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}\dfrac{d \mathbf{X}}{d t} &amp;= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &amp;= \mathbf{F}_{qs} + \mathbf{F}_b, \end{align}\end{split}\]</div>
+\[\begin{split}\dfrac{d \mathbf{X}}{d t} &amp;= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &amp;= \mathbf{F}_{qs} + \mathbf{F}_b,\end{split}\]</div>
 <p>where, for each particle we have the position vector <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>, the velocity vector <span class="math notranslate nohighlight">\(\mathbf{V}\)</span>, the Stokes drag force <span class="math notranslate nohighlight">\(\mathbf{F}_{qs}\)</span>, and the weight force <span class="math notranslate nohighlight">\(\mathbf{F}_{b}\)</span>, defined by</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\mathbf{X} = \begin{bmatrix}X \\ Y \end{bmatrix},\quad \mathbf{V} = \begin{bmatrix}V_x \\ V_y \end{bmatrix},\quad \mathbf{F}_{qs} = \dfrac{M_p}{\tau_p} \begin{bmatrix}V_x \\ V_y \end{bmatrix},\quad \mathbf{F}_{b} = M_p \begin{bmatrix}0 \\ g \end{bmatrix}.\end{split}\]</div>
@@ -188,68 +203,22 @@
 <div class="math notranslate nohighlight">
 \[\begin{split}\mathbf{Y} = \begin{bmatrix}X \\ Y \\ V_x \\ V_y \end{bmatrix},\quad \dot{\mathbf{Y}} = \begin{bmatrix}V_x \\ V_y \\ -V_x/\tau_p + 0\\ -V_y/\tau_p - g \end{bmatrix}.\end{split}\]</div>
 </div>
-<div class="section" id="the-h-file-ppiclf-user-h">
-<h2>The H-File (PPICLF_USER.h)<a class="headerlink" href="#the-h-file-ppiclf-user-h" title="Permalink to this headline">¶</a></h2>
-<p>As is demonstrated above, for each particle we are solving a system of 4 equations, which is the length of the vectors <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. We will order each equation as they appear in the array above. Note that the actual ordering of equations is up to the user, but it is required that the positions <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> (3D only) must be the first equations when ordering the vector. Accordinging we call the solution variables</p>
-<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_JX</span>
-<span class="n">PPICLF_JY</span>
-<span class="n">PPICLF_JVX</span>
-<span class="n">PPICLF_JVY</span>
-</pre></div>
-</div>
-<p>Additionally, we allow <span class="math notranslate nohighlight">\(\tau_p\)</span> to vary for particle, so each particle has 1 property associated with it. We name the property</p>
-<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_R_JTAUP</span>
-</pre></div>
-</div>
-<p>For this example then, the PPICLF_USER.h header file is</p>
+<div class="section" id="user-interface">
+<h2>User Interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../user/hfile.html#hfile"><span class="std std-ref">The H-File</span></a> for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since <span class="math notranslate nohighlight">\(g\)</span> is constant, we do not included in in the list of properties.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRS 4</span>
-<span class="cp">#define PPICLF_JX 1</span>
-<span class="cp">#define PPICLF_JY 2</span>
+<span class="cp">#define PPICLF_LRP 1</span>
+
+<span class="cp">#define PPICLF_JX  1</span>
+<span class="cp">#define PPICLF_JY  2</span>
 <span class="cp">#define PPICLF_JVX 3</span>
 <span class="cp">#define PPICLF_JVY 4</span>
-
-<span class="cp">#define PPICLF_LRP 1</span>
 <span class="cp">#define PPICLF_R_JTAUP 1</span>
 </pre></div>
 </div>
-<p>It is seen that the number of equations is specified (PPICLF_LRS), the equation names are ordered from 1 to PPICLF_LRS with the position being first, the number of properties is specified (PPICLF_LRP), and the properties are ordered from 1 to PPICLF_LRP.</p>
-</div>
-<div class="section" id="the-f-file-ppiclf-user-f">
-<h2>The F-File (ppiclf_user.f)<a class="headerlink" href="#the-f-file-ppiclf-user-f" title="Permalink to this headline">¶</a></h2>
-<p>The values set in the PPICLF_USER.h file are used to access array values in the ppiclf_user.f file.</p>
-<p>Specifically, the arrays ppiclf_y(j,i) and ppiclf_ydot(j,i) correspond to <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. The arrays are arranged by the j equation number (max PPICLF_LRS) for the i particle. The property array ppiclf_rprop(j,i) stores the j (max PPICLF_LRP) properties of the j particle.</p>
-<p>The user is required to define the ppiclf_user.f file. The main purpose of this file is to set <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. Due to this, the subroutine ppiclf_user_SetYdot() sets <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span> and for this case is given as</p>
-<div class="highlight-fortran notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31</pre></div></td><td class="code"><div class="highlight"><pre><span></span>      <span class="k">subroutine </span><span class="n">ppiclf_user_SetYdot</span>
+<p>The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations and the number of properties. The user-only directives are in the bottom block.</p>
+<p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case only has meaningful information in ppiclf_user_SetYdot. The other two routines ppiclf_user_MapProjPart and ppiclf_user_EvalNearestNeighbor are defined only.</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span>      <span class="k">subroutine </span><span class="n">ppiclf_user_SetYdot</span>
 <span class="c">!</span>
       <span class="k">implicit none</span>
 <span class="c">!</span>
@@ -281,151 +250,14 @@
       <span class="k">return</span>
 <span class="k">      end</span>
 </pre></div>
-</td></tr></table></div>
-<p>In this example, the do-loop loops through the total number of particles on each processor, which is the variable ppiclf_npart. The user computes the stokes drag force and weight in each direction for each particle. Then, the 4 equations are specified according to the system of equations defined in this case.</p>
-<p>Note that two additional subroutines are also declared in this file, which are ppiclf_user_MapProjPart() and ppiclf_user_EvalNearestNeighbor(). In this example these routines are not used so their contents are blank. However, they must still be decleared.</p>
-<p>The two user files PPICLF_USER.h and ppiclf_user.f are then copied to the LocalCodeDir/ppiclF/source/ directory and the library can be built using make.</p>
 </div>
-<div class="section" id="external-calls">
-<h2>External Calls<a class="headerlink" href="#external-calls" title="Permalink to this headline">¶</a></h2>
-<p>In order to solve the system of equations, a driver program is used. In this case, a simple fortran MPI program in the example file test.f is used for this purpose (the library can instead be linked as a static library, as decribed in the <a class="reference internal" href="../quickstart/link.html#linking"><span class="std std-ref">Link</span></a> section). Specifically, the driver program is responsible for setting the initial conditions of the solution variables <span class="math notranslate nohighlight">\(\mathbf{Y}_0 = \mathbf{Y} (t = 0)\)</span>, specifying solver options, and looping through time. The program in test.f is found below.</p>
-<div class="highlight-fortran notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
- 2
- 3
- 4
- 5
- 6
- 7
- 8
- 9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66</pre></div></td><td class="code"><div class="highlight"><pre><span></span>      <span class="k">program </span><span class="n">main</span>
-<span class="cp">#include &quot;PPICLF.h&quot;</span>
-      <span class="k">include</span> <span class="s1">&#39;mpif.h&#39;</span>
-<span class="c">!</span>
-      <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">np</span><span class="p">,</span> <span class="n">nid</span><span class="p">,</span> <span class="n">icomm</span>
-      <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">imethod</span><span class="p">,</span> <span class="n">ndim</span><span class="p">,</span> <span class="n">iendian</span><span class="p">,</span> <span class="n">npart</span>
-      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_LRS</span>    <span class="p">,</span> <span class="n">PPICLF_LPART</span><span class="p">)</span> <span class="c">! Normal ordering</span>
-      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_LRP</span><span class="p">,</span> <span class="n">PPICLF_LPART</span><span class="p">)</span> <span class="c">! Normal ordering</span>
-
-      <span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">nstep</span><span class="p">,</span> <span class="n">iostep</span>
-      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">dt</span><span class="p">,</span> <span class="nb">time</span>
-<span class="nb">      </span><span class="kt">integer</span><span class="o">*</span><span class="mi">4</span> <span class="n">ierr</span>
-      <span class="kt">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">rdum</span><span class="p">,</span> <span class="n">ran2</span>
-      <span class="k">external </span><span class="n">ran2</span>
-<span class="c">!</span>
-      <span class="c">! Init MPI</span>
-      <span class="k">call </span><span class="n">MPI_Init</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
-      <span class="n">icomm</span> <span class="o">=</span> <span class="n">MPI_COMM_WORLD</span>
-      <span class="k">call </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">icomm</span><span class="p">,</span> <span class="n">nid</span><span class="p">,</span> <span class="n">ierr</span><span class="p">)</span>
-      <span class="k">call </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">icomm</span><span class="p">,</span> <span class="n">np</span> <span class="p">,</span> <span class="n">ierr</span><span class="p">)</span>
-
-      <span class="c">! Pass to library to Init MPI</span>
-      <span class="k">call </span><span class="n">ppiclf_comm_InitMPI</span><span class="p">(</span><span class="n">icomm</span><span class="p">,</span>
-     <span class="o">&gt;</span>                         <span class="n">nid</span>  <span class="p">,</span>
-     <span class="o">&gt;</span>                         <span class="n">np</span>   <span class="p">)</span>
-
-      <span class="c">! Set initial conditions and parameters for particles</span>
-      <span class="n">imethod</span> <span class="o">=</span> <span class="mi">1</span>
-      <span class="n">ndim</span>    <span class="o">=</span> <span class="mi">2</span>
-      <span class="n">iendian</span> <span class="o">=</span> <span class="mi">0</span>
-      <span class="n">npart</span>   <span class="o">=</span> <span class="mi">250</span>
-      <span class="n">rdum</span>    <span class="o">=</span> <span class="n">ran2</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">nid</span><span class="p">)</span> <span class="c">! init random numbers</span>
-      <span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">npart</span>
-
-         <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>  <span class="o">=</span> <span class="n">ran2</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-         <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>  <span class="o">=</span> <span class="n">ran2</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-         <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JVX</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0</span>
-         <span class="n">y</span><span class="p">(</span><span class="n">PPICLF_JVY</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-         <span class="n">rprop</span><span class="p">(</span><span class="n">PPICLF_R_JTAUP</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="mf">9.8</span>
-      <span class="n">enddo</span>
-      <span class="k">call </span><span class="n">ppiclf_solve_InitParticle</span><span class="p">(</span><span class="n">imethod</span>   <span class="p">,</span>
-     <span class="o">&gt;</span>                               <span class="n">ndim</span>      <span class="p">,</span>
-     <span class="o">&gt;</span>                               <span class="n">iendian</span>   <span class="p">,</span>
-     <span class="o">&gt;</span>                               <span class="n">npart</span>     <span class="p">,</span>
-     <span class="o">&gt;</span>                               <span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>    <span class="p">,</span>
-     <span class="o">&gt;</span>                               <span class="n">rprop</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
-
-      <span class="c">! Integrate particles in time</span>
-      <span class="n">nstep</span>  <span class="o">=</span> <span class="mi">1000</span>
-      <span class="n">iostep</span> <span class="o">=</span> <span class="mi">100</span>
-      <span class="n">dt</span>     <span class="o">=</span> <span class="mf">1E-4</span>
-      <span class="k">do </span><span class="n">istep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">nstep</span>
-
-         <span class="nb">time</span> <span class="o">=</span> <span class="p">(</span><span class="n">istep</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dt</span>
-         <span class="k">call </span><span class="n">ppiclf_solve_IntegrateParticle</span><span class="p">(</span><span class="n">istep</span> <span class="p">,</span>
-     <span class="o">&gt;</span>                                       <span class="n">iostep</span><span class="p">,</span>
-     <span class="o">&gt;</span>                                       <span class="n">dt</span>    <span class="p">,</span>
-     <span class="o">&gt;</span>                                       <span class="nb">time</span>  <span class="p">)</span>
-      <span class="n">enddo</span>
-
-      <span class="c">! Finalize MPI</span>
-      <span class="k">call </span><span class="n">MPI_FINALIZE</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
-
-      <span class="k">stop</span>
-<span class="k">      end</span>
-</pre></div>
-</td></tr></table></div>
-<p>First, MPI is initialized using the current communicator icomm, the current MPI rank nid, and the total number of processors np. These are passed to the routine ppiclf_comm_InitMPI(icomm,nid,np).</p>
-<p>Following this, the user initializes the initial conditions <span class="math notranslate nohighlight">\(\mathbf{Y}_0\)</span> and properties for npart local particles. This is accomplished in the loop from lines 33-41. For each particle initialized, the PPICLF_LRS initial condtions are set in the array y(j,i). The positions of each particle in <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> are set with a random number generator to be between 0 and 1. The initial velocities are set to zero. The property <span class="math notranslate nohighlight">\(\tau_p\)</span> is specified to be <span class="math notranslate nohighlight">\(g^{-1}\)</span> in the array rprop(j,i). Here, y and rprop are defiend to be 8-byte real arrays of size (PPICLF_LRS,PPICLF_LPART) and (PPICLF_LRP,PPICLF_LPART), respectfully. These are temporary arrays which are copied to the internal arrays ppiclf_y and ppiclf_rprop upon initialization.</p>
-<p>The routine ppiclf_solve_InitParticle(imethod,ndim,iendian,npart,y,rprop) is then called. The inputs are the time integration method (4-byte integer imethod), the problem dimension (4-byte integer ndim), the byte ordering (4-byte integer iendian), the local number of particles on this processor (4-byte integer npart), and the first location of the temporary arrays y and rprop.</p>
-<p>Following this, a dummy time loop is iterated. At each step, the subroutine ppiclf_solve_IntegrateParticle(istep,iostep,dt,time) is called. This routine will advance the system of equations in time. Here, we pass in the current time step (4-byte integer istep), the time step file output frequency (4-byte integer iostep), the time step (8-byte real dt), and the current time (8-byte real time). Whenever ppiclf_solve_IntegrateParticle() is called, it will advance the solution ppiclf_y with a time step of dt and a forcing ppiclf_ydot which was specified in the ppiclf_user.f file.</p>
+<p>In this example, the do-loop loops through the total number of particles on each processor. The user computes the stokes drag force and weight in each direction for each particle. Then, the 4 equations are specified according to the system of equations defined in this case.</p>
+<p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur in a simple driver program in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/stokes_2d/fortran/test.f">test.f</a> with the minimum number of initialization and solve subroutines called. In this case:</p>
+<ul class="simple">
+<li>ppiclf_comm_InitMPI is called to initialize the communication,</li>
+<li>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</li>
+<li>ppiclf_solve_IntegrateParticle is called in a simple time step loop.</li>
+</ul>
 </div>
 <div class="section" id="compiling-and-running">
 <h2>Compiling and Running<a class="headerlink" href="#compiling-and-running" title="Permalink to this headline">¶</a></h2>
@@ -465,7 +297,7 @@ mpirun -np <span class="m">4</span> test.out                               <span
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="dem_pack_3d.html" class="btn btn-neutral float-right" title="dem_pack_3d" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="dem_pack_3d.html" class="btn btn-neutral float-right" title="DEM Packing 3D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

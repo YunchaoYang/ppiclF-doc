@@ -20,12 +20,21 @@
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'v1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -88,16 +97,24 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../algorithms.html">Algorithms</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="particle_storage.html">Particle Storage (Bins)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="particle_storage.html">Particle Storage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="overlap_mesh.html">Overlap Mesh</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Ghost Particles</a></li>
 </ul>
 </li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../user.html">User Interface</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
 </ul>
 
@@ -165,13 +182,13 @@
             
   <div class="section" id="ghost-particles">
 <span id="ghosts"></span><h1>Ghost Particles<a class="headerlink" href="#ghost-particles" title="Permalink to this headline">¶</a></h1>
-<p>Particles in the interior of bins have access to locally stored particles through the mapping of bins to ranks (see <a class="reference internal" href="particle_storage.html#part-storage"><span class="std std-ref">Particle Storage (Bins)</span></a>) and the locally stored mesh through mapping the mesh to bins (see <a class="reference internal" href="overlap_mesh.html#overlap-mesh"><span class="std std-ref">Overlap Mesh</span></a>). However, particles near the boundary of bins may interact with data that is stored in the processing ranks associated with neighboring bins. This interaction may occur in two ways:</p>
+<p>Particles in the interior of bins have access to locally stored particles through the mapping of bins to ranks (see <a class="reference internal" href="particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>) and the locally stored mesh through mapping the mesh to bins (see <a class="reference internal" href="overlap_mesh.html#overlap-mesh"><span class="std std-ref">Overlap Mesh</span></a>). However, particles near the boundary of bins may interact with data that is stored in the processing ranks associated with neighboring bins. This interaction may occur in two ways:</p>
 <ol class="arabic simple">
 <li>Particles near the edge of one bin need information from particles in a neighboring bin,</li>
 <li>Projection of particles near the edge of one bin spills over into neighboring bins.</li>
 </ol>
 <p>In either case, ppiclF handles these interactions through the use of ghost particles. Ghost particles are simply copies of computational particles which are used to communicate particle data to neighboring bins that are stored on different processors.</p>
-<p>Recall that a user may specify a minimum interaction length, which we called <code class="code docutils literal notranslate"><span class="pre">W</span></code> (see <a class="reference internal" href="particle_storage.html#part-storage"><span class="std std-ref">Particle Storage (Bins)</span></a>). This length specifies the minimum length of bins in each dimension, even though the actual length of bins is most often determined by the number of processors used. For this reason, a single ghost particle is created for each bin that touches the current bin that a particle is stored with when the distance from the particle to the closest point in the neighboring bin is less than <code class="code docutils literal notranslate"><span class="pre">W</span></code>.</p>
+<p>Recall that a user may specify a minimum interaction length, which we called <code class="code docutils literal notranslate"><span class="pre">W</span></code> (see <a class="reference internal" href="particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>). This length specifies the minimum length of bins in each dimension, even though the actual length of bins is most often determined by the number of processors used. For this reason, a single ghost particle is created for each bin that touches the current bin that a particle is stored with when the distance from the particle to the closest point in the neighboring bin is less than <code class="code docutils literal notranslate"><span class="pre">W</span></code>.</p>
 <p>As a result, only the single layer of neighbor bins to the bin a particle is stored in may recieve a ghost particle. Due to the Cartesian layout of bins, this results in at most 26 ghost particles in 3D and 8 ghost particles in 2D being created for each computational particle.</p>
 </div>
 

@@ -20,12 +20,21 @@
   <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'v1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -36,7 +45,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Quick Start" href="quickstart.html" /> 
+    <link rel="next" title="Quickstart" href="quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,10 +97,18 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="user.html">User Interface</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
 </ul>
 
@@ -172,35 +189,106 @@
 <li>Includes optional fast binned parallel nearest neighbor search between particles within a user defined distance.</li>
 </ul>
 </div>
-<div class="section" id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="quickstart/depend.html">Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart/build.html">Build</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quickstart/link.html">Link</a></li>
 </ul>
 </li>
+</ul>
+</div>
+</div>
+<div class="section" id="algorithms">
+<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="algorithms/particle_storage.html">Particle Storage (Bins)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="algorithms/overlap_mesh.html">Overlap Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms/particle_storage.html">Particle Storage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="algorithms/particle_storage.html#bin-generation">Bin Generation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithms/particle_storage.html#bin-to-rank-mapping">Bin-to-Rank Mapping</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms/overlap_mesh.html">Overlap Mesh</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="algorithms/overlap_mesh.html#mapping">Mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithms/overlap_mesh.html#interpolation">Interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="algorithms/overlap_mesh.html#projection">Projection</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="algorithms/ghosts.html">Ghost Particles</a></li>
 </ul>
 </li>
+</ul>
+</div>
+</div>
+<div class="section" id="user-interface">
+<h2>User Interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="user.html">User Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user/hfile.html">The H-File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user/ffile.html">The F-File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user/external.html">External Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/hfile.html">The H-File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user/hfile.html#pre-defined-directives">Pre-Defined Directives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user/hfile.html#user-only-directives">User-Only Directives</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="user/ffile.html">The F-File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user/ffile.html#ppiclf-user-setydot">ppiclf_user_SetYdot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user/ffile.html#ppiclf-user-mapprojpart">ppiclf_user_MapProjPart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user/ffile.html#ppiclf-user-evalnearestneighbor">ppiclf_user_EvalNearestNeighbor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user/external.html">External Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user/external.html#common-variables">Common Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user/external.html#initialization-subroutines">Initialization Subroutines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user/external.html#solve-subroutines">Solve Subroutines</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/stokes_2d.html">stokes_2d</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/dem_pack_3d.html">dem_pack_3d</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/Nek5000.html">Nek5000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/stokes_2d.html">Stokes 2D</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/stokes_2d.html#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/stokes_2d.html#user-interface">User Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/stokes_2d.html#compiling-and-running">Compiling and Running</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/stokes_2d.html#simulation-output">Simulation Output</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/dem_pack_3d.html">DEM Packing 3D</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/dem_pack_3d.html#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/dem_pack_3d.html#user-interface">User Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/dem_pack_3d.html#compiling-and-running">Compiling and Running</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Nek5000.html">Nek5000 Case</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/Nek5000.html#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/Nek5000.html#user-interface">User Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/Nek5000.html#compiling-and-running">Compiling and Running</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contribute.html#workflow">Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contribute.html#issues">Issues</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -214,7 +302,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quick Start" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

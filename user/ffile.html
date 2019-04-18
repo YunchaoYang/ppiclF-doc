@@ -20,12 +20,21 @@
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'v1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -88,16 +97,29 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../user.html">User Interface</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="hfile.html">The H-File</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">The F-File</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The F-File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ppiclf-user-setydot">ppiclf_user_SetYdot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ppiclf-user-mapprojpart">ppiclf_user_MapProjPart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ppiclf-user-evalnearestneighbor">ppiclf_user_EvalNearestNeighbor</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="external.html">External Interface</a></li>
 </ul>
 </li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
 </ul>
 
@@ -165,6 +187,58 @@
             
   <div class="section" id="the-f-file">
 <span id="ffile"></span><h1>The F-File<a class="headerlink" href="#the-f-file" title="Permalink to this headline">¶</a></h1>
+<p>The F-File refers to the file ppiclf_user.f. This file is required for each case and specifies three key subroutines in the code. Each of these subroutines are described below. In what follows, the terms <em>int</em> and <em>real</em> refer to the Fortran integer*4 and real*8 types, which are also the types int and double in C.</p>
+<div class="section" id="ppiclf-user-setydot">
+<h2>ppiclf_user_SetYdot<a class="headerlink" href="#ppiclf-user-setydot" title="Permalink to this headline">¶</a></h2>
+<p>The main purpose of this subroutine is described below.</p>
+<div class="admonition-ppiclf-user-setydot admonition">
+<p class="first admonition-title">ppiclf_user_SetYdot()</p>
+<p>This routine must set <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span> for the system of equations</p>
+<div class="math notranslate nohighlight">
+\[\dfrac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}}\]</div>
+<p class="last">This is done by specifying the j indices (corresponding to the j equations) of the array ppiclf_ydot(j,i) for the i particle.</p>
+</div>
+<p>Typically, this subroutine amounts to a do-loop over the index i which loops through the total number of particles on each processor (ppiclf_npart). The user is then required to specify <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}^{(i)}\)</span> by setting the j indices ranging from 1 to <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRS</span></code> of the array ppiclf_ydot(j,i). Since <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}^{(i)}\)</span> may be a function of <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and other properties associated with each particle, the user-defined pre-processor directives can be useful in organizing this evaluation.</p>
+<p>Note that additionally, the routine ppiclf_solve_NearestNeighbor can optionally be called for the i particle within the do-loop. When this occurs, the nearby neighbor searching routine ppiclf_user_EvalNearestNeighbor is activated (see below).</p>
+<p>After ppiclf_ydot(j,i) is set, a user may also choose to store some computed values in the array ppiclf_ydotc(j,i) which is ordered the same as ppiclf_ydot(j,i). Values stored in this array are then passed to the projection mapping routine ppiclf_user_MapProjPart (see below).</p>
+</div>
+<div class="section" id="ppiclf-user-mapprojpart">
+<h2>ppiclf_user_MapProjPart<a class="headerlink" href="#ppiclf-user-mapprojpart" title="Permalink to this headline">¶</a></h2>
+<p>The main purpose of this subroutine is to specify which particle properties <span class="math notranslate nohighlight">\(A\)</span> are projected to which fields <span class="math notranslate nohighlight">\(a(\mathbf{x})\)</span>. For more details on the projection opperation, see <a class="reference internal" href="../algorithms/overlap_mesh.html#projection"><span class="std std-ref">Projection</span></a>. Note that projection can only be performed when there is an overlap mesh specified. A description of this routine is given below.</p>
+<div class="admonition-ppiclf-user-mapprojpart-real-map-real-y-real-ydot-real-ydotc-real-rprop admonition">
+<p class="first admonition-title">ppiclf_user_MapProjPart(real <strong>map</strong>, real <strong>y</strong>, real <strong>ydot</strong>, real <strong>ydotc</strong>, real <strong>rprop</strong>)</p>
+<p>This routine specifies which particle properties are projected to which fields.</p>
+<ul class="last simple">
+<li><strong>map(m)</strong> is a vector input of length <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP_PRO</span></code> which must be set, corresponding to the particle property <span class="math notranslate nohighlight">\(A\)</span>. The m index corresponds to which field is being projected in the ppiclf_pro_fld(i,j,k,e,m) array. The user-defined pre-processor directives can be useful in organizing this evaluation.</li>
+<li><strong>y(j)</strong>, <strong>ydot(j)</strong>, and <strong>ydotc(j)</strong> are vector inputs of length <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRS</span></code>. They correspond to the values in the arrays of the i particle ppiclf_y(j,i), ppiclf_ydot(j,i), and ppiclf_ydotc(j,i). Each of these can be used in evaulating <strong>map(m)</strong>.</li>
+<li><strong>rprop(j)</strong> is a vector input of length <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP</span></code>. It corresponds to the values in the array of the i particle ppiclf_rprop(j,i). Its values can be used in evaulating <strong>map(m)</strong>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="ppiclf-user-evalnearestneighbor">
+<h2>ppiclf_user_EvalNearestNeighbor<a class="headerlink" href="#ppiclf-user-evalnearestneighbor" title="Permalink to this headline">¶</a></h2>
+<p>The main purpose of this subroutine is to allow the user to have access to neighboring particle’s information. For the i particle, the j nearest points are passed in within a distance <code class="code docutils literal notranslate"><span class="pre">W</span></code> (see <a class="reference internal" href="../algorithms/particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>). This routine is only activated when the routine ppiclf_user_NearestNeighbor is called for the i particle in the do-loop in ppiclf_user_SetYdot (see <a class="reference internal" href="../examples/dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> for an example of this). The routine ppiclf_user_NearestNeighbor is described below.</p>
+<div class="admonition-ppiclf-user-nearestneighbor-int-i admonition">
+<p class="first admonition-title">ppiclf_user_NearestNeighbor(int <strong>i</strong>)</p>
+<p>This routine specifies that the ppiclf_user_EvalNearestNeighbor routine should be called.</p>
+<ul class="last simple">
+<li><strong>i</strong> is the i particle for which the nearest neighbors are found for.</li>
+</ul>
+</div>
+<p>Additionally, the routine ppiclf_user_EvalNearestNeighbor is described below.</p>
+<div class="admonition-ppiclf-user-evalnearestneighbor-int-i-int-j-real-yi-real-rpropi-real-yj-real-rpropj admonition">
+<p class="first admonition-title">ppiclf_user_EvalNearestNeighbor(int <strong>i</strong>, int <strong>j</strong>, real <strong>yi</strong>, real <strong>rpropi</strong>, real <strong>yj</strong>, real <strong>rpropj*</strong>)</p>
+<p>This routine evaluates the nearest neighbors of the i particle. The neighbors are the j points which are either nearby particles or nearby boundaries. This routine is only activated when ppiclf_user_NearestNeighbor is called for the i particle in ppiclf_user_SetYdot.</p>
+<ul class="last simple">
+<li><strong>i</strong> is the i particle for which the nearest neighbors are found for. The index i may also be used to access the internal arrays (i.e., ppiclf_y(<em>,i), ppiclf_ydot(</em>,i), ppiclf_ydotc(<em>,i), and ppiclf_rprop(</em>,i).</li>
+<li><strong>j</strong> is the j point for which the nearest neighbors of particle i are found. <strong>DO NOT USE j TO ACCESS THE INTERNAL ARRAYS</strong>. The index j may be positive, negative, or zero. A positive value means that the neighbor particle is on the same processor. A negative value means that the neighbor particle is on a different processor. A value of j = 0 means that the neighbor point is a boundary point.</li>
+<li><strong>yi</strong> is a vector of length <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRS</span></code> which passes in the solution variables of the i particle.</li>
+<li><strong>rpropi</strong> is a vector of length <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP</span></code> which passes in the properties of the i particle.</li>
+<li><strong>yj</strong> is a vector of length <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRS</span></code> which passes in the solution variables of the j particle. Note that when a boundary point is passed in as point j (j == 0), then only the first two (2D) or three (3D) values of <strong>yj</strong> can be used, which store the nearest point on the boundary to the i particle.</li>
+<li><strong>rpropj</strong> is a vector of length <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP</span></code> which passes in the properties of the j particle. Note that when a boundary point is passed in as point j (j == 0), the values of <strong>rprop</strong> are meaningless.</li>
+</ul>
+</div>
+</div>
 </div>
 
 

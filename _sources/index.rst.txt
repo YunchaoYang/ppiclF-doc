@@ -25,14 +25,42 @@ Capabilities
 
 .. Zwick, D., Scalable highly-resolved Euler-Lagrange multiphase flow simulation with applications to shock tubes, PhD Thesis, University of Flordia, 2019.
 
-Contents
+Quickstart
+----------
+
+.. toctree::
+   :maxdepth: 3
+
+   quickstart
+
+Algorithms
+----------
+
+.. toctree::
+   :maxdepth: 3
+
+   algorithms
+
+User Interface
+--------------
+
+.. toctree::
+   :maxdepth: 3
+
+   user
+
+Examples
 --------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
-   quickstart
-   algorithms
-   user
    examples
+
+Contributing
+------------
+
+.. toctree::
+   :maxdepth: 3
+
    contribute

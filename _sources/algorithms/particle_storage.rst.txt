@@ -1,8 +1,8 @@
 .. _part-storage:
 
------------------------
-Particle Storage (Bins)
------------------------
+----------------
+Particle Storage
+----------------
 Based on the coordinates (:math:`\mathbf{X}`) of each individual particle, the particle domain may be decomposed into rectangular prisms in 3D (or simply rectangles in 2D). These rectangular prisms are called **bins**. The particles with coordinates inside each bin are stored together on the same processor in memory. Additionally, we make the following key assumption: *the total number of bins does not exceed the total number of processors*.
 
 Bin Generation
@@ -36,7 +36,7 @@ Notice that there are three conditions that are checked upon each iteration. The
 
 In 2D, an example of this is shown in the figure below.
 
-.. figure:: bin_generation.svg
+.. figure:: bin_generation.png
    :align: center
    :figclass: align-center
 
@@ -51,7 +51,8 @@ Bin-to-Rank Mapping
 Once the bins have been created, they are mapped to processing ranks. This includes mapping all the data that has coordinates which are found within the enclosing volume of each bin to the same processor. A single bin is described by the volume which it encloses. To reference a bin, the indices :math:`(i,j,k)` may be used, where :math:`i = 0,...,c(1)-1`, :math:`j = 0,...,c(2)-1`, and :math:`k = 0,...,c(3)-1`. The volume which each bin encloses is
 
 .. math:: 
-   \begin{align*} x \in [L_{dx} + i L_{bx}, L_{dx} + (i+1) L_{bx}], \\ y \in [L_{dy} + j L_{by}, L_{dy} + (j+1) L_{by}], \\ z \in [L_{dz} + k L_{bz}, L_{dz} + (k+1) L_{bz}] ,\end{align*}
+   x \in [L_{dx} + i L_{bx}, L_{dx} + (i+1) L_{bx}], \\ y \in [L_{dy} + j L_{by}, L_{dy} + (j+1) L_{by}], \\ z \in [L_{dz} + k L_{bz}, L_{dz} + (k+1) L_{bz}] ,
+..   \begin{align*} x \in [L_{dx} + i L_{bx}, L_{dx} + (i+1) L_{bx}], \\ y \in [L_{dy} + j L_{by}, L_{dy} + (j+1) L_{by}], \\ z \in [L_{dz} + k L_{bz}, L_{dz} + (k+1) L_{bz}] ,\end{align*}
 
 where :math:`L_{d*}` is the particle domain width in respective dimension and :math:`L_{b*}` is the bin width in respective dimension (i.e., :math:`L_{b*} = L_{d*}/c(*)`).
 

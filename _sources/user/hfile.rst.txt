@@ -3,86 +3,112 @@
 ----------
 The H-File
 ----------
-The H-File (PPICLF_USER.h) is required for each case and specifies the maximum size of different arrays used in the code. These sizes are defined by C pre-processor directives.
+The H-File refers to the file PPICLF_USER.h. This file is required for each case and specifies the maximum size of different arrays used in the code. These sizes are defined by C pre-processor directives, which use the :code:`#define NAME N` syntax, where :code:`NAME` is the variable name in capital letters and :code:`N` is the integer number that :code:`NAME` is replaced by everywhere in the code at compilation. 
 
-In order to understand the naming convention, we recall that we solve the following system of equations for each particle
+The pre-processor directives, along with the actual arrays and other ppiclF variables can be included for use in any Fortran subroutine by simply including the following directive at the top of a routine
+
+.. code-block:: fortran
+
+   #include "PPICLF.h"
+
+Pre-Defined Directives
+^^^^^^^^^^^^^^^^^^^^^^
+A list of pre-defined names are found in the table below with their descriptions.
+
+.. table:: Pre-processor pre-defined names in PPICLF_USER.h.
+   :align: center
+
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`NAME`           | Required? | Description                                           |
+   +========================+===========+=======================================================+
+   | :code:`PPICLF_LRS`     | Yes       | The number of equations solved per particle.          |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LRP`     | No        | The number of additional properties per particle.     |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LPART`   | No        | The maximum number of particles per rank.             |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LRP_INT` | No        | The number of interpolated fields.                    |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LRP_PRO` | No        | The number of projected fields.                       |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LEE`     | No        | The maximum number of overlap mesh elements per rank. |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LEX`     | No        | The number of x coordinates per overlap mesh element. |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LEY`     | No        | The number of y coordinates per overlap mesh element. |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LEZ`     | No        | The number of z coordinates per overlap mesh element. |
+   +------------------------+-----------+-------------------------------------------------------+
+   | :code:`PPICLF_LWALL`   | No        | The maximum number of triangular patch boundaries.    |
+   +------------------------+-----------+-------------------------------------------------------+
+
+User-Only Directives
+^^^^^^^^^^^^^^^^^^^^
+A list of user-only suggested names are found in the table below with their descriptions. Each of these names can be chosen by the user to reflect the equations being solved.
+
+.. table:: Pre-processor suggested names in PPICLF_USER.h.
+   :align: center
+
+   +------------------------+---------------------------------+
+   | Suggested :code:`NAME` | Description                     |
+   +========================+=================================+
+   | :code:`PPICLF_J*`      | Index in solution array.        |
+   +------------------------+---------------------------------+
+   | :code:`PPICLF_R_J*`    | Index in property array.        |
+   +------------------------+---------------------------------+
+   | :code:`PPICLF_P_J*`    | Index in projected field array. |
+   +------------------------+---------------------------------+
+
+Here, the above suggested names may be used for easy naming with user-edited coded. For example, consider the system of equations
 
 .. math::
    \dfrac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}},
 
-where, for example, each particle may have
-
 .. math::
-   \mathbf{Y} = \begin{bmatrix}Y_1 \\ Y_2 \\ Y_3 \\ Y_4 \end{bmatrix},\quad \dot{\mathbf{Y}} = \begin{bmatrix}\dot{Y}_1 \\ \dot{Y}_2 \\ \dot{Y}_3 \\ \dot{Y}_3 \end{bmatrix}.
+   \mathbf{Y} = \begin{bmatrix}X \\ Y \\ V_x \\ V_y \end{bmatrix},\quad \dot{\mathbf{Y}} = \begin{bmatrix} V_x \\ V_y \\ -a V_x \\ -a V_y + b \end{bmatrix}.
 
-As is demonstrated above, for each particle in this case we are solving a system of 4 equations, which is the length of the vectors :math:`\mathbf{Y}` and :math:`\dot{\mathbf{Y}}`. We will order each equation as they appear in the array above. Note that the actual ordering of equations is up to the user, but it is required that the positions :math:`X`, :math:`Y`, and :math:`Z` (3D only) must be the first equations when ordering the vector. Accordinging we call the solution variables
-
-.. code::
-
-   PPICLF_JY1
-   PPICLF_JY2
-   PPICLF_JY3
-   PPICLF_JY4
-
-For this example then, the PPICLF_USER.h header file would define
+In this case, we can refer to the equations as solving for the variables :math:`X`, :math:`Y`, :math:`V_x`, and :math:`V_y`. As a result, the user may want to refer to the equations as
 
 .. code-block:: c
 
-   #define PPICLF_LRS 4
-   #define PPICLF_JY1 1
-   #define PPICLF_JY2 2
-   #define PPICLF_JY3 3
-   #define PPICLF_JY4 4
+   #define PPICLF_JX 1
+   #define PPICLF_JY 2
+   #define PPICLF_JVX 3
+   #define PPICLF_JVY 4
 
-It is seen that the number of equations is specified (PPICLF_LRS) and the equation names are ordered from 1 to PPICLF_LRS with the position being first. Note that you are not required to define PPICLF_JY1, PPICLF_JY2, PPICLF_JY3, and PPICLF_JY4, as these are user defined and only used in :ref:`ffile`. However, PPICLF_LRS must be defined based on the number of equations being solved.
+Then, the user can use these directive names in place of the index j for the i particle in the solution arrays ppiclf_y(j,i), ppiclf_ydot(j,i), and ppiclf_ydotc(j,i).
 
-Similarly, each particle may have a number of properties associated with them. For demonstration, lets say that each particle has properties PROPA and PROPB. We will name them accordingly
+.. admonition:: Caution: User ordering of solution array indices.
+   :class: warning
 
-.. code::
+   1. The indices are ordered from 1 to :code:`PPICLF_LRS`.
+   2. The first two (2D) or three (3D) indicies must always be the :math:`X`, :math:`Y`, and :math:`Z` (3D only) coordinates of each particle.
 
-   PPICLF_R_JPROPA
-   PPICLF_R_JPROPB
-
-Then, in the PPICLF_USER.h header file we would define
+Similarly, if :math:`a` and :math:`b` are properties of each particle that are not being solved for, the user may want to refer to the properties as
 
 .. code-block:: c
 
-   #define PPICLF_LRP 2
-   #define PPICLF_R_JPROPA 1
-   #define PPICLF_R_JPROPB 2
+   #define PPICLF_R_JA 1
+   #define PPICLF_R_JB 2
 
-meaning that the number of properties is PPICLF_LRP and the property names are ordered from 1 to PPICLF_LRP. Note that you are not required to define PPICLF_R_JPROPA and PPICLF_R_JPROPB, as these are user determined and only used in :ref:`ffile`. However, PPICLF_LRP must be defined if any properties are to be used.
+Then, the user can use these directive names in place of the index j for the i particle in the property array ppiclf_rprop(j,i). 
 
-When an overlap mesh is specified, the size of the mesh must be specified. These varaibles must be named as follows
+.. admonition:: Caution: User ordering of property array indices.
+   :class: warning
 
-.. code::
+   1. The indices are ordered from 1 to :code:`PPICLF_LRP`.
 
-   PPICLF_LEX
-   PPICLF_LEY
-   PPICLF_LEZ
-   PPICLF_LEE
-
-where PPICLF_LEZ does not need to be defined in 2D. Here, PPICLF_LEE is the maximum number of elements allowed on each rank. PPICLF_LEX, PPICLF_LEY, and PPICLF_LEZ specify the overlap mesh element coordinates in respecitve dimension. For example, in finite volume methods we would have 
+Similarly, if the user is projecting any properties, each mapped (see :ref:`ffile`) projected fields can also be referenced in this way. Consider three projected fields :math:`f(\mathbf{x})`, :math:`g(\mathbf{x})`, and :math:`h(\mathbf{x})`. The user may want to refer to these fields as
 
 .. code-block:: c
 
-   #define PPICLF_LEX 2
-   #define PPICLF_LEY 2
-   #define PPICLF_LEZ 2
-   #define PPICLF_LEE 1000
+   #define PPICLF_P_JF 1
+   #define PPICLF_P_JG 2
+   #define PPICLF_P_JH 3
 
-where the number 1000 should be replaced with an appropriate number of elements per processor on your application.
+Then, the user can use these directive names in place of the index m for the (i,j,k) coordinate of the e element on the overlap mesh in the projected field array ppiclf_pro_fld(i,j,k,e,m). 
 
-When used, the number of interpolated fields to interpolate must be set in PPICLF_USER.h. For 3 fields to interpolate, we would have
+.. admonition:: Caution: User ordering of projection array indices.
+   :class: warning
 
-.. code-block:: c
-
-   #define PPICLF_LRP_INT 3
-
-Additionally, when used, the number of projected fields must be set in PPICLF_USER.h. For 6 projected fields, we would have
-
-.. code-block:: c
-
-   #define PPICLF_LRP_PRO 6
-
-For ease of user access, we can name the fields similar to how the solution vector and property arrays were named but are not required to.
+   1. The indices are ordered from 1 to :code:`PPICLF_LRP_PRO`.

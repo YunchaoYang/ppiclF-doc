@@ -20,12 +20,21 @@
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'v1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -88,16 +97,28 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../user.html">User Interface</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">The H-File</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">The H-File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pre-defined-directives">Pre-Defined Directives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-only-directives">User-Only Directives</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="ffile.html">The F-File</a></li>
 <li class="toctree-l2"><a class="reference internal" href="external.html">External Interface</a></li>
 </ul>
 </li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
 </ul>
 
@@ -165,65 +186,143 @@
             
   <div class="section" id="the-h-file">
 <span id="hfile"></span><h1>The H-File<a class="headerlink" href="#the-h-file" title="Permalink to this headline">¶</a></h1>
-<p>The H-File (PPICLF_USER.h) is required for each case and specifies the maximum size of different arrays used in the code. These sizes are defined by C pre-processor directives.</p>
-<p>In order to understand the naming convention, we recall that we solve the following system of equations for each particle</p>
+<p>The H-File refers to the file PPICLF_USER.h. This file is required for each case and specifies the maximum size of different arrays used in the code. These sizes are defined by C pre-processor directives, which use the <code class="code docutils literal notranslate"><span class="pre">#define</span> <span class="pre">NAME</span> <span class="pre">N</span></code> syntax, where <code class="code docutils literal notranslate"><span class="pre">NAME</span></code> is the variable name in capital letters and <code class="code docutils literal notranslate"><span class="pre">N</span></code> is the integer number that <code class="code docutils literal notranslate"><span class="pre">NAME</span></code> is replaced by everywhere in the code at compilation.</p>
+<p>The pre-processor directives, along with the actual arrays and other ppiclF variables can be included for use in any Fortran subroutine by simply including the following directive at the top of a routine</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="cp">#include &quot;PPICLF.h&quot;</span>
+</pre></div>
+</div>
+<div class="section" id="pre-defined-directives">
+<h2>Pre-Defined Directives<a class="headerlink" href="#pre-defined-directives" title="Permalink to this headline">¶</a></h2>
+<p>A list of pre-defined names are found in the table below with their descriptions.</p>
+<table border="1" class="docutils align-center" id="id1">
+<caption><span class="caption-text">Pre-processor pre-defined names in PPICLF_USER.h.</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="27%" />
+<col width="12%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head"><code class="code docutils literal notranslate"><span class="pre">NAME</span></code></th>
+<th class="head">Required?</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LRS</span></code></td>
+<td>Yes</td>
+<td>The number of equations solved per particle.</td>
+</tr>
+<tr class="row-odd"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP</span></code></td>
+<td>No</td>
+<td>The number of additional properties per particle.</td>
+</tr>
+<tr class="row-even"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LPART</span></code></td>
+<td>No</td>
+<td>The maximum number of particles per rank.</td>
+</tr>
+<tr class="row-odd"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP_INT</span></code></td>
+<td>No</td>
+<td>The number of interpolated fields.</td>
+</tr>
+<tr class="row-even"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP_PRO</span></code></td>
+<td>No</td>
+<td>The number of projected fields.</td>
+</tr>
+<tr class="row-odd"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LEE</span></code></td>
+<td>No</td>
+<td>The maximum number of overlap mesh elements per rank.</td>
+</tr>
+<tr class="row-even"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LEX</span></code></td>
+<td>No</td>
+<td>The number of x coordinates per overlap mesh element.</td>
+</tr>
+<tr class="row-odd"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LEY</span></code></td>
+<td>No</td>
+<td>The number of y coordinates per overlap mesh element.</td>
+</tr>
+<tr class="row-even"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LEZ</span></code></td>
+<td>No</td>
+<td>The number of z coordinates per overlap mesh element.</td>
+</tr>
+<tr class="row-odd"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_LWALL</span></code></td>
+<td>No</td>
+<td>The maximum number of triangular patch boundaries.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="user-only-directives">
+<h2>User-Only Directives<a class="headerlink" href="#user-only-directives" title="Permalink to this headline">¶</a></h2>
+<p>A list of user-only suggested names are found in the table below with their descriptions. Each of these names can be chosen by the user to reflect the equations being solved.</p>
+<table border="1" class="docutils align-center" id="id2">
+<caption><span class="caption-text">Pre-processor suggested names in PPICLF_USER.h.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="42%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Suggested <code class="code docutils literal notranslate"><span class="pre">NAME</span></code></th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_J*</span></code></td>
+<td>Index in solution array.</td>
+</tr>
+<tr class="row-odd"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_R_J*</span></code></td>
+<td>Index in property array.</td>
+</tr>
+<tr class="row-even"><td><code class="code docutils literal notranslate"><span class="pre">PPICLF_P_J*</span></code></td>
+<td>Index in projected field array.</td>
+</tr>
+</tbody>
+</table>
+<p>Here, the above suggested names may be used for easy naming with user-edited coded. For example, consider the system of equations</p>
 <div class="math notranslate nohighlight">
 \[\dfrac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}},\]</div>
-<p>where, for example, each particle may have</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\mathbf{Y} = \begin{bmatrix}Y_1 \\ Y_2 \\ Y_3 \\ Y_4 \end{bmatrix},\quad \dot{\mathbf{Y}} = \begin{bmatrix}\dot{Y}_1 \\ \dot{Y}_2 \\ \dot{Y}_3 \\ \dot{Y}_3 \end{bmatrix}.\end{split}\]</div>
-<p>As is demonstrated above, for each particle in this case we are solving a system of 4 equations, which is the length of the vectors <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and <span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}\)</span>. We will order each equation as they appear in the array above. Note that the actual ordering of equations is up to the user, but it is required that the positions <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> (3D only) must be the first equations when ordering the vector. Accordinging we call the solution variables</p>
-<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_JY1</span>
-<span class="n">PPICLF_JY2</span>
-<span class="n">PPICLF_JY3</span>
-<span class="n">PPICLF_JY4</span>
+\[\begin{split}\mathbf{Y} = \begin{bmatrix}X \\ Y \\ V_x \\ V_y \end{bmatrix},\quad \dot{\mathbf{Y}} = \begin{bmatrix} V_x \\ V_y \\ -a V_x \\ -a V_y + b \end{bmatrix}.\end{split}\]</div>
+<p>In this case, we can refer to the equations as solving for the variables <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span>, <span class="math notranslate nohighlight">\(V_x\)</span>, and <span class="math notranslate nohighlight">\(V_y\)</span>. As a result, the user may want to refer to the equations as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_JX 1</span>
+<span class="cp">#define PPICLF_JY 2</span>
+<span class="cp">#define PPICLF_JVX 3</span>
+<span class="cp">#define PPICLF_JVY 4</span>
 </pre></div>
 </div>
-<p>For this example then, the PPICLF_USER.h header file would define</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRS 4</span>
-<span class="cp">#define PPICLF_JY1 1</span>
-<span class="cp">#define PPICLF_JY2 2</span>
-<span class="cp">#define PPICLF_JY3 3</span>
-<span class="cp">#define PPICLF_JY4 4</span>
+<p>Then, the user can use these directive names in place of the index j for the i particle in the solution arrays ppiclf_y(j,i), ppiclf_ydot(j,i), and ppiclf_ydotc(j,i).</p>
+<div class="warning admonition">
+<p class="first admonition-title">Caution: User ordering of solution array indices.</p>
+<ol class="last arabic simple">
+<li>The indices are ordered from 1 to <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRS</span></code>.</li>
+<li>The first two (2D) or three (3D) indicies must always be the <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span>, and <span class="math notranslate nohighlight">\(Z\)</span> (3D only) coordinates of each particle.</li>
+</ol>
+</div>
+<p>Similarly, if <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> are properties of each particle that are not being solved for, the user may want to refer to the properties as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_R_JA 1</span>
+<span class="cp">#define PPICLF_R_JB 2</span>
 </pre></div>
 </div>
-<p>It is seen that the number of equations is specified (PPICLF_LRS) and the equation names are ordered from 1 to PPICLF_LRS with the position being first. Note that you are not required to define PPICLF_JY1, PPICLF_JY2, PPICLF_JY3, and PPICLF_JY4, as these are user defined and only used in <a class="reference internal" href="ffile.html#ffile"><span class="std std-ref">The F-File</span></a>. However, PPICLF_LRS must be defined based on the number of equations being solved.</p>
-<p>Similarly, each particle may have a number of properties associated with them. For demonstration, lets say that each particle has properties PROPA and PROPB. We will name them accordingly</p>
-<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_R_JPROPA</span>
-<span class="n">PPICLF_R_JPROPB</span>
+<p>Then, the user can use these directive names in place of the index j for the i particle in the property array ppiclf_rprop(j,i).</p>
+<div class="warning admonition">
+<p class="first admonition-title">Caution: User ordering of property array indices.</p>
+<ol class="last arabic simple">
+<li>The indices are ordered from 1 to <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP</span></code>.</li>
+</ol>
+</div>
+<p>Similarly, if the user is projecting any properties, each mapped (see <a class="reference internal" href="ffile.html#ffile"><span class="std std-ref">The F-File</span></a>) projected fields can also be referenced in this way. Consider three projected fields <span class="math notranslate nohighlight">\(f(\mathbf{x})\)</span>, <span class="math notranslate nohighlight">\(g(\mathbf{x})\)</span>, and <span class="math notranslate nohighlight">\(h(\mathbf{x})\)</span>. The user may want to refer to these fields as</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_P_JF 1</span>
+<span class="cp">#define PPICLF_P_JG 2</span>
+<span class="cp">#define PPICLF_P_JH 3</span>
 </pre></div>
 </div>
-<p>Then, in the PPICLF_USER.h header file we would define</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRP 2</span>
-<span class="cp">#define PPICLF_R_JPROPA 1</span>
-<span class="cp">#define PPICLF_R_JPROPB 2</span>
-</pre></div>
+<p>Then, the user can use these directive names in place of the index m for the (i,j,k) coordinate of the e element on the overlap mesh in the projected field array ppiclf_pro_fld(i,j,k,e,m).</p>
+<div class="warning admonition">
+<p class="first admonition-title">Caution: User ordering of projection array indices.</p>
+<ol class="last arabic simple">
+<li>The indices are ordered from 1 to <code class="code docutils literal notranslate"><span class="pre">PPICLF_LRP_PRO</span></code>.</li>
+</ol>
 </div>
-<p>meaning that the number of properties is PPICLF_LRP and the property names are ordered from 1 to PPICLF_LRP. Note that you are not required to define PPICLF_R_JPROPA and PPICLF_R_JPROPB, as these are user determined and only used in <a class="reference internal" href="ffile.html#ffile"><span class="std std-ref">The F-File</span></a>. However, PPICLF_LRP must be defined if any properties are to be used.</p>
-<p>When an overlap mesh is specified, the size of the mesh must be specified. These varaibles must be named as follows</p>
-<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PPICLF_LEX</span>
-<span class="n">PPICLF_LEY</span>
-<span class="n">PPICLF_LEZ</span>
-<span class="n">PPICLF_LEE</span>
-</pre></div>
 </div>
-<p>where PPICLF_LEZ does not need to be defined in 2D. Here, PPICLF_LEE is the maximum number of elements allowed on each rank. PPICLF_LEX, PPICLF_LEY, and PPICLF_LEZ specify the overlap mesh element coordinates in respecitve dimension. For example, in finite volume methods we would have</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LEX 2</span>
-<span class="cp">#define PPICLF_LEY 2</span>
-<span class="cp">#define PPICLF_LEZ 2</span>
-<span class="cp">#define PPICLF_LEE 1000</span>
-</pre></div>
-</div>
-<p>where the number 1000 should be replaced with an appropriate number of elements per processor on your application.</p>
-<p>When used, the number of interpolated fields to interpolate must be set in PPICLF_USER.h. For 3 fields to interpolate, we would have</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRP_INT 3</span>
-</pre></div>
-</div>
-<p>Additionally, when used, the number of projected fields must be set in PPICLF_USER.h. For 6 projected fields, we would have</p>
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRP_PRO 6</span>
-</pre></div>
-</div>
-<p>For ease of user access, we can name the fields similar to how the solution vector and property arrays were named but are not required to.</p>
 </div>
 
 
