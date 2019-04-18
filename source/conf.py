@@ -18,7 +18,6 @@
 
 
 # -- Project information -----------------------------------------------------
-
 project = u'ppiclF'
 copyright = u'2019, David Zwick'
 author = u'David Zwick'
@@ -78,7 +77,7 @@ pygments_style = None
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-html_theme_path = ['_themes', ]
+#html_theme_path = ['_themes', ]
 
 html_title = "ppiclF Documentation"
 

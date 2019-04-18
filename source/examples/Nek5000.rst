@@ -1,8 +1,8 @@
 .. _Nek5000_example:
 
--------
-Nek5000
--------
+--------------------------------------------------------------------------------
+`Nek5000 Case <https://github.com/dpzwick/ppiclF/tree/master/examples/Nek5000>`_
+--------------------------------------------------------------------------------
 
 .. raw:: html
 
@@ -19,7 +19,7 @@ This is an example that illustrates a two-dimensional fluidized bed example. Thi
 The core particle equations being solved in this case are
 
 .. math::
-   \begin{align}\dfrac{d \mathbf{X}}{d t} &= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &= \mathbf{F}_{qs} + \mathbf{F}_{c} + \mathbf{F}_b, \end{align}
+   \dfrac{d \mathbf{X}}{d t} &= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &= \mathbf{F}_{qs} + \mathbf{F}_{c} + \mathbf{F}_b,
 
 where, for each particle we have the position vector :math:`\mathbf{X}`, the velocity vector :math:`\mathbf{V}`, the drag force :math:`\mathbf{F}_{qs}`, the collision force :math:`\mathbf{F}_{c}`, and the weight force :math:`\mathbf{F}_{b}`, defined by
 
@@ -44,329 +44,84 @@ where :math:`C^*_D` is another drag coefficient, :math:`Re_p^* = \phi_f |\mathbf
 The fluid equations that Nek5000 solves in this example are
 
 .. math::
-   \begin{align}\nabla \cdot \mathbf{u} &= - \dfrac{1}{\phi_f} \dfrac{D \phi_f}{D t}, \\ \rho_f \dfrac{D \mathbf{u}}{D t} &= \nabla \cdot \mathbf{\sigma}_f + \dfrac{\mathbf{f}_{pf}}{\phi_f}, \end{align}
+   \nabla \cdot \mathbf{u} &= - \dfrac{1}{\phi_f} \dfrac{D \phi_f}{D t}, \\ \rho_f \dfrac{D \mathbf{u}}{D t} &= \nabla \cdot \mathbf{\sigma}_f + \dfrac{\mathbf{f}_{pf}}{\phi_f},
 
 where :math:`\mathbf{u}` is the fluid velocity, :math:`\rho_f` is the fluid density, :math:`\mathbf{\sigma}_f` is the Navier-Stokes fluid stress tensor, :math:`\phi_f` is the fluid volume fraction, and :math:`\phi_p` is the particle volume fraction field (:math:`\phi_f + \phi_p = 1`), and :math:`\mathbf{f}_{pf}` is a particle-fluid coupling force.
 
 The solution to these equations reside on a mesh within Nek5000. Since the particles are solved in the Lagrangian reference frame, their contributions on the mesh must be accounted for. Most notably, the explicit particle contributions are :math:`\phi_p` (and as a result :math:`\phi_f`) and :math:`\mathbf{f}_{pf}`. The method by which these are obtained is explained in the overlap mesh section below.
 
-The H-File (PPICLF_USER.h)
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-As is demonstrated above, for each particle we are solving a system of 4 equations, which is the length of the vectors :math:`\mathbf{Y}` and :math:`\dot{\mathbf{Y}}`. We will order each equation as they appear in the array above. Note that the actual ordering of equations is up to the user, but it is required that the positions :math:`X`, :math:`Y`, and :math:`Z` (3D only) must be the first equations when ordering the vector. Accordinging we call the solution variables
-
-.. code::
-
-   PPICLF_JX
-   PPICLF_JY
-   PPICLF_JVX
-   PPICLF_JVY
-
-Additionally, we allow six properties to vary for each particle. These are the particle density :math:`\rho_p`, the particle diameter :math:`D_p`, the particle volume :math:`V_p`, and the interpolated quantities at each particle location :math:`\phi_p`, :math:`U_x`, and :math:`U_y`. As a result, each particle has 6 properties associated with it. We name the properties
-
-.. code::
-
-   PPICLF_R_JRHOP
-   PPICLF_R_JDP
-   PPICLF_R_JVOLP
-   PPICLF_R_JPHIP
-   PPICLF_R_JUX
-   PPICLF_R_JUY
-
-For this example then, the PPICLF_USER.h header file is
+User Interface
+^^^^^^^^^^^^^^
+:ref:`hfile` for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included in in the list of properties.
 
 .. code-block:: c
 
    #define PPICLF_LRS 4
+   #define PPICLF_LRP 6
+   #define PPICLF_LEE 1000
+   #define PPICLF_LEX 6
+   #define PPICLF_LEY 6
+   #define PPICLF_LRP_INT 3
+   #define PPICLF_LRP_PRO 3
+   
    #define PPICLF_JX 1
    #define PPICLF_JY 2
    #define PPICLF_JVX 3
    #define PPICLF_JVY 4
-   
-   #define PPICLF_LRP 6
    #define PPICLF_R_JRHOP 1
    #define PPICLF_R_JDP 2
    #define PPICLF_R_JVOLP 3
    #define PPICLF_R_JPHIP 4
    #define PPICLF_R_JUX 5
    #define PPICLF_R_JUY 6
-   
-   #define PPICLF_LEX 6
-   #define PPICLF_LEY 6
-   #define PPICLF_LEE 1000
-   
-   #define PPICLF_LRP_INT 3
-   
-   #define PPICLF_LRP_PRO 3
    #define PPICLF_P_JPHIP 1
    #define PPICLF_P_JFX 2
    #define PPICLF_P_JFY 3
 
-It is seen that the number of equations is specified (PPICLF_LRS), the equation names are ordered from 1 to PPICLF_LRS with the position being first, the number of properties is specified (PPICLF_LRP), and the properties are ordered from 1 to PPICLF_LRP.
+The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the humber of projected fields. The user-only directives are in the bottom block.
 
-Additionally, the remaining parameters specify memory allocations for the overlapping mesh. These will be described in the overlap mesh section below.
+:ref:`ffile` for this case has meaningful information in every routine. The routine ppiclf_user_SetYdot is nearly the same as the :ref:`dem3d` example but with an added drag model evaluation that is slightly more complicated than the :ref:`stokes2d` example. Also, the ppiclf_user_EvalNearestNeighbor routine is similar to the :ref:`dem3d` example. The new addition is the mapping of particle properties to be projected in ppiclf_user_MapProjPart. With some study, it can be found that the three fields being projected in 2D are:
 
-The F-File (ppiclf_user.f)
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-The values set in the PPICLF_USER.h file are used to access array values in the ppiclf_user.f file. 
 
-Specifically, the arrays ppiclf_y(j,i) and ppiclf_ydot(j,i) correspond to :math:`\mathbf{Y}` and :math:`\dot{\mathbf{Y}}`. The arrays are arranged by the j equation number (max PPICLF_LRS) for the i particle. The property array ppiclf_rprop(j,i) stores the j (max PPICLF_LRP) properties of the j particle. 
+.. table:: Projection mapping in ppiclf_user_MapProjPart.
+   :align: center
 
-The user is required to define the ppiclf_user.f file. The main purpose of this file is to set :math:`\dot{\mathbf{Y}}`. Due to this, the subroutine ppiclf_user_SetYdot() sets :math:`\dot{\mathbf{Y}}`. This routine is similar to that of the :ref:`dem3d` example with a few additions. First, the drag model has been updated to the previously given Gidaspow drag model. In addition, there are the following lines
+   +----------------------------------------+-------------------------------------+
+   | Projected Field (:math:`a(\mathbf{x})`)| Particle Property (:math:`A^{(i)}`) |
+   +========================================+=====================================+
+   | :math:`\phi_p(\mathbf{x})`             | :math:`V_p/D_p`                     |
+   +----------------------------------------+-------------------------------------+
+   | :math:`f_{pf,x}(\mathbf{x})`           | :math:`-F_{qs,x}/D_p`               |
+   +----------------------------------------+-------------------------------------+
+   | :math:`f_{pf,y}(\mathbf{x})`           | :math:`-F_{qs,y}/D_p`               |
+   +----------------------------------------+-------------------------------------+
 
-.. code-block:: fortran
+where :math:`D_p` has been used to normalize the values in 2D. Note that the negative signs to the :math:`\mathbf{F}_{qs}` were added when they were stored in the storage array ppiclf_ydotc at the end of the routine ppiclf_user_SetYdot.
 
-         ppiclf_ydotc(PPICLF_JVX,i) = -fqsx
-         ppiclf_ydotc(PPICLF_JVY,i) = -fqsy
+The :ref:`external` calls for this example occur with in the user initialization Nek5000 routine usrdat2 in the file `test.f <https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/uniform.usr>`_ with the minimum number of initialization and solve subroutines called. In this case:
 
-which sets the array ppiclf_ydotc(j,i) to the equal and opposite Gidaspow drag force of each particle. Recall that in the :ref:`dem3d` example, ppiclf_ydotc(j,i) was used to store the collision force for each particle inside the ppiclf_user_EvalNearestNeighbor() subroutine. In a similar way, after ppiclf_ydot(j,i) has been set for a particle in this example, we use ppiclf_ydot(j,i) to temporarily store the equal and opposite drag force on each particle.
+* ppiclf_comm_InitMPI is called to initialize the communication, 
+* ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,
+* ppiclf_solve_InitGaussianFilter is called to initialize the fitler for projection to the overlap mesh,
+* ppiclf_comm_InitOverlapMesh is called to initialize the overlap mesh from Nek5000,
+* ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,
+* ppiclf_solve_InitWall is called which sets a wall for the particles at the bottom of the domain,
+* ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimensional along the domain.
 
-Note that two other subroutines are declared in ppiclf_user.f. While the subroutine ppiclf_user_EvalNearestNeighbor() is similar to the :ref:`dem3d` example and is used for computing the collision force on each particle, the routine ppiclf_user_MapProjPart() is also used. This routine will be described in more detail in the following overlap section.
+Additionally, the solve routines are called every time step in the same file but in the Nek5000 routine userchk. In this routine, 
 
-External Calls
-^^^^^^^^^^^^^^
-In order to solve the system of equations, Nek5000 is used as driver program. In this case, the following three lines in the included makenek file link the ppiclf library:
+* ppiclf_solve_InterpFieldUser is called three times to interpolate the fields :math:`\phi_p`, :math:`u_x`, and :math:`u_y` into the property array,
+* ppiclf_solve_IntegrateParticle is called to integrate the system at the current time step.
+
+Note that the projected fields in the array ppiclf_pro_fld are used to apply the projected forces to the fluid in the Nek5000 routine userf in the same file.
+
+Also, note that ppiclF has been linked with Nek5000 in the Nek5000 makenek compilation file through the following lines:
 
 .. code-block:: make
 
    SOURCE_ROOT_PPICLF=$HOME/libraries/ppiclF/source
    FFLAGS=" -I$SOURCE_ROOT_PPICLF"
    USR_LFLAGS+=" -L$SOURCE_ROOT_PPICLF -lppiclF"
-
-The first line specifies the source code directory (i.e., LocalCodeDir/ppiclF/source). The second and third lines specify the location of the ppiclF code for building and linking to Nek5000 at compile time.
-
-The initialization of the ppiclF calls are found in the file uniform.usr in the subroutine usrdat2(). This routine is found below.
-
-.. code-block:: fortran
- :linenos:
-
-       subroutine usrdat2
-       include 'SIZE'
-       include 'TOTAL'
- #include "PPICLF.h"
- 
-       real*8 ksp,erest
-       common /ucollision/ ksp,erest
-       data ksp   /10.0/ ! note: this limits dt, whcih we explicity set in .par file
-       data erest /0.8/
- 
-       common /nekmpi/ mid,mp,nekcomm,nekgroup,nekreal
- 
-       real*8 y(PPICLF_LRS    , PPICLF_LPART) ! Normal ordering
-       real*8 rprop(PPICLF_LRP, PPICLF_LPART) ! Normal ordering
- 
-       real*8 dp,rhop,rlx,rrx,rly,rry,rspace
-       integer*4 imethod,iendian,nmain,noff,nrow,npart
- 
-       ! Pass to library to Init MPI
-       call ppiclf_comm_InitMPI(nekcomm,
-      >                         nid    , ! nid already defined in Nek5000
-      >                         np     ) ! np already defined in Nek5000
- 
-       ! Set initial conditions and parameters for particles
-       dp      = 1.2E-3
-       rhop    = 1000.0D0
-       rdp     = 1.01*dp ! extra threshold when initially placed
-       rlx     = -0.022
-       rrx     =  0.022
-       rly     =  0.000+rdp/2.0
-       rry     =  0.030
-       nmain   = floor((rrx-rlx)/rdp)
-       noff    = nmain
-       rspace  = sqrt(0.75d0)*rdp
-       nrow    = 0
-       if (nid .eq. 0) 
-      >nrow = floor((rry-rly)/rspace)
-       npart   = 0
-       ! the loop below will place particles in a nearly bcc packing
-       ! on nid == 0. We could have done in parallel but for the few
-       ! particles in this case rank 0 is fine
-       do i=1,nrow
-          ! main rows
-          if (mod(i,2) .eq. 1) then
-             do j=1,nmain
-                npart = npart + 1
-                y(PPICLF_JX,npart)  = rlx + rdp    *(j-1)
-                y(PPICLF_JY,npart)  = rly + rspace*(i-1)
-                y(PPICLF_JVX,npart) = 0.0d0
-                y(PPICLF_JVY,npart) = 0.0d0
- 
-                rprop(PPICLF_R_JRHOP,npart) = rhop
-                rprop(PPICLF_R_JDP  ,npart) = dp
-                rprop(PPICLF_R_JVOLP,npart) = pi/6.0D0*dp**3
-             enddo
-          ! off rows
-          else
-             do j=1,noff
-                npart = npart + 1
-                y(PPICLF_JX,npart)  = rlx + rdp/2.0d0     + rdp    *(j-1)
-                y(PPICLF_JY,npart)  = rly + rspace*(i-1)
-                y(PPICLF_JVX,npart) = 0.0d0
-                y(PPICLF_JVY,npart) = 0.0d0
- 
-                rprop(PPICLF_R_JRHOP,npart) = rhop
-                rprop(PPICLF_R_JDP  ,npart) = dp
-                rprop(PPICLF_R_JVOLP,npart) = pi/6.0D0*dp**3
-             enddo
-          endif
-       enddo
-       imethod = 1
-       iendian = 0
- !     ndim    = 2 ! ndim already defined in Nek5000
-       call ppiclf_solve_InitParticle(imethod   ,
-      >                               ndim      ,
-      >                               iendian   ,
-      >                               npart     ,
-      >                               y(1,1)    ,
-      >                               rprop(1,1))
- 
- 
-       ! Specify Gaussian filter
-       call ppiclf_solve_InitGaussianFilter(2.0*dp,1E-3,1)
- 
-       ! Specify Overlap Mesh
-       call ppiclf_comm_InitOverlapMesh(nelt,lx1,ly1,lz1,xm1,ym1,zm1)
- 
-       ! Specify neighbor bin size
-       call ppiclf_solve_InitNeighborBin(dp)
- 
-       ! Add a bottom wall boundary
-       call ppiclf_solve_InitWall( 
-      >                 (/-0.022,0.0/),
-      >                 (/ 0.022,0.0/),
-      >                 (/ 0.0  ,0.0/))
- 
-       ! Set left and right boundaries to periodic
-       call ppiclf_solve_InitPeriodicX(rlx,rrx)
- 
-       return
-       end
-
-This routine is called once at the beginning of the simulation. Similar to the initialization in the standalone driver program in :ref:`stokes2d`, ppiclf_comm_InitMPI() is called. Following this, the initial conditions of the solution variables :math:`\mathbf{Y}_0 = \mathbf{Y} (t = 0)` are set, and the particle properties are initialized. In this case, the particles are initially lined in rows in a packed arrangement. The particles all of the same diameter and density.
-
-Following the call to ppiclf_solve_InitParticle(), the routine ppiclf_solve_InitGaussianFilter() is called. this routine is described in the overlap mesh section below.
-
-Following this, the routine ppiclf_comm_InitOverlapMesh(ne, lx, ly,lz, x, y, z) is called. This will be described in more detail in the overlap mesh section below.
-
-After this, ppiclf_solve_InitNeighborBin(w) is called to set up the particle neighbor search distance (refer to :ref:`dem3d` example).
-
-Following this, the routine ppiclf_solve_InitWall(a,b,c) is called. This initializes a boundary between points a, b, and c. Note that point c is used in 3D only for a triangluar element. In 2D, a and b are 8-byte real arrays of length 2 and store the (x,y) coordinates of the points. In 3D, a, b, and c are 8-byte real arrays of length 3 which store the (x,y,z) coordinates of the points. When only a small number of boundaries are needed, they can be set in this way by subsequent calls to ppiclf_solve_InitWall(). However, for more complicated boundaries we suggest a boundary file be read in as in the :ref:`dem3d` example.
-
-To complete initialization, the x boundaries of the domain are set to be periodic with the call to the subroutine ppiclf_solve_InitPeriodicX(a,b). The inputs are 8-byte reals a and b, which specify the low and high points at which particles crossing lower/higher than will be moved to the opposite boundary. While not required in this problem, Y and Z routines are also available and may be called instead or in addition to other periodic conditions.
-
-Following the initialization, particles are advanced in time. This can be found in the uniform.usr file in the subroutine userchk(), which is shown below.
-
-.. code-block:: fortran
- :linenos:
-
-       subroutine userchk
-       include 'SIZE'
-       include 'TOTAL'
- #include "PPICLF.h"
-
-       ! Set divergence equal to -1/phi_f * D/Dt( phi_f )
-       call qtl_pvol(usrdiv,
-      >              ppiclf_pro_fld(1,1,1,1,PPICLF_P_JPHIP))
-       ! Set divergence at outflow elements so that characteristics go out
-       call fill_div(usrdiv)  
- 
-       ! Interpolate fields to particle positions
-       call ppiclf_solve_InterpFieldUser(PPICLF_R_JPHIP
-      >                          ,ppiclf_pro_fld(1,1,1,1,PPICLF_P_JPHIP))
-       call ppiclf_solve_InterpFieldUser(PPICLF_R_JUX
-      >                          ,vx(1,1,1,1))
-       call ppiclf_solve_InterpFieldUser(PPICLF_R_JUY
-      >                          ,vy(1,1,1,1))
- 
-       ! Integrate particles
-       call ppiclf_solve_IntegrateParticle(istep ,
-      >                                    iostep,
-      >                                    dt    ,
-      >                                    time  )
- 
-       if (mod(istep,iostep) .eq. 0)
-      >   call outpost2(ppiclf_pro_fld(1,1,1,1,PPICLF_P_JFX)
-      >                ,ppiclf_pro_fld(1,1,1,1,PPICLF_P_JFY)
-      >                ,ppiclf_pro_fld(1,1,1,1,PPICLF_P_JPHIP)
-      >                ,ppiclf_pro_fld(1,1,1,1,PPICLF_P_JPHIP)
-      >                ,ppiclf_pro_fld(1,1,1,1,PPICLF_P_JPHIP),1,'ptw')
- 
-       return
-       end
-
-The userchk() routine is called at every simulation time step. The first call to qtl_pvol() specifies the non-zero velocity divergence of the governing equations and is specific to this application. The second routine fill_div() specifies the divergence at outflow elements to be facing outward and is standard in Nek5000 cases with outflows.
-
-In lines 13-18, three fields are mapped to be interpolated by the time ppiclf_solve_IntegrateParticle() is called. More information on this is given in the following overlap mesh section
-
-The time integration is then performed in lines 21-24 by calling the routine ppiclf_solve_IntegrateParticle() as in the other examples.
-
-Finally, the Nek5000 routine outpost2() is called to output native Nek5000 field files with the projected variables.
-
-Overlapping Mesh
-^^^^^^^^^^^^^^^^
-As has been previously mentioned, an overlap mesh is used. The term "overlap" refers to the external grid, which in this case is provided by Nek5000, which overlaps the region spanned by the particles. We can define two key operations that can be used when an overlap mesh is used:
-
-1. Grid-to-particle interaction (*interpolation*)
-2. Particle-to-grid interaction (*projection*)
-
-Both of these operations require the user to initially specify the coordinates of the overlap grid. This was done previously in the current example with the subroutine ppiclf_comm_InitOverlapMesh() at initialization. Nek5000 stores an element based hexagonal grid with each element having a sub-grid resolution of lx, ly, and lz (lz = 1 in 2D). On each MPI processor, there are ne local elements (or cells), which make up a portion of the entire domain. Note that ne, lx, ly, and lz are 4-byte integers. The grid coordinates are stored in the 8-byte real arrays x(lx1,ly,lz,ne), y(lx,ly,lz,ne), and z(lx,ly,lz,ne). For standard hexagonal elements with no sub-grid resolution (i.e., most finite volume methods), lx = ly = lz = 2 so that only the nodes of the overlap mesh are stored. The user must also specify the maximum grid sizes in the PPICLF_USER.h file. That entails setting the parameters PPICLF_LEX, PPICLF_LEY, PPICLF_LEZ (3D only), and PPICLF_LEE. Note that ne must be less than PPICLF_LEE. In some cases, PPICLF_LEE must be larger than ne and will be determined by a specific problem's geometry.
-
-Interpolation is the operation of using the Eulerian field values on the external grid which surrounds a particle to evaluate the field values at the particle's position. The user interface for interpolation in ppiclF includes:
-
-* Specifying the number of fields to be interpolated for each particle
-* Specifying the mapping of interpolated fields to interpolated particle values in the property array
-
-The number of fields to be interpolated is set in the PPICLF_USER.h file as the parameter PPICLF_LRP_INT. The mapping of interpolated fields to particle properties is performed at each step and is performed by the calls to the routine ppiclf_solve_InterpFieldUser(j,fld). The first input is a 4-byte integer j which specifies the index in which ppiclf_rprop(j,i) will store the interpolated field value from fld. The input fld is an 8-byte real array that is stored in the same ordering as the overlap mesh coordinates, so fld(lx,ly,lz,ne). Since ppiclf_solve_InterpFieldUser() is called directly before ppiclf_solve_IntegrateParticle(), which means the interpolated values ppiclf_rprop(j,i) for the i particle is updated whenever ppiclf_user_SetYdot() is called.
-
-Projection on the other hand is the operation of filtering the particles to the surrounding Eulerian grid. The user interface for projection in ppiclF includes:
-
-* Specifying the number of fields to be projected for each particle
-* Specifying the projection filter
-* Specifying the mapping of particle quantities to projected fields
-
-The number of projected fields is set in the PPICLF_USER.h file as the parameter PPICLF_LRP_PRO. The projection filter is initialized by calling ppiclf_solve_InitGaussianFilter(w, a, n). This sets up a Gaussian filtering of particles to the surrounding overlapped mesh. The inputs are an 8-byte real filter width w, an 8-byte real cut-off percent a, and a 4-byte integer n which specifies how particles near boundarys are filtered.
-
-In the ppiclf_user.f file, the subroutine ppiclf_user_MapProjPart(map,y,ydot,ydotc,rprop). The inputs to this routine are 8-byte real arrays of lengths map(PPICLF_LRP_PRO), y(PPICLF_LRS), ydot(PPICLF_LRS), ydotc(PPICLF_LRS), and rprop(PPICLF_LRP). The input arguments are the dummy variables y, ydot, ydotc, and rprop. These are dummy arguements for each particle which store the values for the i particle which calls this routine. They correspond exactly to ppiclf_y(j,i), ppiclf_ydot(j,i), ppiclf_ydotc(j,i), and ppiclf_rprop(j,i). The map value must be set when projection is used, which corresponds to the value which is projected to fields. The projected values outside this routine are then stored in the array ppiclf_pro_fld(PPICLF_LEX,PPICLF_LEY,PPICLF_LEZ,PPICLF_LEE,j), where j may be 1 to PPICLF_LRP_PRO. For convenience, in this case we have defined the projected field names in the PPICLF_USER.h file as
-
-.. code-block:: c
-
-   PPICLF_P_JPHIP
-   PPICLF_P_JFX
-   PPICLF_P_JFY
-
-Thus, in the present example, the routine is shown below. 
-
-.. code-block:: fortran
-
-       subroutine ppiclf_user_MapProjPart(map,y,ydot,ydotc,rprop)
- !
-       implicit none
- !
- ! Input:
- !
-       real*8 y    (PPICLF_LRS)
-       real*8 ydot (PPICLF_LRS)
-       real*8 ydotc(PPICLF_LRS)
-       real*8 rprop(PPICLF_LRP)
- !
- ! Output:
- !
-       real*8 map  (PPICLF_LRP_PRO)
- !
- ! Internal:
- !
-       real*8 dp_norm
- !
- 
-       ! particle volume divided by particle diameter for 2d
-       dp_norm = 1./rprop(PPICLF_R_JDP)
-       map(PPICLF_P_JPHIP) = dp_norm*rprop(PPICLF_R_JVOLP)
-       map(PPICLF_P_JFX)   = dp_norm*ydotc(PPICLF_JVX)
-       map(PPICLF_P_JFY)   = dp_norm*ydotc(PPICLF_JVY)
- 
-       return
-       end
-
-It can be seen that the first mapped value is PPICLF_P_JPHIP which tells ppiclF to store the volume fraction :math:`\phi_p` on the overlap mesh by projecting :math:`V_p/D_p`. The second and third projected values are PPICLF_P_JFX and PPICLF_P_JFY which tell ppiclF to store projected Gidaspow drag force :math:`\mathbf{f}_{qs}` on the overlap mesh by projecting :math:`\mathbf{F}_{qs}/D_p`. Note that in this 2D example, the diamter normalizes the projection but would not be there in a 3D case.
 
 Compiling and Running
 ^^^^^^^^^^^^^^^^^^^^^

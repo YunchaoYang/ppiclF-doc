@@ -37,6 +37,8 @@ In order to interpolate fields from the mesh to the particle locations, the mesh
 The current supported interpolation method is element based, in that only the nodes of the mesh element which surround the particle is within is used to interpolate a field to the particle's position. In most cases, this results in trilinear (or bilinear in 2D) interpolation being performed. However, spectral polynomial interpolation is also supported in which mapped Gauss-Lobatto-Legendre points within each element are used to evaluate the barycentric Lagrange polynomials at the particles coordinates.
 
 
+.. _projection:
+
 Projection
 ^^^^^^^^^^
 In order to project quantities from the particle locations to the mesh, each bin stores a copy of the mesh coordinates that are found within each bin. Then, particles are filtered to this mesh copy locally and then communicated back to the processing ranks in the original mesh-to-rank mapping.

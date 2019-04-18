@@ -1,15 +1,15 @@
 .. _stokes2d:
 
----------
-stokes_2d
----------
+-------------------------------------------------------------------------------
+`Stokes 2D <https://github.com/dpzwick/ppiclF/tree/master/examples/stokes_2d>`_
+-------------------------------------------------------------------------------
 
 Background
 ^^^^^^^^^^
 This is a simple example that illustrates Stokes drag on solid spherical particles. This can be illustrated by the following system of equations. For each particle, we have
 
 .. math::
-   \begin{align}\dfrac{d \mathbf{X}}{d t} &= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &= \mathbf{F}_{qs} + \mathbf{F}_b, \end{align}
+   \dfrac{d \mathbf{X}}{d t} &= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &= \mathbf{F}_{qs} + \mathbf{F}_b,
 
 where, for each particle we have the position vector :math:`\mathbf{X}`, the velocity vector :math:`\mathbf{V}`, the Stokes drag force :math:`\mathbf{F}_{qs}`, and the weight force :math:`\mathbf{F}_{b}`, defined by
 
@@ -26,48 +26,26 @@ where
 .. math::
    \mathbf{Y} = \begin{bmatrix}X \\ Y \\ V_x \\ V_y \end{bmatrix},\quad \dot{\mathbf{Y}} = \begin{bmatrix}V_x \\ V_y \\ -V_x/\tau_p + 0\\ -V_y/\tau_p - g \end{bmatrix}.
 
-The H-File (PPICLF_USER.h)
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-As is demonstrated above, for each particle we are solving a system of 4 equations, which is the length of the vectors :math:`\mathbf{Y}` and :math:`\dot{\mathbf{Y}}`. We will order each equation as they appear in the array above. Note that the actual ordering of equations is up to the user, but it is required that the positions :math:`X`, :math:`Y`, and :math:`Z` (3D only) must be the first equations when ordering the vector. Accordinging we call the solution variables
-
-.. code::
-
-   PPICLF_JX
-   PPICLF_JY
-   PPICLF_JVX
-   PPICLF_JVY
-
-Additionally, we allow :math:`\tau_p` to vary for particle, so each particle has 1 property associated with it. We name the property
-
-.. code::
-
-   PPICLF_R_JTAUP
-
-For this example then, the PPICLF_USER.h header file is
+User Interface
+^^^^^^^^^^^^^^
+:ref:`hfile` for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included in in the list of properties.
 
 .. code-block:: c
 
-   #define PPICLF_LRS 4
-   #define PPICLF_JX 1
-   #define PPICLF_JY 2
+   #define PPICLF_LRS 4 
+   #define PPICLF_LRP 1 
+
+   #define PPICLF_JX  1
+   #define PPICLF_JY  2
    #define PPICLF_JVX 3
    #define PPICLF_JVY 4
-
-   #define PPICLF_LRP 1
    #define PPICLF_R_JTAUP 1
 
-It is seen that the number of equations is specified (PPICLF_LRS), the equation names are ordered from 1 to PPICLF_LRS with the position being first, the number of properties is specified (PPICLF_LRP), and the properties are ordered from 1 to PPICLF_LRP.
+The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations and the number of properties. The user-only directives are in the bottom block.
 
-The F-File (ppiclf_user.f)
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-The values set in the PPICLF_USER.h file are used to access array values in the ppiclf_user.f file. 
-
-Specifically, the arrays ppiclf_y(j,i) and ppiclf_ydot(j,i) correspond to :math:`\mathbf{Y}` and :math:`\dot{\mathbf{Y}}`. The arrays are arranged by the j equation number (max PPICLF_LRS) for the i particle. The property array ppiclf_rprop(j,i) stores the j (max PPICLF_LRP) properties of the j particle. 
-
-The user is required to define the ppiclf_user.f file. The main purpose of this file is to set :math:`\dot{\mathbf{Y}}`. Due to this, the subroutine ppiclf_user_SetYdot() sets :math:`\dot{\mathbf{Y}}` and for this case is given as
+:ref:`ffile` for this case only has meaningful information in ppiclf_user_SetYdot. The other two routines ppiclf_user_MapProjPart and ppiclf_user_EvalNearestNeighbor are defined only.
 
 .. code-block:: fortran
- :linenos:
 
        subroutine ppiclf_user_SetYdot
  !
@@ -101,93 +79,13 @@ The user is required to define the ppiclf_user.f file. The main purpose of this 
        return
        end
 
-In this example, the do-loop loops through the total number of particles on each processor, which is the variable ppiclf_npart. The user computes the stokes drag force and weight in each direction for each particle. Then, the 4 equations are specified according to the system of equations defined in this case.
+In this example, the do-loop loops through the total number of particles on each processor. The user computes the stokes drag force and weight in each direction for each particle. Then, the 4 equations are specified according to the system of equations defined in this case.
 
-Note that two additional subroutines are also declared in this file, which are ppiclf_user_MapProjPart() and ppiclf_user_EvalNearestNeighbor(). In this example these routines are not used so their contents are blank. However, they must still be decleared.
+The :ref:`external` calls for this example occur in a simple driver program in the file `test.f <https://github.com/dpzwick/ppiclf/tree/master/examples/stokes_2d/fortran/test.f>`_ with the minimum number of initialization and solve subroutines called. In this case:
 
-The two user files PPICLF_USER.h and ppiclf_user.f are then copied to the LocalCodeDir/ppiclF/source/ directory and the library can be built using make.
-
-External Calls
-^^^^^^^^^^^^^^
-In order to solve the system of equations, a driver program is used. In this case, a simple fortran MPI program in the example file test.f is used for this purpose (the library can instead be linked as a static library, as decribed in the :ref:`linking` section). Specifically, the driver program is responsible for setting the initial conditions of the solution variables :math:`\mathbf{Y}_0 = \mathbf{Y} (t = 0)`, specifying solver options, and looping through time. The program in test.f is found below.
-
-.. code-block:: fortran
- :linenos:
-
-       program main
- #include "PPICLF.h"
-       include 'mpif.h' 
- !
-       integer*4 np, nid, icomm
-       integer*4 imethod, ndim, iendian, npart
-       real*8 y(PPICLF_LRS    , PPICLF_LPART) ! Normal ordering
-       real*8 rprop(PPICLF_LRP, PPICLF_LPART) ! Normal ordering
- 
-       integer*4 nstep, iostep
-       real*8 dt, time
-       integer*4 ierr
-       real*8 rdum, ran2
-       external ran2
- !
-       ! Init MPI
-       call MPI_Init(ierr) 
-       icomm = MPI_COMM_WORLD
-       call MPI_Comm_rank(icomm, nid, ierr) 
-       call MPI_Comm_size(icomm, np , ierr)
- 
-       ! Pass to library to Init MPI
-       call ppiclf_comm_InitMPI(icomm,
-      >                         nid  ,
-      >                         np   )
- 
-       ! Set initial conditions and parameters for particles
-       imethod = 1
-       ndim    = 2
-       iendian = 0
-       npart   = 250
-       rdum    = ran2(-1-nid) ! init random numbers
-       do i=1,npart
- 
-          y(PPICLF_JX,i)  = ran2(2)
-          y(PPICLF_JY,i)  = ran2(2)
-          y(PPICLF_JVX,i) = 0.0
-          y(PPICLF_JVY,i) = 0.0
- 
-          rprop(PPICLF_R_JTAUP,i) = 1.0/9.8
-       enddo
-       call ppiclf_solve_InitParticle(imethod   ,
-      >                               ndim      ,
-      >                               iendian   ,
-      >                               npart     ,
-      >                               y(1,1)    ,
-      >                               rprop(1,1))
- 
-       ! Integrate particles in time
-       nstep  = 1000
-       iostep = 100
-       dt     = 1E-4
-       do istep=1,nstep
- 
-          time = (istep-1)*dt
-          call ppiclf_solve_IntegrateParticle(istep ,
-      >                                       iostep,
-      >                                       dt    ,
-      >                                       time  )
-       enddo
- 
-       ! Finalize MPI
-       call MPI_FINALIZE(ierr) 
- 
-       stop
-       end
-
-First, MPI is initialized using the current communicator icomm, the current MPI rank nid, and the total number of processors np. These are passed to the routine ppiclf_comm_InitMPI(icomm,nid,np).
-
-Following this, the user initializes the initial conditions :math:`\mathbf{Y}_0` and properties for npart local particles. This is accomplished in the loop from lines 33-41. For each particle initialized, the PPICLF_LRS initial condtions are set in the array y(j,i). The positions of each particle in :math:`X` and :math:`Y` are set with a random number generator to be between 0 and 1. The initial velocities are set to zero. The property :math:`\tau_p` is specified to be :math:`g^{-1}` in the array rprop(j,i). Here, y and rprop are defiend to be 8-byte real arrays of size (PPICLF_LRS,PPICLF_LPART) and (PPICLF_LRP,PPICLF_LPART), respectfully. These are temporary arrays which are copied to the internal arrays ppiclf_y and ppiclf_rprop upon initialization.
-
-The routine ppiclf_solve_InitParticle(imethod,ndim,iendian,npart,y,rprop) is then called. The inputs are the time integration method (4-byte integer imethod), the problem dimension (4-byte integer ndim), the byte ordering (4-byte integer iendian), the local number of particles on this processor (4-byte integer npart), and the first location of the temporary arrays y and rprop.
-
-Following this, a dummy time loop is iterated. At each step, the subroutine ppiclf_solve_IntegrateParticle(istep,iostep,dt,time) is called. This routine will advance the system of equations in time. Here, we pass in the current time step (4-byte integer istep), the time step file output frequency (4-byte integer iostep), the time step (8-byte real dt), and the current time (8-byte real time). Whenever ppiclf_solve_IntegrateParticle() is called, it will advance the solution ppiclf_y with a time step of dt and a forcing ppiclf_ydot which was specified in the ppiclf_user.f file.
+* ppiclf_comm_InitMPI is called to initialize the communication, 
+* ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,
+* ppiclf_solve_IntegrateParticle is called in a simple time step loop.
 
 Compiling and Running
 ^^^^^^^^^^^^^^^^^^^^^

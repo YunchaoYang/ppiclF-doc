@@ -1,6 +1,5 @@
-===========
-Quick Start
-===========
+Quickstart
+==========
 
 .. toctree::
    :maxdepth: 2
