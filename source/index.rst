@@ -10,7 +10,7 @@ Capabilities
 .. math::
    \dfrac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}}.
 
-* Open MPI parallelization allows millions of equations to be solved.
+* Open MPI parallelization allows billions of equations to be solved.
 								           
 * Load balances equations based on spatial position of particles.
 
@@ -27,9 +27,8 @@ Capabilities
 
 Quickstart
 ----------
-
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    quickstart
 
@@ -37,7 +36,7 @@ Algorithms
 ----------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    algorithms
 
@@ -45,7 +44,7 @@ User Interface
 --------------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    user
 
@@ -53,7 +52,7 @@ Examples
 --------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    examples
 
@@ -61,6 +60,14 @@ Contributing
 ------------
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    contribute
+
+Acknowledgements
+----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   acknowledge

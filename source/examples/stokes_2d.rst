@@ -28,7 +28,7 @@ where
 
 User Interface
 ^^^^^^^^^^^^^^
-:ref:`hfile` for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included in in the list of properties.
+:ref:`hfile` for this case (`Stokes 2D H-File <https://github.com/dpzwick/ppiclf/tree/master/examples/stokes_2d/user_routines/PPICLF_USER.h>`_) is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included it in the list of properties.
 
 .. code-block:: c
 
@@ -43,7 +43,7 @@ User Interface
 
 The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations and the number of properties. The user-only directives are in the bottom block.
 
-:ref:`ffile` for this case only has meaningful information in ppiclf_user_SetYdot. The other two routines ppiclf_user_MapProjPart and ppiclf_user_EvalNearestNeighbor are defined only.
+:ref:`ffile` for this case (`Stokes 2D F-File <https://github.com/dpzwick/ppiclf/tree/master/examples/stokes_2d/user_routines/ppiclf_user.f>`_) only has meaningful information in ppiclf_user_SetYdot. The other two routines ppiclf_user_MapProjPart and ppiclf_user_EvalNearestNeighbor are defined only.
 
 .. code-block:: fortran
 

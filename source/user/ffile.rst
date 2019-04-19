@@ -51,7 +51,7 @@ The main purpose of this subroutine is to allow the user to have access to neigh
 
    This routine specifies that the ppiclf_user_EvalNearestNeighbor routine should be called.
 
-   * **i** is the i particle for which the nearest neighbors are found for.
+   * **i** is the i particle for which the nearest neighbors are found.
 
 Additionally, the routine ppiclf_user_EvalNearestNeighbor is described below.
 
@@ -61,9 +61,9 @@ Additionally, the routine ppiclf_user_EvalNearestNeighbor is described below.
 
    This routine evaluates the nearest neighbors of the i particle. The neighbors are the j points which are either nearby particles or nearby boundaries. This routine is only activated when ppiclf_user_NearestNeighbor is called for the i particle in ppiclf_user_SetYdot.
 
-   * **i** is the i particle for which the nearest neighbors are found for. The index i may also be used to access the internal arrays (i.e., ppiclf_y(*,i), ppiclf_ydot(*,i), ppiclf_ydotc(*,i), and ppiclf_rprop(*,i).
+   * **i** is the i particle for which the nearest neighbors are found for. The index i may also be used to access the internal arrays (i.e., ppiclf_y(:,i), ppiclf_ydot(:,i), ppiclf_ydotc(:,i), and ppiclf_rprop(:,i).
    * **j** is the j point for which the nearest neighbors of particle i are found. **DO NOT USE j TO ACCESS THE INTERNAL ARRAYS**. The index j may be positive, negative, or zero. A positive value means that the neighbor particle is on the same processor. A negative value means that the neighbor particle is on a different processor. A value of j = 0 means that the neighbor point is a boundary point.
    * **yi** is a vector of length :code:`PPICLF_LRS` which passes in the solution variables of the i particle.
    * **rpropi** is a vector of length :code:`PPICLF_LRP` which passes in the properties of the i particle.
    * **yj** is a vector of length :code:`PPICLF_LRS` which passes in the solution variables of the j particle. Note that when a boundary point is passed in as point j (j == 0), then only the first two (2D) or three (3D) values of **yj** can be used, which store the nearest point on the boundary to the i particle.
-   * **rpropj** is a vector of length :code:`PPICLF_LRP` which passes in the properties of the j particle. Note that when a boundary point is passed in as point j (j == 0), the values of **rprop** are meaningless.
+   * **rpropj** is a vector of length :code:`PPICLF_LRP` which passes in the properties of the j particle. Note that when a boundary point is passed in as point j (j == 0), the values of **rpropj** are meaningless.

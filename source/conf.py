@@ -89,7 +89,13 @@ html_show_sourcelink = False
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+   'canonical_url': 'https://dpzwick.github.io/ppiclF-doc/',
+   'logo_only': False,
+   'display_version': True,
+   'prev_next_buttons_location': 'None',
+   'navigation_depth': 3,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

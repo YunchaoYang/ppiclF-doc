@@ -6,7 +6,7 @@ Link
 
 In order to use the ppiclF library that was built in the last step (see :ref:`build`), the library file source/libppiclF.a must be linked to your existing code. This will be specific to your exisiting code compilation. The process of linking will generally involve adding "-I LocalCodeDir/ppiclF/source" to the compiler flags and "-L LocalCodeDir/ppiclF/source -lppiclF" to the linking flags.
 
-Alternatively, ppiclF may be used on its own as well. Both a fortran and C++ example of this is given in the simple MPI driver example found in examples/stokes_2d. We will use the fortran program to test the linking. 
+Alternatively, ppiclF may be used on its own as well. Both a Fortran and C++ example of this is given in the simple MPI driver program example :ref:`stokes2d`. We will use the Fortran program to test the linking. 
 
 First, create a working directory to run the test case. We will call this TestCaseDir, and it should be located outside of the cloned GitHub repository ppiclF:
 
