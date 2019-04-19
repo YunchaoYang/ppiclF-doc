@@ -15,6 +15,8 @@
   
   
   
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/examples/stokes_2d.html"/>
+  
 
   
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
@@ -123,6 +125,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge.html">Acknowledgements</a></li>
+</ul>
 
             
           
@@ -205,7 +210,7 @@
 </div>
 <div class="section" id="user-interface">
 <h2>User Interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="../user/hfile.html#hfile"><span class="std std-ref">The H-File</span></a> for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since <span class="math notranslate nohighlight">\(g\)</span> is constant, we do not included in in the list of properties.</p>
+<p><a class="reference internal" href="../user/hfile.html#hfile"><span class="std std-ref">The H-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/stokes_2d/user_routines/PPICLF_USER.h">Stokes 2D H-File</a>) is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since <span class="math notranslate nohighlight">\(g\)</span> is constant, we do not included it in the list of properties.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRS 4</span>
 <span class="cp">#define PPICLF_LRP 1</span>
 
@@ -217,7 +222,7 @@
 </pre></div>
 </div>
 <p>The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations and the number of properties. The user-only directives are in the bottom block.</p>
-<p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case only has meaningful information in ppiclf_user_SetYdot. The other two routines ppiclf_user_MapProjPart and ppiclf_user_EvalNearestNeighbor are defined only.</p>
+<p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/stokes_2d/user_routines/ppiclf_user.f">Stokes 2D F-File</a>) only has meaningful information in ppiclf_user_SetYdot. The other two routines ppiclf_user_MapProjPart and ppiclf_user_EvalNearestNeighbor are defined only.</p>
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span>      <span class="k">subroutine </span><span class="n">ppiclf_user_SetYdot</span>
 <span class="c">!</span>
       <span class="k">implicit none</span>
@@ -294,15 +299,6 @@ mpirun -np <span class="m">4</span> test.out                               <span
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="dem_pack_3d.html" class="btn btn-neutral float-right" title="DEM Packing 3D" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

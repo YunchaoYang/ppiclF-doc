@@ -15,6 +15,8 @@
   
   
   
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/examples/dem_pack_3d.html"/>
+  
 
   
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
@@ -122,6 +124,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge.html">Acknowledgements</a></li>
+</ul>
 
             
           
@@ -191,7 +196,7 @@
    <iframe width="560" height="315" src="https://www.youtube.com/embed/0VSfiedYaCI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div><div class="section" id="background">
 <h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
-<p>This is an example that illustrates a particle packing in a realistic geometry. To accomplish this, an efficient neighbor search is performed along with reading in of external boundary conditions. The following system of equations is solved for the i particle</p>
+<p>This is an example that illustrates a particle packing in a realistic geometry. To accomplish this, an efficient neighbor search is performed along with reading in external boundary conditions. The following system of equations is solved for the i particle</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\dfrac{d \mathbf{X}^{(i)}}{d t} &amp;= \mathbf{V}^{(i)}, \\ M_p^{(i)} \dfrac{d \mathbf{V}^{(i)}}{d t} &amp;= \mathbf{F}_{c}^{(i)} + \mathbf{F}_b^{(i)},\end{split}\]</div>
 <p>where, for each particle we have the position vector <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>, the velocity vector <span class="math notranslate nohighlight">\(\mathbf{V}\)</span>, the collision force <span class="math notranslate nohighlight">\(\mathbf{F}_{c}\)</span>, and the weight force <span class="math notranslate nohighlight">\(\mathbf{F}_{b}\)</span>, defined by</p>
@@ -219,7 +224,7 @@
 <p>Note that the time in collision can be computed by</p>
 <div class="math notranslate nohighlight">
 \[t_c = \sqrt{\dfrac{M^{(i,j)}}{k_c} (\ln^2 e_n + \pi^2)}.\]</div>
-<p>This time scale must be resolved in the simulation. As we will see, this sets practical limitations on the simulation time step.</p>
+<p>This time scale must be resolved in the simulation. As can be seen, this sets practical limitations on the simulation time step.</p>
 <p>Thus, for each particle we can write the following system of equations</p>
 <div class="math notranslate nohighlight">
 \[\dfrac{d \mathbf{Y}^{(i)}}{d t} = \dot{\mathbf{Y}^{(i)}},\]</div>
@@ -229,7 +234,7 @@
 </div>
 <div class="section" id="user-interface">
 <h2>User Interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="../user/hfile.html#hfile"><span class="std std-ref">The H-File</span></a> for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since <span class="math notranslate nohighlight">\(g\)</span> is constant, we do not included in in the list of properties.</p>
+<p><a class="reference internal" href="../user/hfile.html#hfile"><span class="std std-ref">The H-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/dem_pack_3d/user_routines/PPICLF_USER.h">DEM Packing 3D H-File</a>) is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since <span class="math notranslate nohighlight">\(g\)</span> is constant, we do not included in in the list of properties.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRS 6</span>
 <span class="cp">#define PPICLF_LRP 3</span>
 <span class="cp">#define PPICLF_LWALL 800</span>
@@ -246,13 +251,13 @@
 </pre></div>
 </div>
 <p>The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, and the maximum number of boundaries. The user-only directives are in the bottom block.</p>
-<p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case is similar to the <a class="reference internal" href="stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> exmaple. In ppiclf_user_SetYdot, the forces are evaulated. Note that the routine ppiclf_solve_NearestNeighbor is invoked which activaes the routine ppiclf_user_EvalNearestNeighbor. In ppiclf_user_EvalNearestNeighbor, the collision force model is applied between the j nearby particles as well as the j nearby boundaries. The collision force is stored in the extra storage array ppiclf_ydotc. The other routine ppiclf_user_MapProjPart is defined only.</p>
+<p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/dem_pack_3d/user_routines/ppiclf_user.f">DEM Packing 3D F-File</a>) is similar to the <a class="reference internal" href="stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> exmaple. In ppiclf_user_SetYdot, the forces are evaulated. Note that the routine ppiclf_solve_NearestNeighbor is invoked which activates the routine ppiclf_user_EvalNearestNeighbor. In ppiclf_user_EvalNearestNeighbor, the collision force model is applied between the j nearby particles as well as the j nearby boundaries. The collision force is stored in the extra storage array ppiclf_ydotc. The other routine ppiclf_user_MapProjPart is defined only.</p>
 <p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur in a simple driver program in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/dem_pack_3d/fortran/test.f">test.f</a> with the minimum number of initialization and solve subroutines called. In this case:</p>
 <ul class="simple">
 <li>ppiclf_comm_InitMPI is called to initialize the communication,</li>
 <li>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</li>
 <li>ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,</li>
-<li>ppiclf_io_ReadWallVTK is called which reads the minimal ASCII triangular wall boundary file,</li>
+<li>ppiclf_io_ReadWallVTK is called which reads the minimal ASCII triangular patch boundary file,</li>
 <li>ppiclf_solve_IntegrateParticle is called in a simple time step loop.</li>
 </ul>
 </div>
@@ -282,15 +287,6 @@ mpirun -np <span class="m">4</span> test.out                                 <sp
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="Nek5000.html" class="btn btn-neutral float-right" title="Nek5000 Case" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="stokes_2d.html" class="btn btn-neutral float-left" title="Stokes 2D" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

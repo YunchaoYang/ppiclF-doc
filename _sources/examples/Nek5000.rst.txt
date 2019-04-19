@@ -12,7 +12,7 @@
 
 Background
 ^^^^^^^^^^
-This is an example that illustrates a two-dimensional fluidized bed example. This example is linked to the incompressible, spectral element, fluid solver Nek5000_.
+This is an example that illustrates a two-dimensional fluidized bed. This example also illustrates linking ppiclF to the incompressible, spectral element, fluid solver Nek5000_.
 
 .. _Nek5000: https://nek5000.mcs.anl.gov
 
@@ -31,7 +31,7 @@ and the same weight and collision forces as in the :ref:`dem3d` example are used
 .. math::
    \mathbf{F}_{qs} = \beta V_p (\mathbf{U} - \mathbf{V}) = \beta V_p \begin{bmatrix} U_x - V_x \\ U_y - V_y \end{bmatrix},
 
-where :math:`\mathbf{U}` is the fluid velocity vector at the particle's coordinates (see interpolation overlap mesh section below), :math:`V_p` is each particle's volume, and :math:`\beta` is a drag coefficient, computed by
+where :math:`\mathbf{U}` is the fluid velocity vector interpolated to the particle's coordinates, :math:`V_p` is each particle's volume, and :math:`\beta` is a drag coefficient, computed by
 
 .. math::
 	\beta =	\begin{cases}150 \dfrac{\phi_p}{\phi_f} \dfrac{\mu_f}{D_p^2} + 1.75 \dfrac{\rho_f}{D_p} |\mathbf{U} - \mathbf{V}| & \phi_p > 0.2, \\ 0.75 C^*_D \dfrac{\phi_f}{D_p} \rho_f |\mathbf{U} - \mathbf{V}| \phi_f^{-2.65} & \phi_p \leq 0.2. \end{cases}
@@ -46,13 +46,13 @@ The fluid equations that Nek5000 solves in this example are
 .. math::
    \nabla \cdot \mathbf{u} &= - \dfrac{1}{\phi_f} \dfrac{D \phi_f}{D t}, \\ \rho_f \dfrac{D \mathbf{u}}{D t} &= \nabla \cdot \mathbf{\sigma}_f + \dfrac{\mathbf{f}_{pf}}{\phi_f},
 
-where :math:`\mathbf{u}` is the fluid velocity, :math:`\rho_f` is the fluid density, :math:`\mathbf{\sigma}_f` is the Navier-Stokes fluid stress tensor, :math:`\phi_f` is the fluid volume fraction, and :math:`\phi_p` is the particle volume fraction field (:math:`\phi_f + \phi_p = 1`), and :math:`\mathbf{f}_{pf}` is a particle-fluid coupling force.
+where :math:`\mathbf{u}` is the fluid velocity, :math:`\rho_f` is the fluid density, :math:`\mathbf{\sigma}_f` is the Navier-Stokes fluid stress tensor, :math:`\phi_f` is the fluid volume fraction, and :math:`\phi_p` is the particle volume fraction (:math:`\phi_f + \phi_p = 1`), and :math:`\mathbf{f}_{pf}` is a particle-fluid coupling force.
 
-The solution to these equations reside on a mesh within Nek5000. Since the particles are solved in the Lagrangian reference frame, their contributions on the mesh must be accounted for. Most notably, the explicit particle contributions are :math:`\phi_p` (and as a result :math:`\phi_f`) and :math:`\mathbf{f}_{pf}`. The method by which these are obtained is explained in the overlap mesh section below.
+The solution to these equations reside on a mesh within Nek5000. Since the particles are solved in the Lagrangian reference frame, their contributions on the mesh must be accounted for. Most notably, the explicit particle contributions from ppiclF to Nek5000 are :math:`\phi_p` (and as a result :math:`\phi_f`) and :math:`\mathbf{f}_{pf}`. The method by which these fields are obtained is :ref:`projection`.
 
 User Interface
 ^^^^^^^^^^^^^^
-:ref:`hfile` for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included in in the list of properties.
+:ref:`hfile` for this case (`Nek5000 H-File <https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/user_routines/PPICLF_USER.h>`_) is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included in in the list of properties.
 
 .. code-block:: c
 
@@ -78,9 +78,9 @@ User Interface
    #define PPICLF_P_JFX 2
    #define PPICLF_P_JFY 3
 
-The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the humber of projected fields. The user-only directives are in the bottom block.
+The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the number of projected fields. The user-only directives are in the bottom block.
 
-:ref:`ffile` for this case has meaningful information in every routine. The routine ppiclf_user_SetYdot is nearly the same as the :ref:`dem3d` example but with an added drag model evaluation that is slightly more complicated than the :ref:`stokes2d` example. Also, the ppiclf_user_EvalNearestNeighbor routine is similar to the :ref:`dem3d` example. The new addition is the mapping of particle properties to be projected in ppiclf_user_MapProjPart. With some study, it can be found that the three fields being projected in 2D are:
+:ref:`ffile` for this case (`Nek5000 F-File <https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/user_routines/ppiclf_user.f>`_) has meaningful information in every routine. The routine ppiclf_user_SetYdot is nearly the same as the :ref:`dem3d` example but with an added drag model evaluation that is slightly more complicated than the :ref:`stokes2d` example. Also, the ppiclf_user_EvalNearestNeighbor routine is similar to the :ref:`dem3d` example. The new addition is the mapping of particle properties to be projected in ppiclf_user_MapProjPart. With some study, it can be found that the three fields being projected in 2D are:
 
 
 .. table:: Projection mapping in ppiclf_user_MapProjPart.
@@ -96,9 +96,9 @@ The two blocks of lines denote the pre-defined and user-only directives. The pre
    | :math:`f_{pf,y}(\mathbf{x})`           | :math:`-F_{qs,y}/D_p`               |
    +----------------------------------------+-------------------------------------+
 
-where :math:`D_p` has been used to normalize the values in 2D. Note that the negative signs to the :math:`\mathbf{F}_{qs}` were added when they were stored in the storage array ppiclf_ydotc at the end of the routine ppiclf_user_SetYdot.
+where :math:`D_p` has been used to normalize the values in 2D. Note that the negative signs of the components of :math:`\mathbf{F}_{qs}` were added when the forces were stored in the storage array ppiclf_ydotc at the end of the routine ppiclf_user_SetYdot.
 
-The :ref:`external` calls for this example occur with in the user initialization Nek5000 routine usrdat2 in the file `test.f <https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/uniform.usr>`_ with the minimum number of initialization and solve subroutines called. In this case:
+The :ref:`external` calls for this example occur within the user initialization Nek5000 routine usrdat2 in the file `uniform.usr <https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/uniform.usr>`_ with the minimum number of initialization and solve subroutines called. In this case:
 
 * ppiclf_comm_InitMPI is called to initialize the communication, 
 * ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,
@@ -106,9 +106,9 @@ The :ref:`external` calls for this example occur with in the user initialization
 * ppiclf_comm_InitOverlapMesh is called to initialize the overlap mesh from Nek5000,
 * ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,
 * ppiclf_solve_InitWall is called which sets a wall for the particles at the bottom of the domain,
-* ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimensional along the domain.
+* ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimension along the domain.
 
-Additionally, the solve routines are called every time step in the same file but in the Nek5000 routine userchk. In this routine, 
+Additionally, the solve routines are called every time step in the same file in the Nek5000 routine userchk. In this routine, 
 
 * ppiclf_solve_InterpFieldUser is called three times to interpolate the fields :math:`\phi_p`, :math:`u_x`, and :math:`u_y` into the property array,
 * ppiclf_solve_IntegrateParticle is called to integrate the system at the current time step.

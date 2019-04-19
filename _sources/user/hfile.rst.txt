@@ -98,7 +98,7 @@ Then, the user can use these directive names in place of the index j for the i p
 
    1. The indices are ordered from 1 to :code:`PPICLF_LRP`.
 
-Similarly, if the user is projecting any properties, each mapped (see :ref:`ffile`) projected fields can also be referenced in this way. Consider three projected fields :math:`f(\mathbf{x})`, :math:`g(\mathbf{x})`, and :math:`h(\mathbf{x})`. The user may want to refer to these fields as
+Similarly, if the user is projecting any properties, each mapped (see :ref:`ffile`) projected field can also be referenced in this way. Consider three projected fields :math:`f(\mathbf{x})`, :math:`g(\mathbf{x})`, and :math:`h(\mathbf{x})`. The user may want to refer to these fields as
 
 .. code-block:: c
 

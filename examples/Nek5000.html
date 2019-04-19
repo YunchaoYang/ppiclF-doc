@@ -15,6 +15,8 @@
   
   
   
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/examples/Nek5000.html"/>
+  
 
   
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
@@ -122,6 +124,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge.html">Acknowledgements</a></li>
+</ul>
 
             
           
@@ -191,7 +196,7 @@
    <iframe width="560" height="315" src="https://www.youtube.com/embed/xaH7ub68S7k" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div><div class="section" id="background">
 <h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
-<p>This is an example that illustrates a two-dimensional fluidized bed example. This example is linked to the incompressible, spectral element, fluid solver <a class="reference external" href="https://nek5000.mcs.anl.gov">Nek5000</a>.</p>
+<p>This is an example that illustrates a two-dimensional fluidized bed. This example also illustrates linking ppiclF to the incompressible, spectral element, fluid solver <a class="reference external" href="https://nek5000.mcs.anl.gov">Nek5000</a>.</p>
 <p>The core particle equations being solved in this case are</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\dfrac{d \mathbf{X}}{d t} &amp;= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &amp;= \mathbf{F}_{qs} + \mathbf{F}_{c} + \mathbf{F}_b,\end{split}\]</div>
@@ -201,7 +206,7 @@
 <p>and the same weight and collision forces as in the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example are used. For the drag force, the Gidaspow drag model has been used, which is</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\mathbf{F}_{qs} = \beta V_p (\mathbf{U} - \mathbf{V}) = \beta V_p \begin{bmatrix} U_x - V_x \\ U_y - V_y \end{bmatrix},\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathbf{U}\)</span> is the fluid velocity vector at the particle’s coordinates (see interpolation overlap mesh section below), <span class="math notranslate nohighlight">\(V_p\)</span> is each particle’s volume, and <span class="math notranslate nohighlight">\(\beta\)</span> is a drag coefficient, computed by</p>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{U}\)</span> is the fluid velocity vector interpolated to the particle’s coordinates, <span class="math notranslate nohighlight">\(V_p\)</span> is each particle’s volume, and <span class="math notranslate nohighlight">\(\beta\)</span> is a drag coefficient, computed by</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\beta = \begin{cases}150 \dfrac{\phi_p}{\phi_f} \dfrac{\mu_f}{D_p^2} + 1.75 \dfrac{\rho_f}{D_p} |\mathbf{U} - \mathbf{V}| &amp; \phi_p &gt; 0.2, \\ 0.75 C^*_D \dfrac{\phi_f}{D_p} \rho_f |\mathbf{U} - \mathbf{V}| \phi_f^{-2.65} &amp; \phi_p \leq 0.2. \end{cases}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(C^*_D\)</span> is another drag coefficient, <span class="math notranslate nohighlight">\(Re_p^* = \phi_f |\mathbf{U}-\mathbf{V}|D_p/ \nu_f\)</span> is the volume weighted Reynolds number, and <span class="math notranslate nohighlight">\(\nu_f = \mu_f/\rho_f\)</span> is the fluid kinematic viscosity. The equation for <span class="math notranslate nohighlight">\(C^*_D\)</span> is</p>
@@ -210,12 +215,12 @@
 <p>The fluid equations that Nek5000 solves in this example are</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\nabla \cdot \mathbf{u} &amp;= - \dfrac{1}{\phi_f} \dfrac{D \phi_f}{D t}, \\ \rho_f \dfrac{D \mathbf{u}}{D t} &amp;= \nabla \cdot \mathbf{\sigma}_f + \dfrac{\mathbf{f}_{pf}}{\phi_f},\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is the fluid velocity, <span class="math notranslate nohighlight">\(\rho_f\)</span> is the fluid density, <span class="math notranslate nohighlight">\(\mathbf{\sigma}_f\)</span> is the Navier-Stokes fluid stress tensor, <span class="math notranslate nohighlight">\(\phi_f\)</span> is the fluid volume fraction, and <span class="math notranslate nohighlight">\(\phi_p\)</span> is the particle volume fraction field (<span class="math notranslate nohighlight">\(\phi_f + \phi_p = 1\)</span>), and <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}\)</span> is a particle-fluid coupling force.</p>
-<p>The solution to these equations reside on a mesh within Nek5000. Since the particles are solved in the Lagrangian reference frame, their contributions on the mesh must be accounted for. Most notably, the explicit particle contributions are <span class="math notranslate nohighlight">\(\phi_p\)</span> (and as a result <span class="math notranslate nohighlight">\(\phi_f\)</span>) and <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}\)</span>. The method by which these are obtained is explained in the overlap mesh section below.</p>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is the fluid velocity, <span class="math notranslate nohighlight">\(\rho_f\)</span> is the fluid density, <span class="math notranslate nohighlight">\(\mathbf{\sigma}_f\)</span> is the Navier-Stokes fluid stress tensor, <span class="math notranslate nohighlight">\(\phi_f\)</span> is the fluid volume fraction, and <span class="math notranslate nohighlight">\(\phi_p\)</span> is the particle volume fraction (<span class="math notranslate nohighlight">\(\phi_f + \phi_p = 1\)</span>), and <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}\)</span> is a particle-fluid coupling force.</p>
+<p>The solution to these equations reside on a mesh within Nek5000. Since the particles are solved in the Lagrangian reference frame, their contributions on the mesh must be accounted for. Most notably, the explicit particle contributions from ppiclF to Nek5000 are <span class="math notranslate nohighlight">\(\phi_p\)</span> (and as a result <span class="math notranslate nohighlight">\(\phi_f\)</span>) and <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}\)</span>. The method by which these fields are obtained is <a class="reference internal" href="../algorithms/overlap_mesh.html#projection"><span class="std std-ref">Projection</span></a>.</p>
 </div>
 <div class="section" id="user-interface">
 <h2>User Interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="../user/hfile.html#hfile"><span class="std std-ref">The H-File</span></a> for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since <span class="math notranslate nohighlight">\(g\)</span> is constant, we do not included in in the list of properties.</p>
+<p><a class="reference internal" href="../user/hfile.html#hfile"><span class="std std-ref">The H-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/user_routines/PPICLF_USER.h">Nek5000 H-File</a>) is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since <span class="math notranslate nohighlight">\(g\)</span> is constant, we do not included in in the list of properties.</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LRS 4</span>
 <span class="cp">#define PPICLF_LRP 6</span>
 <span class="cp">#define PPICLF_LEE 1000</span>
@@ -239,8 +244,8 @@
 <span class="cp">#define PPICLF_P_JFY 3</span>
 </pre></div>
 </div>
-<p>The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the humber of projected fields. The user-only directives are in the bottom block.</p>
-<p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case has meaningful information in every routine. The routine ppiclf_user_SetYdot is nearly the same as the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example but with an added drag model evaluation that is slightly more complicated than the <a class="reference internal" href="stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> example. Also, the ppiclf_user_EvalNearestNeighbor routine is similar to the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example. The new addition is the mapping of particle properties to be projected in ppiclf_user_MapProjPart. With some study, it can be found that the three fields being projected in 2D are:</p>
+<p>The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the number of projected fields. The user-only directives are in the bottom block.</p>
+<p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/user_routines/ppiclf_user.f">Nek5000 F-File</a>) has meaningful information in every routine. The routine ppiclf_user_SetYdot is nearly the same as the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example but with an added drag model evaluation that is slightly more complicated than the <a class="reference internal" href="stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> example. Also, the ppiclf_user_EvalNearestNeighbor routine is similar to the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example. The new addition is the mapping of particle properties to be projected in ppiclf_user_MapProjPart. With some study, it can be found that the three fields being projected in 2D are:</p>
 <table border="1" class="docutils align-center" id="id2">
 <caption><span class="caption-text">Projection mapping in ppiclf_user_MapProjPart.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
@@ -264,8 +269,8 @@
 </tr>
 </tbody>
 </table>
-<p>where <span class="math notranslate nohighlight">\(D_p\)</span> has been used to normalize the values in 2D. Note that the negative signs to the <span class="math notranslate nohighlight">\(\mathbf{F}_{qs}\)</span> were added when they were stored in the storage array ppiclf_ydotc at the end of the routine ppiclf_user_SetYdot.</p>
-<p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur with in the user initialization Nek5000 routine usrdat2 in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/uniform.usr">test.f</a> with the minimum number of initialization and solve subroutines called. In this case:</p>
+<p>where <span class="math notranslate nohighlight">\(D_p\)</span> has been used to normalize the values in 2D. Note that the negative signs of the components of <span class="math notranslate nohighlight">\(\mathbf{F}_{qs}\)</span> were added when the forces were stored in the storage array ppiclf_ydotc at the end of the routine ppiclf_user_SetYdot.</p>
+<p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur within the user initialization Nek5000 routine usrdat2 in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/uniform.usr">uniform.usr</a> with the minimum number of initialization and solve subroutines called. In this case:</p>
 <ul class="simple">
 <li>ppiclf_comm_InitMPI is called to initialize the communication,</li>
 <li>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</li>
@@ -273,9 +278,9 @@
 <li>ppiclf_comm_InitOverlapMesh is called to initialize the overlap mesh from Nek5000,</li>
 <li>ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,</li>
 <li>ppiclf_solve_InitWall is called which sets a wall for the particles at the bottom of the domain,</li>
-<li>ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimensional along the domain.</li>
+<li>ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimension along the domain.</li>
 </ul>
-<p>Additionally, the solve routines are called every time step in the same file but in the Nek5000 routine userchk. In this routine,</p>
+<p>Additionally, the solve routines are called every time step in the same file in the Nek5000 routine userchk. In this routine,</p>
 <ul class="simple">
 <li>ppiclf_solve_InterpFieldUser is called three times to interpolate the fields <span class="math notranslate nohighlight">\(\phi_p\)</span>, <span class="math notranslate nohighlight">\(u_x\)</span>, and <span class="math notranslate nohighlight">\(u_y\)</span> into the property array,</li>
 <li>ppiclf_solve_IntegrateParticle is called to integrate the system at the current time step.</li>
@@ -314,15 +319,6 @@ mpirun -np <span class="m">4</span> nek5000                                     
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../contribute.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="dem_pack_3d.html" class="btn btn-neutral float-left" title="DEM Packing 3D" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

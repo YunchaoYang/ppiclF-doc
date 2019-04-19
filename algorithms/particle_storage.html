@@ -15,6 +15,8 @@
   
   
   
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/algorithms/particle_storage.html"/>
+  
 
   
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
@@ -109,6 +111,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="overlap_mesh.html">Overlap Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ghosts.html">Ghost Particles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance</a></li>
 </ul>
 </li>
 </ul>
@@ -120,6 +123,9 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge.html">Acknowledgements</a></li>
 </ul>
 
             
@@ -217,7 +223,7 @@
 <p class="caption"><span class="caption-text">Example of bin generation through recursive planar cutting.</span></p>
 </div>
 <p>As is shown in the figure, the bin generation begins by bounding the particle domain, which is the region occupied by the rectangular prism whose planes are determined by the global maximum and minimum coordinates of the particles. Following this, the bins, which are demarcated by the dashed lines, are generated through the recursive planar cutting algorithm above. At the end of the process, different bin configurations are realized based on the number of processing ranks used. The resulting bin configurations are shown in the bottom of the figure above.</p>
-<p>Additionally, below each bin distribution, the number of particles :math:’N_p’ per processing rank :math:’R’ is compared between the different cases. Note that since we have required there to only be one bin stored on each processor, <span class="math notranslate nohighlight">\(N_p/R\)</span> also refers to the number of particles per bin. Ideally, there would be exactly <span class="math notranslate nohighlight">\(N_p/R\)</span> particles on a processor. In the current method, the ideal number of particles per rank is relaxed to allow nearby particles to be locally grouped together in the same rank (or bin). Thus, in the current method we have a deviation from the ideal number of particles on each rank, with ranks having varying numbers of particles. In the figure, the maximum and minimum number of particles on each rank in the BBGP method is shown.</p>
+<p>Additionally, below each bin distribution, the number of particles <span class="math notranslate nohighlight">\(N_p\)</span> per processing rank <span class="math notranslate nohighlight">\(R\)</span> is compared between the different cases. Note that since we have required there to only be one bin stored on each processor, <span class="math notranslate nohighlight">\(N_p/R\)</span> also refers to the number of particles per bin. Ideally, there would be exactly <span class="math notranslate nohighlight">\(N_p/R\)</span> particles on a processor. In the current method, the ideal number of particles per rank is relaxed to allow nearby particles to be locally grouped together in the same rank (or bin). Thus, in the current method we have a deviation from the ideal number of particles on each rank, with ranks having varying numbers of particles. In the figure, the maximum and minimum number of particles on each rank in ppiclF is shown.</p>
 </div>
 <div class="section" id="bin-to-rank-mapping">
 <h2>Bin-to-Rank Mapping<a class="headerlink" href="#bin-to-rank-mapping" title="Permalink to this headline">¶</a></h2>
@@ -236,15 +242,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="overlap_mesh.html" class="btn btn-neutral float-right" title="Overlap Mesh" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../algorithms.html" class="btn btn-neutral float-left" title="Algorithms" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

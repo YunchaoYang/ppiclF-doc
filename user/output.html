@@ -8,14 +8,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Link &mdash; ppiclF Documentation</title>
+  <title>File Output &mdash; ppiclF Documentation</title>
   
 
   
   
   
   
-    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/quickstart/link.html"/>
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/user/output.html"/>
   
 
   
@@ -47,8 +47,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Algorithms" href="../algorithms.html" />
-    <link rel="prev" title="Build" href="build.html" /> 
+    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="prev" title="External Interface" href="external.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -99,19 +99,20 @@
               
             
             
-              <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../quickstart.html">Quickstart</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="depend.html">Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="build.html">Build</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Link</a></li>
-</ul>
-</li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms</a></li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../user.html">User Interface</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../user.html">User Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hfile.html">The H-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ffile.html">The F-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="external.html">External Interface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">File Output</a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
@@ -166,9 +167,9 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-          <li><a href="../quickstart.html">Quickstart</a> &raquo;</li>
+          <li><a href="../user.html">User Interface</a> &raquo;</li>
         
-      <li>Link</li>
+      <li>File Output</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -185,22 +186,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="link">
-<span id="linking"></span><h1>Link<a class="headerlink" href="#link" title="Permalink to this headline">¶</a></h1>
-<p>In order to use the ppiclF library that was built in the last step (see <a class="reference internal" href="build.html#build"><span class="std std-ref">Build</span></a>), the library file source/libppiclF.a must be linked to your existing code. This will be specific to your exisiting code compilation. The process of linking will generally involve adding “-I LocalCodeDir/ppiclF/source” to the compiler flags and “-L LocalCodeDir/ppiclF/source -lppiclF” to the linking flags.</p>
-<p>Alternatively, ppiclF may be used on its own as well. Both a Fortran and C++ example of this is given in the simple MPI driver program example <a class="reference internal" href="../examples/stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a>. We will use the Fortran program to test the linking.</p>
-<p>First, create a working directory to run the test case. We will call this TestCaseDir, and it should be located outside of the cloned GitHub repository ppiclF:</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">TestCaseDir</span>
-</pre></div>
-</div>
-<p>The example case can then be copied from the cloned GitHub code to TestCaseDir</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">LocalCodeDir</span><span class="o">/</span><span class="n">ppiclF</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">stokes_2d</span><span class="o">/</span><span class="n">fortran</span><span class="o">/*</span> <span class="n">TestCaseDir</span><span class="o">/</span>
-<span class="n">cd</span> <span class="n">TestCaseDir</span>
-</pre></div>
-</div>
-<p>Included in this test case is a Makefile and a driver program called test.f.</p>
-<p>The Makefile is simple and should be edited as needed. In particular, the variable PPICLF_LOCATION may need to be changed to match the location that was set as LocalCodeDir/ppiclF.</p>
-<p>The driver program test.f is explained in further detail in the <a class="reference internal" href="../examples/stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> example.</p>
+  <div class="section" id="file-output">
+<span id="output"></span><h1>File Output<a class="headerlink" href="#file-output" title="Permalink to this headline">¶</a></h1>
+<p>Two different files are output for viewing the solution. The default names for these files are:</p>
+<ol class="arabic simple">
+<li>parXXXXX*.vtu,</li>
+<li>binXXXXX*.vtu,</li>
+</ol>
+<p>where XXXXX refers to a particular file output number ordered from 00001 to the number of output files in a simulation. Each file is in a combined binary/ASCII <a class="reference external" href="https://vtk.org">VTU</a> format.</p>
+<p>The par-prefixed file stores the solution <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and property arrays of each particle according to the order in <a class="reference internal" href="hfile.html#hfile"><span class="std std-ref">The H-File</span></a>. Additionally, a three part tag is given to every particle and also stored in the par files so that any particle can be uniquely identified throughout a simulation. These files can be used to restart from a particular output step by calling the external interface routine ppiclf_io_ReadParticleVTU at initialization.</p>
+<p>The bin file stores the volumes enclosed by the bins and how many particles are stored within that bin (see <a class="reference internal" href="../algorithms/particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>). This can be useful for analyzing the distribution of particles-to-ranks throughout a simulation.</p>
+<p>These files may be viewed and/or post-processed in outside programs, such as <a class="reference external" href="https://wci.llnl.gov/simulation/computer-codes/visit">VisIt</a> or <a class="reference external" href="https://paraview.org">ParaView</a>.</p>
 </div>
 
 

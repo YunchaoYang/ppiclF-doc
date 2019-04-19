@@ -15,6 +15,8 @@
   
   
   
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/index.html"/>
+  
 
   
   <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
@@ -111,6 +113,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contribute.html">Contributing</a></li>
 </ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledge.html">Acknowledgements</a></li>
+</ul>
 
             
           
@@ -182,7 +187,7 @@
 <div class="math notranslate nohighlight">
 \[\dfrac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}}.\]</div>
 <ul class="simple">
-<li>Open MPI parallelization allows millions of equations to be solved.</li>
+<li>Open MPI parallelization allows billions of equations to be solved.</li>
 <li>Load balances equations based on spatial position of particles.</li>
 <li>Links with both Fortran and C++ external code.</li>
 <li>Allows simple user input of external overlapping mesh for interactions between particles and external mesh, including interpolation and projection.</li>
@@ -207,18 +212,10 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="algorithms/particle_storage.html">Particle Storage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="algorithms/particle_storage.html#bin-generation">Bin Generation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="algorithms/particle_storage.html#bin-to-rank-mapping">Bin-to-Rank Mapping</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="algorithms/overlap_mesh.html">Overlap Mesh</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="algorithms/overlap_mesh.html#mapping">Mapping</a></li>
-<li class="toctree-l3"><a class="reference internal" href="algorithms/overlap_mesh.html#interpolation">Interpolation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="algorithms/overlap_mesh.html#projection">Projection</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms/particle_storage.html">Particle Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms/overlap_mesh.html">Overlap Mesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="algorithms/ghosts.html">Ghost Particles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithms/performance.html">Performance</a></li>
 </ul>
 </li>
 </ul>
@@ -229,23 +226,10 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="user.html">User Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user/hfile.html">The H-File</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="user/hfile.html#pre-defined-directives">Pre-Defined Directives</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user/hfile.html#user-only-directives">User-Only Directives</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="user/ffile.html">The F-File</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="user/ffile.html#ppiclf-user-setydot">ppiclf_user_SetYdot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user/ffile.html#ppiclf-user-mapprojpart">ppiclf_user_MapProjPart</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user/ffile.html#ppiclf-user-evalnearestneighbor">ppiclf_user_EvalNearestNeighbor</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="user/external.html">External Interface</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="user/external.html#common-variables">Common Variables</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user/external.html#initialization-subroutines">Initialization Subroutines</a></li>
-<li class="toctree-l3"><a class="reference internal" href="user/external.html#solve-subroutines">Solve Subroutines</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="user/hfile.html">The H-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/ffile.html">The F-File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/external.html">External Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/output.html">File Output</a></li>
 </ul>
 </li>
 </ul>
@@ -256,25 +240,9 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/stokes_2d.html">Stokes 2D</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/stokes_2d.html#background">Background</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/stokes_2d.html#user-interface">User Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/stokes_2d.html#compiling-and-running">Compiling and Running</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/stokes_2d.html#simulation-output">Simulation Output</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="examples/dem_pack_3d.html">DEM Packing 3D</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/dem_pack_3d.html#background">Background</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/dem_pack_3d.html#user-interface">User Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/dem_pack_3d.html#compiling-and-running">Compiling and Running</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="examples/Nek5000.html">Nek5000 Case</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="examples/Nek5000.html#background">Background</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/Nek5000.html#user-interface">User Interface</a></li>
-<li class="toctree-l3"><a class="reference internal" href="examples/Nek5000.html#compiling-and-running">Compiling and Running</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/stokes_2d.html">Stokes 2D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/dem_pack_3d.html">DEM Packing 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/Nek5000.html">Nek5000 Case</a></li>
 </ul>
 </li>
 </ul>
@@ -292,6 +260,18 @@
 </ul>
 </div>
 </div>
+<div class="section" id="acknowledgements">
+<h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="acknowledge.html">Acknowledgements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="acknowledge.html#funding">Funding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="acknowledge.html#contributions">Contributions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 </div>
 
 
@@ -299,13 +279,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-    </div>
   
 
   <hr/>

@@ -4,7 +4,7 @@
 External Interface
 ------------------
 
-The following subroutines and variables can be called from an external program's compiled source code. The source code may be found in an appilcation that you are linking ppiclF to (see :ref:`Nek5000_example`) or a simple driver program that links to ppiclF (see :ref:`stokes2d`).
+The following subroutines and variables can be called from an external program's pre-compilation source code. The source code may be found in an appilcation that you are linking ppiclF to (see :ref:`Nek5000_example`) or a simple driver program that links to ppiclF (see :ref:`stokes2d`).
 
 In what follows, the terms *int* and *real* refer to the Fortran integer*4 and real*8 types, which are also the types int and double in C.
 
@@ -38,7 +38,7 @@ The following common variables are stored in memory and may be included by addin
 
 Initialization Subroutines
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-The following subroutines are only to be called once at the begining of a simulation. Note that every routine does not need to be called. The actual subroutines called at setup are problem dependent. However, the subroutines **ppiclf_comm_InitMPI** and **ppiclf_solve_InitParticle** must be called at least once at initialization.
+The following subroutines are only to be called once at the begining of a simulation. Note that every routine does not need to be called. The actual subroutines called at setup are problem dependent. However, the subroutines **ppiclf_comm_InitMPI** and **ppiclf_solve_InitParticle** must be called at least once at initialization for every case.
 
 ..
 ..
@@ -61,7 +61,9 @@ The following subroutines are only to be called once at the begining of a simula
 ..
 .. admonition:: ppiclf_io_ReadParticleVTU(char*1 **filein(132)**)
 
-   The user specifies **filein** with .vtu extension to use as the initial conditions for particles. 
+   The user specifies **filein** with .vtu extension to use as the initial conditions for particles. When this routine is called, the arrays ppiclf_y(j,i) and ppiclf_rprop(j,i) will automatically be filled. 
+
+   * Note that ppiclf_solve_InitParticle should still be called following this, but with a dummy arguement in place of **y** and **rprop**.
 
 ..
 ..
@@ -112,9 +114,20 @@ The following subroutines are only to be called once at the begining of a simula
 
 ..
 ..
+.. admonition:: ppiclf_solve_InitWall(real **xp1**, real **xp2**, real **xp3**)
+
+   The user manually sets a boundary. This is similar to ppiclf_io_ReadWallVTK, but the user may only want to manually set a single or few walls manually without a VTK file.
+
+   * The inputs are all vectors of length two (2D) or three (3D).
+   * **xp1** stores coordinates (p1x, p1y, p1z) as in the VTK file.
+   * **xp2** stores coordinates (p2x, p2y, p2z) as in the VTK file.
+   * **xp3** stores coordinates (p3x, p3y, p3z) as in the VTK file.
+
+..
+..
 .. admonition:: ppiclf_solve_InitNeighborBin(real **W**)
 
-   The user specifies **W** as the minimum interaction distance to resolve. See :ref:*part-storage*.
+   The user specifies **W** as the minimum interaction distance to resolve. See :ref:`part-storage`.
 
 ..
 ..
@@ -151,7 +164,7 @@ The following subroutines are only to be called once at the begining of a simula
 ..
 .. admonition:: ppiclf_solve_InitGaussianFilter(real **f**, real **a**, int **iflg**)
 
-   The Gaussian filter half-width for projection :math:`\delta_f` is **f** (see :ref:*overlap-mesh*). The value **a** is the percent of the r = 0 value that the Gaussian filter is computationally allowed to decay to. The flag **iflg** sets if particles should be mirrored and then projected across boundaries or not.
+   The Gaussian filter half-width for projection :math:`\delta_f` is **f** (see :ref:`overlap-mesh`). The value **a** is the percent of the r = 0 value that the Gaussian filter is computationally allowed to decay to. The flag **iflg** sets if particles should be mirrored and then projected across boundaries or not.
    
    * **a** < 1.0.
    * **iflg** = 0 (no mirror) or 1 (mirror).
@@ -160,7 +173,7 @@ The following subroutines are only to be called once at the begining of a simula
 ..
 .. admonition:: ppiclf_solve_InitBoxFilter(real **f**, int **iflg**)
 
-   The box filter half-width for projection :math:`\delta_f` is **f** (see :ref:*overlap-mesh*). The flag **iflg** sets if particles should be mirrored and then projected across boundaries or not.
+   The box filter half-width for projection :math:`\delta_f` is **f** (see :ref:`overlap-mesh`). The flag **iflg** sets if particles should be mirrored and then projected across boundaries or not.
    
    * **iflg** = 0 (no mirror) or 1 (mirror).
 

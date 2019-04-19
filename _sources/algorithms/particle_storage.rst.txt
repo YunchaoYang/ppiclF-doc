@@ -44,7 +44,7 @@ In 2D, an example of this is shown in the figure below.
 
 As is shown in the figure, the bin generation begins by bounding the particle domain, which is the region occupied by the rectangular prism whose planes are determined by the global maximum and minimum coordinates of the particles. Following this, the bins, which are demarcated by the dashed lines, are generated through the recursive planar cutting algorithm above. At the end of the process, different bin configurations are realized based on the number of processing ranks used. The resulting bin configurations are shown in the bottom of the figure above.
 
-Additionally, below each bin distribution, the number of particles :math:'N_p' per processing rank :math:'R' is compared between the different cases. Note that since we have required there to only be one bin stored on each processor, :math:`N_p/R` also refers to the number of particles per bin. Ideally, there would be exactly :math:`N_p/R` particles on a processor. In the current method, the ideal number of particles per rank is relaxed to allow nearby particles to be locally grouped together in the same rank (or bin). Thus, in the current method we have a deviation from the ideal number of particles on each rank, with ranks having varying numbers of particles. In the figure, the maximum and minimum number of particles on each rank in the BBGP method is shown.
+Additionally, below each bin distribution, the number of particles :math:`N_p` per processing rank :math:`R` is compared between the different cases. Note that since we have required there to only be one bin stored on each processor, :math:`N_p/R` also refers to the number of particles per bin. Ideally, there would be exactly :math:`N_p/R` particles on a processor. In the current method, the ideal number of particles per rank is relaxed to allow nearby particles to be locally grouped together in the same rank (or bin). Thus, in the current method we have a deviation from the ideal number of particles on each rank, with ranks having varying numbers of particles. In the figure, the maximum and minimum number of particles on each rank in ppiclF is shown.
 
 Bin-to-Rank Mapping
 ^^^^^^^^^^^^^^^^^^^
@@ -52,7 +52,6 @@ Once the bins have been created, they are mapped to processing ranks. This inclu
 
 .. math:: 
    x \in [L_{dx} + i L_{bx}, L_{dx} + (i+1) L_{bx}], \\ y \in [L_{dy} + j L_{by}, L_{dy} + (j+1) L_{by}], \\ z \in [L_{dz} + k L_{bz}, L_{dz} + (k+1) L_{bz}] ,
-..   \begin{align*} x \in [L_{dx} + i L_{bx}, L_{dx} + (i+1) L_{bx}], \\ y \in [L_{dy} + j L_{by}, L_{dy} + (j+1) L_{by}], \\ z \in [L_{dz} + k L_{bz}, L_{dz} + (k+1) L_{bz}] ,\end{align*}
 
 where :math:`L_{d*}` is the particle domain width in respective dimension and :math:`L_{b*}` is the bin width in respective dimension (i.e., :math:`L_{b*} = L_{d*}/c(*)`).
 

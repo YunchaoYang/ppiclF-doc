@@ -11,7 +11,7 @@
 
 Background
 ^^^^^^^^^^
-This is an example that illustrates a particle packing in a realistic geometry. To accomplish this, an efficient neighbor search is performed along with reading in of external boundary conditions. The following system of equations is solved for the i particle
+This is an example that illustrates a particle packing in a realistic geometry. To accomplish this, an efficient neighbor search is performed along with reading in external boundary conditions. The following system of equations is solved for the i particle
 
 .. math::
    \dfrac{d \mathbf{X}^{(i)}}{d t} &= \mathbf{V}^{(i)}, \\ M_p^{(i)} \dfrac{d \mathbf{V}^{(i)}}{d t} &= \mathbf{F}_{c}^{(i)} + \mathbf{F}_b^{(i)},
@@ -58,7 +58,7 @@ Note that the time in collision can be computed by
 .. math::
    t_c = \sqrt{\dfrac{M^{(i,j)}}{k_c} (\ln^2 e_n + \pi^2)}.
 
-This time scale must be resolved in the simulation. As we will see, this sets practical limitations on the simulation time step.
+This time scale must be resolved in the simulation. As can be seen, this sets practical limitations on the simulation time step.
 
 Thus, for each particle we can write the following system of equations
 
@@ -72,7 +72,7 @@ where
 
 User Interface
 ^^^^^^^^^^^^^^
-:ref:`hfile` for this case is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included in in the list of properties.
+:ref:`hfile` for this case (`DEM Packing 3D H-File <https://github.com/dpzwick/ppiclf/tree/master/examples/dem_pack_3d/user_routines/PPICLF_USER.h>`_) is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included in in the list of properties.
 
 .. code-block:: c
 
@@ -92,14 +92,14 @@ User Interface
 
 The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, and the maximum number of boundaries. The user-only directives are in the bottom block.
  
-:ref:`ffile` for this case is similar to the :ref:`stokes2d` exmaple. In ppiclf_user_SetYdot, the forces are evaulated. Note that the routine ppiclf_solve_NearestNeighbor is invoked which activaes the routine ppiclf_user_EvalNearestNeighbor. In ppiclf_user_EvalNearestNeighbor, the collision force model is applied between the j nearby particles as well as the j nearby boundaries. The collision force is stored in the extra storage array ppiclf_ydotc. The other routine ppiclf_user_MapProjPart is defined only.
+:ref:`ffile` for this case (`DEM Packing 3D F-File <https://github.com/dpzwick/ppiclf/tree/master/examples/dem_pack_3d/user_routines/ppiclf_user.f>`_) is similar to the :ref:`stokes2d` exmaple. In ppiclf_user_SetYdot, the forces are evaulated. Note that the routine ppiclf_solve_NearestNeighbor is invoked which activates the routine ppiclf_user_EvalNearestNeighbor. In ppiclf_user_EvalNearestNeighbor, the collision force model is applied between the j nearby particles as well as the j nearby boundaries. The collision force is stored in the extra storage array ppiclf_ydotc. The other routine ppiclf_user_MapProjPart is defined only.
 
 The :ref:`external` calls for this example occur in a simple driver program in the file `test.f <https://github.com/dpzwick/ppiclf/tree/master/examples/dem_pack_3d/fortran/test.f>`_ with the minimum number of initialization and solve subroutines called. In this case:
 
 * ppiclf_comm_InitMPI is called to initialize the communication, 
 * ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,
 * ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,
-* ppiclf_io_ReadWallVTK is called which reads the minimal ASCII triangular wall boundary file,
+* ppiclf_io_ReadWallVTK is called which reads the minimal ASCII triangular patch boundary file,
 * ppiclf_solve_IntegrateParticle is called in a simple time step loop.
 
 Compiling and Running

@@ -15,6 +15,8 @@
   
   
   
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/user/external.html"/>
+  
 
   
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
@@ -45,7 +47,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="next" title="File Output" href="output.html" />
     <link rel="prev" title="The F-File" href="ffile.html" /> 
 </head>
 
@@ -113,6 +115,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#solve-subroutines">Solve Subroutines</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="output.html">File Output</a></li>
 </ul>
 </li>
 </ul>
@@ -121,6 +124,9 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge.html">Acknowledgements</a></li>
 </ul>
 
             
@@ -187,7 +193,7 @@
             
   <div class="section" id="external-interface">
 <span id="external"></span><h1>External Interface<a class="headerlink" href="#external-interface" title="Permalink to this headline">¶</a></h1>
-<p>The following subroutines and variables can be called from an external program’s compiled source code. The source code may be found in an appilcation that you are linking ppiclF to (see <a class="reference internal" href="../examples/Nek5000.html#nek5000-example"><span class="std std-ref">Nek5000 Case</span></a>) or a simple driver program that links to ppiclF (see <a class="reference internal" href="../examples/stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a>).</p>
+<p>The following subroutines and variables can be called from an external program’s pre-compilation source code. The source code may be found in an appilcation that you are linking ppiclF to (see <a class="reference internal" href="../examples/Nek5000.html#nek5000-example"><span class="std std-ref">Nek5000 Case</span></a>) or a simple driver program that links to ppiclF (see <a class="reference internal" href="../examples/stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a>).</p>
 <p>In what follows, the terms <em>int</em> and <em>real</em> refer to the Fortran integer*4 and real*8 types, which are also the types int and double in C.</p>
 <div class="section" id="common-variables">
 <h2>Common Variables<a class="headerlink" href="#common-variables" title="Permalink to this headline">¶</a></h2>
@@ -238,7 +244,7 @@
 </div>
 <div class="section" id="initialization-subroutines">
 <h2>Initialization Subroutines<a class="headerlink" href="#initialization-subroutines" title="Permalink to this headline">¶</a></h2>
-<p>The following subroutines are only to be called once at the begining of a simulation. Note that every routine does not need to be called. The actual subroutines called at setup are problem dependent. However, the subroutines <strong>ppiclf_comm_InitMPI</strong> and <strong>ppiclf_solve_InitParticle</strong> must be called at least once at initialization.</p>
+<p>The following subroutines are only to be called once at the begining of a simulation. Note that every routine does not need to be called. The actual subroutines called at setup are problem dependent. However, the subroutines <strong>ppiclf_comm_InitMPI</strong> and <strong>ppiclf_solve_InitParticle</strong> must be called at least once at initialization for every case.</p>
 <div class="admonition-ppiclf-comm-initmpi-int-comm-int-id-int-np admonition">
 <p class="first admonition-title">ppiclf_comm_InitMPI(int <strong>comm</strong>, int <strong>id</strong>, int <strong>np</strong>)</p>
 <p class="last">The user inputs the current MPI communicator <strong>comm</strong> where the current MPI rank is <strong>id</strong> and there are <strong>np</strong> total ranks.</p>
@@ -255,7 +261,10 @@
 </div>
 <div class="admonition-ppiclf-io-readparticlevtu-char-1-filein-132 admonition">
 <p class="first admonition-title">ppiclf_io_ReadParticleVTU(char*1 <strong>filein(132)</strong>)</p>
-<p class="last">The user specifies <strong>filein</strong> with .vtu extension to use as the initial conditions for particles.</p>
+<p>The user specifies <strong>filein</strong> with .vtu extension to use as the initial conditions for particles. When this routine is called, the arrays ppiclf_y(j,i) and ppiclf_rprop(j,i) will automatically be filled.</p>
+<ul class="last simple">
+<li>Note that ppiclf_solve_InitParticle should still be called following this, but with a dummy arguement in place of <strong>y</strong> and <strong>rprop</strong>.</li>
+</ul>
 </div>
 <div class="admonition-ppiclf-io-readwallvtk-char-1-filein-132 admonition">
 <p class="first admonition-title">ppiclf_io_ReadWallVTK(char*1 <strong>filein(132)</strong>)</p>
@@ -294,9 +303,19 @@
 </ul>
 <p class="last">This format can actually be output using the free finite element mesh generator <a class="reference external" href="https://gmsh.info">Gmsh</a>. The process is to create the appropriate mesh, export as a VTK file, and then remove everything except the format as specified above. <strong>Please make sure there are no blank lines in file.</strong></p>
 </div>
+<div class="admonition-ppiclf-solve-initwall-real-xp1-real-xp2-real-xp3 admonition">
+<p class="first admonition-title">ppiclf_solve_InitWall(real <strong>xp1</strong>, real <strong>xp2</strong>, real <strong>xp3</strong>)</p>
+<p>The user manually sets a boundary. This is similar to ppiclf_io_ReadWallVTK, but the user may only want to manually set a single or few walls manually without a VTK file.</p>
+<ul class="last simple">
+<li>The inputs are all vectors of length two (2D) or three (3D).</li>
+<li><strong>xp1</strong> stores coordinates (p1x, p1y, p1z) as in the VTK file.</li>
+<li><strong>xp2</strong> stores coordinates (p2x, p2y, p2z) as in the VTK file.</li>
+<li><strong>xp3</strong> stores coordinates (p3x, p3y, p3z) as in the VTK file.</li>
+</ul>
+</div>
 <div class="admonition-ppiclf-solve-initneighborbin-real-w admonition">
 <p class="first admonition-title">ppiclf_solve_InitNeighborBin(real <strong>W</strong>)</p>
-<p class="last">The user specifies <strong>W</strong> as the minimum interaction distance to resolve. See :ref:<em>part-storage</em>.</p>
+<p class="last">The user specifies <strong>W</strong> as the minimum interaction distance to resolve. See <a class="reference internal" href="../algorithms/particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>.</p>
 </div>
 <div class="admonition-ppiclf-solve-initsuggesteddir-char-1-dir admonition">
 <p class="first admonition-title">ppiclf_solve_InitSuggestedDir(char*1 <strong>dir</strong>)</p>
@@ -328,7 +347,7 @@
 </div>
 <div class="admonition-ppiclf-solve-initgaussianfilter-real-f-real-a-int-iflg admonition">
 <p class="first admonition-title">ppiclf_solve_InitGaussianFilter(real <strong>f</strong>, real <strong>a</strong>, int <strong>iflg</strong>)</p>
-<p>The Gaussian filter half-width for projection <span class="math notranslate nohighlight">\(\delta_f\)</span> is <strong>f</strong> (see :ref:<em>overlap-mesh</em>). The value <strong>a</strong> is the percent of the r = 0 value that the Gaussian filter is computationally allowed to decay to. The flag <strong>iflg</strong> sets if particles should be mirrored and then projected across boundaries or not.</p>
+<p>The Gaussian filter half-width for projection <span class="math notranslate nohighlight">\(\delta_f\)</span> is <strong>f</strong> (see <a class="reference internal" href="../algorithms/overlap_mesh.html#overlap-mesh"><span class="std std-ref">Overlap Mesh</span></a>). The value <strong>a</strong> is the percent of the r = 0 value that the Gaussian filter is computationally allowed to decay to. The flag <strong>iflg</strong> sets if particles should be mirrored and then projected across boundaries or not.</p>
 <ul class="last simple">
 <li><strong>a</strong> &lt; 1.0.</li>
 <li><strong>iflg</strong> = 0 (no mirror) or 1 (mirror).</li>
@@ -336,7 +355,7 @@
 </div>
 <div class="admonition-ppiclf-solve-initboxfilter-real-f-int-iflg admonition">
 <p class="first admonition-title">ppiclf_solve_InitBoxFilter(real <strong>f</strong>, int <strong>iflg</strong>)</p>
-<p>The box filter half-width for projection <span class="math notranslate nohighlight">\(\delta_f\)</span> is <strong>f</strong> (see :ref:<em>overlap-mesh</em>). The flag <strong>iflg</strong> sets if particles should be mirrored and then projected across boundaries or not.</p>
+<p>The box filter half-width for projection <span class="math notranslate nohighlight">\(\delta_f\)</span> is <strong>f</strong> (see <a class="reference internal" href="../algorithms/overlap_mesh.html#overlap-mesh"><span class="std std-ref">Overlap Mesh</span></a>). The flag <strong>iflg</strong> sets if particles should be mirrored and then projected across boundaries or not.</p>
 <ul class="last simple">
 <li><strong>iflg</strong> = 0 (no mirror) or 1 (mirror).</li>
 </ul>
@@ -380,15 +399,6 @@
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="ffile.html" class="btn btn-neutral float-left" title="The F-File" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

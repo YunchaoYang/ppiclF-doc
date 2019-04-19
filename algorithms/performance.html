@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Performance &mdash; ppiclF Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/algorithms/performance.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'v1.0',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="User Interface" href="../user.html" />
+    <link rel="prev" title="Ghost Particles" href="ghosts.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ppiclF
+          
+
+          
+            
+            <img src="../_static/ppiclF.gif" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../algorithms.html">Algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="particle_storage.html">Particle Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overlap_mesh.html">Overlap Mesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ghosts.html">Ghost Particles</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#description">Description</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#results">Results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user.html">User Interface</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge.html">Acknowledgements</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ppiclF</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../algorithms.html">Algorithms</a> &raquo;</li>
+        
+      <li>Performance</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="performance">
+<span id="id1"></span><h1>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>In this section, the performance of the ppiclF implementation of these algorithms is tested. In the following simulations, ppiclF has been coupled with the incompressible fluid solver <a class="reference external" href="https://nek5000.mcs.anl.gov">Nek5000</a>.</p>
+<p>Here, the fluid discritization is composed of hexahedral spectral elements, each with Gauss-Lobatto-Legendre (GLL) quadrature points. Since the GLL points are collocated with the Eulerian field variables, particle-fluid interactions (i.e., <a class="reference internal" href="overlap_mesh.html#interpolation"><span class="std std-ref">Interpolation</span></a> and <a class="reference internal" href="overlap_mesh.html#projection"><span class="std std-ref">Projection</span></a>) occur between the overlap GLL mesh within each element and nearby particles.</p>
+<p>In this example, 9 fields are interpolated and 7 fields are projected, which corresponds to typical multiphase flow simulations. For simplicity, each spectral element is a cube with side lengths <span class="math notranslate nohighlight">\(L_e\)</span> and <span class="math notranslate nohighlight">\(N = 6\)</span> quadrature points in each dimension. Additionally, the entire domain is a cube with side lengths <span class="math notranslate nohighlight">\(L_D\)</span>.</p>
+<p>Within the domain, <span class="math notranslate nohighlight">\(N_p\)</span> particles are also distributed with uniform random probability in a cube with side lengths of <span class="math notranslate nohighlight">\(L_P\)</span>, with this cube being centered inside the GLL elemental domain. Each particle is assumed to be spherical with diameter <span class="math notranslate nohighlight">\(D_p\)</span> and density <span class="math notranslate nohighlight">\(\rho_p\)</span>. For projection, a cut-off radius for the Gaussian filter <span class="math notranslate nohighlight">\(r_c/L_e = 0.35\)</span> is used, which bounds the number of grid points each projected particle quantity will be spread over relative to the particle’s coordinates. The soft-sphere collision model in the <a class="reference internal" href="../examples/dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example is used. In each case, <span class="math notranslate nohighlight">\(L_e = 11.25 \; \text{mm}\)</span>, <span class="math notranslate nohighlight">\(\rho_p = 2,500 \; \text{kg/m}^3\)</span>, <span class="math notranslate nohighlight">\(k_c = 1,000 \; \text{kg/s}^2\)</span>, and <span class="math notranslate nohighlight">\(e_n = 0.9\)</span>. Each case was simulated with <span class="math notranslate nohighlight">\(R\)</span> MPI ranks of the Vulcan supercomputer at Lawrence Livermore National Laboratory.</p>
+<p>In order to understand how the algorithms in ppiclF perform, we have looked at multiple configurations of the test problem under strong and weak processor scaling. The exact parameters for each case are found in the table below.</p>
+<table border="1" class="docutils align-center" id="id2">
+<caption><span class="caption-text">Scaling case parameters.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="9%" />
+<col width="6%" />
+<col width="11%" />
+<col width="13%" />
+<col width="30%" />
+<col width="30%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Scaling</th>
+<th class="head">Case</th>
+<th class="head"><span class="math notranslate nohighlight">\(R\)</span></th>
+<th class="head"><span class="math notranslate nohighlight">\(N_p\)</span></th>
+<th class="head"><span class="math notranslate nohighlight">\(D_p \; (\mu\text{m})\)</span></th>
+<th class="head"><span class="math notranslate nohighlight">\(L_p/L_D \; (\text{m})\)</span></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td rowspan="6">Strong</td>
+<td>1</td>
+<td>1,024</td>
+<td>25,165,824</td>
+<td>511</td>
+<td>0.54/0.54</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>4,096</td>
+<td>“</td>
+<td>“</td>
+<td>“</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>8,192</td>
+<td>“</td>
+<td>“</td>
+<td>“</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>16,384</td>
+<td>“</td>
+<td>“</td>
+<td>“</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>32,768</td>
+<td>“</td>
+<td>“</td>
+<td>“</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>98,304</td>
+<td>“</td>
+<td>“</td>
+<td>“</td>
+</tr>
+<tr class="row-even"><td rowspan="6">Weak</td>
+<td>7</td>
+<td>1,024</td>
+<td>3,145,728</td>
+<td>232</td>
+<td>0.12/0.54</td>
+</tr>
+<tr class="row-odd"><td>8</td>
+<td>4,096</td>
+<td>12,582,912</td>
+<td>“</td>
+<td>0.19/0.54</td>
+</tr>
+<tr class="row-even"><td>9</td>
+<td>8,192</td>
+<td>25,165,824</td>
+<td>“</td>
+<td>0.24/0.54</td>
+</tr>
+<tr class="row-odd"><td>10</td>
+<td>16,384</td>
+<td>50,331,648</td>
+<td>“</td>
+<td>0.30/0.54</td>
+</tr>
+<tr class="row-even"><td>11</td>
+<td>32,768</td>
+<td>100,663,296</td>
+<td>“</td>
+<td>0.37/0.54</td>
+</tr>
+<tr class="row-odd"><td>12</td>
+<td>98,304</td>
+<td>301,989,888</td>
+<td>“</td>
+<td>0.54/0.54</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>For each of these cases, the maximum time on a processor was measured per time step for different algorithms of ppiclF. The strong and weak scaling of these cases in shown in the two figures below on a <span class="math notranslate nohighlight">\(\log_{10}-\log_{10}\)</span> scale. Note that slopes of -1 and -2 are shown in the dashed lines in the strong scaling plot and a slope of 0 is shown on the weak scaling plot.</p>
+<div class="align-center figure" id="id3">
+<img alt="../_images/strong_opt.png" src="../_images/strong_opt.png" />
+<p class="caption"><span class="caption-text">Strong scaling results (cases 1-6).</span></p>
+</div>
+<div class="align-center figure" id="id4">
+<img alt="../_images/weak_opt.png" src="../_images/weak_opt.png" />
+<p class="caption"><span class="caption-text">Weak scaling results (cases 7-12).</span></p>
+</div>
+<p>Additionally, the log-log slopes <span class="math notranslate nohighlight">\(b\)</span> of each of these lines have been computed for a functional scaling of the form <span class="math notranslate nohighlight">\(t = a R^b\)</span> in the table below.</p>
+<table border="1" class="docutils align-center" id="id5">
+<caption><span class="caption-text">Log-log slopes <span class="math notranslate nohighlight">\(b\)</span> for <span class="math notranslate nohighlight">\(t = a R^b\)</span> for different ppiclF algorithms.</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="36%" />
+<col width="34%" />
+<col width="30%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&#160;</th>
+<th class="head">Strong Scaling</th>
+<th class="head">Weak Scaling</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Total</td>
+<td>-1.36</td>
+<td>-0.38</td>
+</tr>
+<tr class="row-odd"><td>Find/Move</td>
+<td>-0.47</td>
+<td>-0.15</td>
+</tr>
+<tr class="row-even"><td>Ghost Particles</td>
+<td>-0.48</td>
+<td>0.32</td>
+</tr>
+<tr class="row-odd"><td>Interpolation</td>
+<td>-0.58</td>
+<td>-0.64</td>
+</tr>
+<tr class="row-even"><td>Projection</td>
+<td>-1.03</td>
+<td>-0.04</td>
+</tr>
+<tr class="row-odd"><td>Collision</td>
+<td>-1.87</td>
+<td>-0.07</td>
+</tr>
+</tbody>
+</table>
+<p>In the strong scaling, the problem size is fixed with nearly 25 million particles while the number of processors are increased from approximately <span class="math notranslate nohighlight">\(10^3\)</span> to <span class="math notranslate nohighlight">\(10^5\)</span> ranks. It is observed that collisions dominate the total time taken per time step when <span class="math notranslate nohighlight">\(N_p/R\)</span> is large in case 1. This is expected since the collision algorithm scales as <span class="math notranslate nohighlight">\(O((N_p/R)^2)\)</span> whereas other portions of the algorithm only scale as <span class="math notranslate nohighlight">\(O(N_p/R)\)</span>. Despite this, when the number of ranks are increased, the cost of collisions is driven down at a rate of <span class="math notranslate nohighlight">\(R^{-1.87}\)</span> (refer to log-log slope table above) even when <span class="math notranslate nohighlight">\(10^5\)</span> processors are used. Note that -1.87 is close to the algorithmically expected value of -2. Since ideal strong scaling would have a slope of -1, we refer to the collision algorithm as having a “super” scaling. Also, projection and interpolation are the next most costly portions of ppiclF. Projection is more costly than interpolation even though in case 6 they are of comparable cost. Overall, projection has been found to scale as <span class="math notranslate nohighlight">\(R^{-1.03}\)</span> and interpolation as <span class="math notranslate nohighlight">\(R^{-0.58}\)</span>. Both projection and interpolation have begun to level off in cases 5-6 even though they perform quite well at first. This is due to the inherent communication associated with the overlap mesh and nearby particles not residing on the same processor. Thus, for greater numbers of particles on a processor (case 1) the communication costs in sending elemental data to the overlapping bins is much less than the computational costs of particle-element interactions. However, when fewer particles per rank are used, the communication costs begin to dominate which is observed in cases 5-6.</p>
+<p>In the weak scaling cases, the problem size per processor is fixed at <span class="math notranslate nohighlight">\(N_p/R = 3,072\)</span> as the number of ranks are scaled from approximately <span class="math notranslate nohighlight">\(10^3\)</span> to <span class="math notranslate nohighlight">\(10^5\)</span>. This results in over 300 million total particles in case 12. We observe similar trends compared to the strong scaling. Note that an ideal weak scaling slope would be 0 since the problem size per rank doesn’t change. For the most part, the weak scaling of ppiclF is exceptional with most of the algorithmic slopes being less than 0. The reason that most algorithms perform better than ideal is that the bin generation (see <a class="reference internal" href="particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>) equally partitions the particle domain into a near-ideal distribution with increasing number of processors. The only algorithmic portion which increases under weak scaling is the sending of ghost particles. This routine relies upon the open source <a class="reference external" href="https://github.com/gslib/gslib">GSLIB</a> tool for efficient parallel data transfer under the hood. GSLIB adheres to a logarithmic many-to-many scaling of <span class="math notranslate nohighlight">\(\log_2{R}\)</span> and is the back bone of ppiclF’s parallel communication. Thus, we expect to see this increase in sending ghost particles since the total number of processing ranks is also increasing. While sending ghost particles becomes non-trivial at <span class="math notranslate nohighlight">\(10^5\)</span> processors, if we extrapolate the performance to <span class="math notranslate nohighlight">\(10^6\)</span> ranks we presume that even at such extreme scales ppiclF is not consumed by communication costs.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, David Zwick
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
