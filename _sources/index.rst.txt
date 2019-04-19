@@ -28,7 +28,7 @@ Capabilities
 Quickstart
 ----------
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    quickstart
 
@@ -36,7 +36,7 @@ Algorithms
 ----------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    algorithms
 
@@ -44,7 +44,7 @@ User Interface
 --------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    user
 
@@ -52,7 +52,7 @@ Examples
 --------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    examples
 
@@ -60,7 +60,7 @@ Contributing
 ------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    contribute
 
@@ -68,6 +68,6 @@ Acknowledgements
 ----------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    acknowledge
