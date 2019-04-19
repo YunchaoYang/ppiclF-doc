@@ -14,7 +14,7 @@ This work was also supported in part by the US Department of Energy, National Nu
 
 Contributions
 ^^^^^^^^^^^^^
-There have been numerous suggestions and reworking of ppiclF over the past few years, including valuable input from the Nek5000_ and the UF-CMT_ teams.
+There have been numerous suggestions and reworking of ppiclF over the past few years, including valuable input from the Nek5000_ and the UF-CCMT_ teams.
 
 .. admonition:: Recommended reading
    :class: note
@@ -23,4 +23,4 @@ There have been numerous suggestions and reworking of ppiclF over the past few y
 
 .. _Nek5000: https://nek5000.mcs.anl.gov
 
-.. _UF-CMT: https://www.eng.ufl.edu/ccmt
+.. _UF-CCMT: https://www.eng.ufl.edu/ccmt
