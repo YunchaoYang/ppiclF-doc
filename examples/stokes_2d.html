@@ -22,21 +22,12 @@
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'v1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -259,9 +250,9 @@
 <p>In this example, the do-loop loops through the total number of particles on each processor. The user computes the stokes drag force and weight in each direction for each particle. Then, the 4 equations are specified according to the system of equations defined in this case.</p>
 <p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur in a simple driver program in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/stokes_2d/fortran/test.f">test.f</a> with the minimum number of initialization and solve subroutines called. In this case:</p>
 <ul class="simple">
-<li>ppiclf_comm_InitMPI is called to initialize the communication,</li>
-<li>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</li>
-<li>ppiclf_solve_IntegrateParticle is called in a simple time step loop.</li>
+<li><p>ppiclf_comm_InitMPI is called to initialize the communication,</p></li>
+<li><p>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</p></li>
+<li><p>ppiclf_solve_IntegrateParticle is called in a simple time step loop.</p></li>
 </ul>
 </div>
 <div class="section" id="compiling-and-running">

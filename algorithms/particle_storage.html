@@ -22,21 +22,12 @@
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'v1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -213,14 +204,14 @@
 <p>In the previous algorithm, we have defined <code class="code docutils literal notranslate"><span class="pre">d</span></code> to be the number of dimensions (either 2 or 3), <code class="code docutils literal notranslate"><span class="pre">c(i)</span></code> to be a counting array in the <code class="code docutils literal notranslate"><span class="pre">i</span></code> dimension, and <code class="code docutils literal notranslate"><span class="pre">f(i)</span></code> to be a flagging array in the <code class="code docutils literal notranslate"><span class="pre">i</span></code> dimension. The counting array specifies the number of bins in each dimension while the flagging array specifies if more bins can be added in the respective dimension.</p>
 <p>Notice that there are three conditions that are checked upon each iteration. The conditions are:</p>
 <ul class="simple">
-<li>Condition 1 checks the key assumtption: if the total number of bins is less than or equal to the total number of processors.</li>
-<li>Condition 2 deals with the size of the bins. Ideally, <code class="code docutils literal notranslate"><span class="pre">c(1)*c(2)*c(3)</span></code> would be as close to the total number of processors as possible. However, the user may specify a minimum interaction length between nearby particles, called <code class="code docutils literal notranslate"><span class="pre">W</span></code>. In the current algorithm, this requires the bin lengths in each dimension to be no smaller than <code class="code docutils literal notranslate"><span class="pre">W</span></code>. Thus, condition 2 checks if the length of the bins in every dimension is the smallest that it can be without being smaller than <code class="code docutils literal notranslate"><span class="pre">W</span></code>.</li>
-<li>Condition 3 also deals with the size of the bins. However, condition 3 only checks if the length of the bins in a single <code class="code docutils literal notranslate"><span class="pre">i</span></code> dimension is the smallest that it can be without being smaller than <code class="code docutils literal notranslate"><span class="pre">W</span></code>.</li>
+<li><p>Condition 1 checks the key assumtption: if the total number of bins is less than or equal to the total number of processors.</p></li>
+<li><p>Condition 2 deals with the size of the bins. Ideally, <code class="code docutils literal notranslate"><span class="pre">c(1)*c(2)*c(3)</span></code> would be as close to the total number of processors as possible. However, the user may specify a minimum interaction length between nearby particles, called <code class="code docutils literal notranslate"><span class="pre">W</span></code>. In the current algorithm, this requires the bin lengths in each dimension to be no smaller than <code class="code docutils literal notranslate"><span class="pre">W</span></code>. Thus, condition 2 checks if the length of the bins in every dimension is the smallest that it can be without being smaller than <code class="code docutils literal notranslate"><span class="pre">W</span></code>.</p></li>
+<li><p>Condition 3 also deals with the size of the bins. However, condition 3 only checks if the length of the bins in a single <code class="code docutils literal notranslate"><span class="pre">i</span></code> dimension is the smallest that it can be without being smaller than <code class="code docutils literal notranslate"><span class="pre">W</span></code>.</p></li>
 </ul>
 <p>In 2D, an example of this is shown in the figure below.</p>
 <div class="align-center figure" id="id1">
 <img alt="../_images/bin_generation.png" src="../_images/bin_generation.png" />
-<p class="caption"><span class="caption-text">Example of bin generation through recursive planar cutting.</span></p>
+<p class="caption"><span class="caption-text">Example of bin generation through recursive planar cutting.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 <p>As is shown in the figure, the bin generation begins by bounding the particle domain, which is the region occupied by the rectangular prism whose planes are determined by the global maximum and minimum coordinates of the particles. Following this, the bins, which are demarcated by the dashed lines, are generated through the recursive planar cutting algorithm above. At the end of the process, different bin configurations are realized based on the number of processing ranks used. The resulting bin configurations are shown in the bottom of the figure above.</p>
 <p>Additionally, below each bin distribution, the number of particles <span class="math notranslate nohighlight">\(N_p\)</span> per processing rank <span class="math notranslate nohighlight">\(R\)</span> is compared between the different cases. Note that since we have required there to only be one bin stored on each processor, <span class="math notranslate nohighlight">\(N_p/R\)</span> also refers to the number of particles per bin. Ideally, there would be exactly <span class="math notranslate nohighlight">\(N_p/R\)</span> particles on a processor. In the current method, the ideal number of particles per rank is relaxed to allow nearby particles to be locally grouped together in the same rank (or bin). Thus, in the current method we have a deviation from the ideal number of particles on each rank, with ranks having varying numbers of particles. In the figure, the maximum and minimum number of particles on each rank in ppiclF is shown.</p>

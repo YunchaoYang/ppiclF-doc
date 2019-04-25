@@ -22,21 +22,12 @@
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'v1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -197,22 +188,22 @@
 <h2>Mapping<a class="headerlink" href="#mapping" title="Permalink to this headline">¶</a></h2>
 <p>In particle-in-cell simulations, the particles are often required to interact with an Eulerian mesh. Since the particle are tracked individually at discrete locations that do not necessarily coincide with a mesh, interactions between the particles and mesh must be handled carefully. We define two key opperations between the particles and the mesh:</p>
 <ol class="arabic simple">
-<li><strong>Interpolation</strong> - field quantities on the mesh are evaulated at the particle’s coordinates,</li>
-<li><strong>Projection</strong> - particle quantities are filtered from the particle’s coordinates to the mesh.</li>
+<li><p><strong>Interpolation</strong> - field quantities on the mesh are evaulated at the particle’s coordinates,</p></li>
+<li><p><strong>Projection</strong> - particle quantities are filtered from the particle’s coordinates to the mesh.</p></li>
 </ol>
 <p>Both of these operations require the user to initially specify the coordinates of the mesh. In the current version of ppiclF, only element based hexahedral (or quad in 2D) meshes are supported.</p>
 <p>The elements of the mesh are stored in memory according to the external program which calls ppiclF. For this reason, the elements need to be mapped to bins where the particles are stored. An example of this mapping is shown in the figure below.</p>
 <div class="align-center figure" id="id4">
 <img alt="../_images/bin_map.png" src="../_images/bin_map.png" />
-<p class="caption"><span class="caption-text">Illustration of mapping overlapping mesh to bins.</span></p>
+<p class="caption"><span class="caption-text">Illustration of mapping overlapping mesh to bins.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
 </div>
 <p>In the top left corner of the figure, a semicircular mesh is given. Particles handled by ppiclF are shown in the interior of the mesh. The four bins generated through the algorithm in the section <a class="reference internal" href="particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a> are also shown surrounding the particles. The particles within the same bin are mapped to the same processor as illustrated in through the coloring of bins in the bottom left corner of the figure.</p>
 <p>The elements in the mesh are mapped to processing ranks in the top right of the figure. Note that the ppiclF library is independent of this mesh-to-rank mapping and this is handled in the external calling program. As is shown in the bottom right corner of the figure, the mesh elements which are spatially found within each bin belong to processing ranks that are not the same as the ranks which store the bin data. For this reason, the mesh and corresponding fields found within bins must be communicated between the processors that store the bins themselves. In this example, this results in:</p>
 <ul class="simple">
-<li>communication between rank 0 (bin 0) and overlap ranks 0, 1, and 3,</li>
-<li>communication between rank 1 (bin 1) and overlap ranks 0, 2, and 3,</li>
-<li>communication between rank 2 (bin 2) and overlap ranks 0 and 1,</li>
-<li>communication between rank 3 (bin 3) and overlap ranks 0 and 2.</li>
+<li><p>communication between rank 0 (bin 0) and overlap ranks 0, 1, and 3,</p></li>
+<li><p>communication between rank 1 (bin 1) and overlap ranks 0, 2, and 3,</p></li>
+<li><p>communication between rank 2 (bin 2) and overlap ranks 0 and 1,</p></li>
+<li><p>communication between rank 3 (bin 3) and overlap ranks 0 and 2.</p></li>
 </ul>
 </div>
 <div class="section" id="interpolation">

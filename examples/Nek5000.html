@@ -22,21 +22,12 @@
   <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
   
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'v1.0',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -246,44 +237,44 @@
 </div>
 <p>The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the number of projected fields. The user-only directives are in the bottom block.</p>
 <p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/user_routines/ppiclf_user.f">Nek5000 F-File</a>) has meaningful information in every routine. The routine ppiclf_user_SetYdot is nearly the same as the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example but with an added drag model evaluation that is slightly more complicated than the <a class="reference internal" href="stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> example. Also, the ppiclf_user_EvalNearestNeighbor routine is similar to the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example. The new addition is the mapping of particle properties to be projected in ppiclf_user_MapProjPart. With some study, it can be found that the three fields being projected in 2D are:</p>
-<table border="1" class="docutils align-center" id="id2">
+<table class="docutils align-center" id="id2">
 <caption><span class="caption-text">Projection mapping in ppiclf_user_MapProjPart.</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col width="52%" />
-<col width="48%" />
+<col style="width: 52%" />
+<col style="width: 48%" />
 </colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Projected Field (<span class="math notranslate nohighlight">\(a(\mathbf{x})\)</span>)</th>
-<th class="head">Particle Property (<span class="math notranslate nohighlight">\(A^{(i)}\)</span>)</th>
+<thead>
+<tr class="row-odd"><th class="head"><p>Projected Field (<span class="math notranslate nohighlight">\(a(\mathbf{x})\)</span>)</p></th>
+<th class="head"><p>Particle Property (<span class="math notranslate nohighlight">\(A^{(i)}\)</span>)</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(\phi_p(\mathbf{x})\)</span></td>
-<td><span class="math notranslate nohighlight">\(V_p/D_p\)</span></td>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\phi_p(\mathbf{x})\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(V_p/D_p\)</span></p></td>
 </tr>
-<tr class="row-odd"><td><span class="math notranslate nohighlight">\(f_{pf,x}(\mathbf{x})\)</span></td>
-<td><span class="math notranslate nohighlight">\(-F_{qs,x}/D_p\)</span></td>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{pf,x}(\mathbf{x})\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(-F_{qs,x}/D_p\)</span></p></td>
 </tr>
-<tr class="row-even"><td><span class="math notranslate nohighlight">\(f_{pf,y}(\mathbf{x})\)</span></td>
-<td><span class="math notranslate nohighlight">\(-F_{qs,y}/D_p\)</span></td>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(f_{pf,y}(\mathbf{x})\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(-F_{qs,y}/D_p\)</span></p></td>
 </tr>
 </tbody>
 </table>
 <p>where <span class="math notranslate nohighlight">\(D_p\)</span> has been used to normalize the values in 2D. Note that the negative signs of the components of <span class="math notranslate nohighlight">\(\mathbf{F}_{qs}\)</span> were added when the forces were stored in the storage array ppiclf_ydotc at the end of the routine ppiclf_user_SetYdot.</p>
 <p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur within the user initialization Nek5000 routine usrdat2 in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/uniform.usr">uniform.usr</a> with the minimum number of initialization and solve subroutines called. In this case:</p>
 <ul class="simple">
-<li>ppiclf_comm_InitMPI is called to initialize the communication,</li>
-<li>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</li>
-<li>ppiclf_solve_InitGaussianFilter is called to initialize the fitler for projection to the overlap mesh,</li>
-<li>ppiclf_comm_InitOverlapMesh is called to initialize the overlap mesh from Nek5000,</li>
-<li>ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,</li>
-<li>ppiclf_solve_InitWall is called which sets a wall for the particles at the bottom of the domain,</li>
-<li>ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimension along the domain.</li>
+<li><p>ppiclf_comm_InitMPI is called to initialize the communication,</p></li>
+<li><p>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</p></li>
+<li><p>ppiclf_solve_InitGaussianFilter is called to initialize the fitler for projection to the overlap mesh,</p></li>
+<li><p>ppiclf_comm_InitOverlapMesh is called to initialize the overlap mesh from Nek5000,</p></li>
+<li><p>ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,</p></li>
+<li><p>ppiclf_solve_InitWall is called which sets a wall for the particles at the bottom of the domain,</p></li>
+<li><p>ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimension along the domain.</p></li>
 </ul>
 <p>Additionally, the solve routines are called every time step in the same file in the Nek5000 routine userchk. In this routine,</p>
 <ul class="simple">
-<li>ppiclf_solve_InterpFieldUser is called three times to interpolate the fields <span class="math notranslate nohighlight">\(\phi_p\)</span>, <span class="math notranslate nohighlight">\(u_x\)</span>, and <span class="math notranslate nohighlight">\(u_y\)</span> into the property array,</li>
-<li>ppiclf_solve_IntegrateParticle is called to integrate the system at the current time step.</li>
+<li><p>ppiclf_solve_InterpFieldUser is called three times to interpolate the fields <span class="math notranslate nohighlight">\(\phi_p\)</span>, <span class="math notranslate nohighlight">\(u_x\)</span>, and <span class="math notranslate nohighlight">\(u_y\)</span> into the property array,</p></li>
+<li><p>ppiclf_solve_IntegrateParticle is called to integrate the system at the current time step.</p></li>
 </ul>
 <p>Note that the projected fields in the array ppiclf_pro_fld are used to apply the projected forces to the fluid in the Nek5000 routine userf in the same file.</p>
 <p>Also, note that ppiclF has been linked with Nek5000 in the Nek5000 makenek compilation file through the following lines:</p>
