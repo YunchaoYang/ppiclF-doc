@@ -20,6 +20,9 @@ Capabilities
 											       
 * Includes optional fast binned parallel nearest neighbor search between particles within a user defined distance.
 
+
+* :download:`Overview of ppiclF <ppiclF_overview.pdf>`.
+
 .. .. admonition:: Recommended publication for citing
    :class: tip
 
