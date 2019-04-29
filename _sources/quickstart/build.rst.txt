@@ -16,8 +16,8 @@ Then, set the appropriate properties in the files source/ppiclf_user.f and sourc
 
 .. code:: bash
 
-    cp examples/stokes_2d/user_source/ppiclf_user.f source/
-    cp examples/stokes_2d/user_source/PPICLF_USER.h source/
+    cp examples/stokes_2d/user_routines/ppiclf_user.f source/
+    cp examples/stokes_2d/user_routines/PPICLF_USER.h source/
 
 Now, set the appropriate parameters in the Makefile. Either mpif77 or mpif90 are supported Fortran compilers. Note that mpicc is also required for a 3rd party library internally. 
 

@@ -245,11 +245,11 @@
 <p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/dem_pack_3d/user_routines/ppiclf_user.f">DEM Packing 3D F-File</a>) is similar to the <a class="reference internal" href="stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> exmaple. In ppiclf_user_SetYdot, the forces are evaulated. Note that the routine ppiclf_solve_NearestNeighbor is invoked which activates the routine ppiclf_user_EvalNearestNeighbor. In ppiclf_user_EvalNearestNeighbor, the collision force model is applied between the j nearby particles as well as the j nearby boundaries. The collision force is stored in the extra storage array ppiclf_ydotc. The other routine ppiclf_user_MapProjPart is defined only.</p>
 <p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur in a simple driver program in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/dem_pack_3d/fortran/test.f">test.f</a> with the minimum number of initialization and solve subroutines called. In this case:</p>
 <ul class="simple">
-<li><p>ppiclf_comm_InitMPI is called to initialize the communication,</p></li>
-<li><p>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</p></li>
-<li><p>ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,</p></li>
-<li><p>ppiclf_io_ReadWallVTK is called which reads the minimal ASCII triangular patch boundary file,</p></li>
-<li><p>ppiclf_solve_IntegrateParticle is called in a simple time step loop.</p></li>
+<li>ppiclf_comm_InitMPI is called to initialize the communication,</li>
+<li>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</li>
+<li>ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,</li>
+<li>ppiclf_io_ReadWallVTK is called which reads the minimal ASCII triangular patch boundary file,</li>
+<li>ppiclf_solve_IntegrateParticle is called in a simple time step loop.</li>
 </ul>
 </div>
 <div class="section" id="compiling-and-running">

@@ -192,43 +192,43 @@
 <div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="cp">#include &quot;PPICLF.h&quot;</span>
 </pre></div>
 </div>
-<table class="docutils align-center" id="id1">
+<table border="1" class="docutils align-center" id="id1">
 <caption><span class="caption-text">Common variables used and their descriptions.</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
 <colgroup>
-<col style="width: 20%" />
-<col style="width: 4%" />
-<col style="width: 76%" />
+<col width="20%" />
+<col width="4%" />
+<col width="76%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Name</p></th>
-<th class="head"><p>Type</p></th>
-<th class="head"><p>Description</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>ppiclf_y(j,i)</p></td>
-<td><p>real</p></td>
-<td><p>Array of j equations solution for i particle (<span class="math notranslate nohighlight">\(\mathbf{Y}^{(i)}\)</span>).</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>ppiclf_y(j,i)</td>
+<td>real</td>
+<td>Array of j equations solution for i particle (<span class="math notranslate nohighlight">\(\mathbf{Y}^{(i)}\)</span>).</td>
 </tr>
-<tr class="row-odd"><td><p>ppiclf_ydot(j,i)</p></td>
-<td><p>real</p></td>
-<td><p>Array of j equations forcing for i particle (<span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}^{(i)}\)</span>).</p></td>
+<tr class="row-odd"><td>ppiclf_ydot(j,i)</td>
+<td>real</td>
+<td>Array of j equations forcing for i particle (<span class="math notranslate nohighlight">\(\dot{\mathbf{Y}}^{(i)}\)</span>).</td>
 </tr>
-<tr class="row-even"><td><p>ppiclf_ydotc(j,i)</p></td>
-<td><p>real</p></td>
-<td><p>Array of j equations extra storage for i particle.</p></td>
+<tr class="row-even"><td>ppiclf_ydotc(j,i)</td>
+<td>real</td>
+<td>Array of j equations extra storage for i particle.</td>
 </tr>
-<tr class="row-odd"><td><p>ppiclf_rprop(j,i)</p></td>
-<td><p>real</p></td>
-<td><p>Array of j properties for i particle.</p></td>
+<tr class="row-odd"><td>ppiclf_rprop(j,i)</td>
+<td>real</td>
+<td>Array of j properties for i particle.</td>
 </tr>
-<tr class="row-even"><td><p>ppiclf_npart</p></td>
-<td><p>int</p></td>
-<td><p>The number of local particles on the current processor.</p></td>
+<tr class="row-even"><td>ppiclf_npart</td>
+<td>int</td>
+<td>The number of local particles on the current processor.</td>
 </tr>
-<tr class="row-odd"><td><p>ppiclf_pro_fld(i,j,k,e,m)</p></td>
-<td><p>real</p></td>
-<td><p>Projected field m at overlap mesh point (i,j,k) on element e.</p></td>
+<tr class="row-odd"><td>ppiclf_pro_fld(i,j,k,e,m)</td>
+<td>real</td>
+<td>Projected field m at overlap mesh point (i,j,k) on element e.</td>
 </tr>
 </tbody>
 </table>
@@ -237,32 +237,32 @@
 <h2>Initialization Subroutines<a class="headerlink" href="#initialization-subroutines" title="Permalink to this headline">¶</a></h2>
 <p>The following subroutines are only to be called once at the begining of a simulation. Note that every routine does not need to be called. The actual subroutines called at setup are problem dependent. However, the subroutines <strong>ppiclf_comm_InitMPI</strong> and <strong>ppiclf_solve_InitParticle</strong> must be called at least once at initialization for every case.</p>
 <div class="admonition-ppiclf-comm-initmpi-int-comm-int-id-int-np admonition">
-<p class="admonition-title">ppiclf_comm_InitMPI(int <strong>comm</strong>, int <strong>id</strong>, int <strong>np</strong>)</p>
-<p>The user inputs the current MPI communicator <strong>comm</strong> where the current MPI rank is <strong>id</strong> and there are <strong>np</strong> total ranks.</p>
+<p class="first admonition-title">ppiclf_comm_InitMPI(int <strong>comm</strong>, int <strong>id</strong>, int <strong>np</strong>)</p>
+<p class="last">The user inputs the current MPI communicator <strong>comm</strong> where the current MPI rank is <strong>id</strong> and there are <strong>np</strong> total ranks.</p>
 </div>
 <div class="admonition-ppiclf-comm-initoverlapmesh-int-ncell-int-lx-int-ly-int-lz-real-xgrid-real-ygrid-real-zgrid admonition">
-<p class="admonition-title">ppiclf_comm_InitOverlapMesh(int <strong>ncell</strong>, int <strong>lx</strong>, int <strong>ly</strong>, int <strong>lz</strong>, real <strong>xgrid</strong>, real <strong>ygrid</strong>, real <strong>zgrid</strong>)</p>
+<p class="first admonition-title">ppiclf_comm_InitOverlapMesh(int <strong>ncell</strong>, int <strong>lx</strong>, int <strong>ly</strong>, int <strong>lz</strong>, real <strong>xgrid</strong>, real <strong>ygrid</strong>, real <strong>zgrid</strong>)</p>
 <p>The user inputs the element based mesh. The arrays <strong>xgrid</strong>, <strong>ygrid</strong>, and <strong>zgrid</strong> are of size (<strong>lx,ly,lz,ncell</strong>) and stores the mesh coordinates. Here, <strong>ncell</strong> is the number of local hexahedral elements on rank <strong>id</strong>, with <strong>lx,ly,lz</strong> points in each dimension.</p>
-<ul class="simple">
-<li><p><strong>ncell</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LEE.</p></li>
-<li><p><strong>lx</strong> == PPICLF_LEX.</p></li>
-<li><p><strong>ly</strong> == PPICLF_LEY.</p></li>
-<li><p><strong>lz</strong> == PPICLF_LEZ.</p></li>
+<ul class="last simple">
+<li><strong>ncell</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LEE.</li>
+<li><strong>lx</strong> == PPICLF_LEX.</li>
+<li><strong>ly</strong> == PPICLF_LEY.</li>
+<li><strong>lz</strong> == PPICLF_LEZ.</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-io-readparticlevtu-char-1-filein-132 admonition">
-<p class="admonition-title">ppiclf_io_ReadParticleVTU(char*1 <strong>filein(132)</strong>)</p>
+<p class="first admonition-title">ppiclf_io_ReadParticleVTU(char*1 <strong>filein(132)</strong>)</p>
 <p>The user specifies <strong>filein</strong> with .vtu extension to use as the initial conditions for particles. When this routine is called, the arrays ppiclf_y(j,i) and ppiclf_rprop(j,i) will automatically be filled.</p>
-<ul class="simple">
-<li><p>Note that ppiclf_solve_InitParticle should still be called following this, but with a dummy arguement in place of <strong>y</strong> and <strong>rprop</strong>.</p></li>
+<ul class="last simple">
+<li>Note that ppiclf_solve_InitParticle should still be called following this, but with a dummy arguement in place of <strong>y</strong> and <strong>rprop</strong>.</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-io-readwallvtk-char-1-filein-132 admonition">
-<p class="admonition-title">ppiclf_io_ReadWallVTK(char*1 <strong>filein(132)</strong>)</p>
+<p class="first admonition-title">ppiclf_io_ReadWallVTK(char*1 <strong>filein(132)</strong>)</p>
 <p>The user specifies <strong>filein</strong> with .vtk extension to use as triangular plane boundaries.</p>
 <p>The format of the file is a minimized ASCII VTK format as shown below.</p>
 <p>In 3D:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">POINTS</span> <span class="n">npoints</span>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">POINTS</span> <span class="n">npoints</span>
 <span class="n">p1x</span> <span class="n">p1y</span> <span class="n">p1z</span>
 <span class="n">p2x</span> <span class="n">p2y</span> <span class="n">p2z</span>
 <span class="o">...</span>
@@ -273,7 +273,7 @@
 </pre></div>
 </div>
 <p>and in 2D:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">POINTS</span> <span class="n">npoints</span>
+<div class="code highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">POINTS</span> <span class="n">npoints</span>
 <span class="n">p1x</span> <span class="n">p1y</span> <span class="n">p1z</span>
 <span class="n">p2x</span> <span class="n">p2y</span> <span class="n">p2z</span>
 <span class="o">...</span>
@@ -285,80 +285,80 @@
 </div>
 <p>where:</p>
 <ul class="simple">
-<li><p>a tri-element surface mesh is required in 3D problems,</p></li>
-<li><p>a line-element surface mesh is required in 2D problems,</p></li>
-<li><p>npoints is total number of points that follow,</p></li>
-<li><p>pab is point a coordinate in b dimension,</p></li>
-<li><p>nwalls is total number of walls that follow,</p></li>
-<li><p>ncipd is the index of the points from 0 to npoints-1 that make up the wall with c being the wall number and d being the arbitrary ordering of points.</p></li>
+<li>a tri-element surface mesh is required in 3D problems,</li>
+<li>a line-element surface mesh is required in 2D problems,</li>
+<li>npoints is total number of points that follow,</li>
+<li>pab is point a coordinate in b dimension,</li>
+<li>nwalls is total number of walls that follow,</li>
+<li>ncipd is the index of the points from 0 to npoints-1 that make up the wall with c being the wall number and d being the arbitrary ordering of points.</li>
 </ul>
-<p>This format can actually be output using the free finite element mesh generator <a class="reference external" href="https://gmsh.info">Gmsh</a>. The process is to create the appropriate mesh, export as a VTK file, and then remove everything except the format as specified above. <strong>Please make sure there are no blank lines in file.</strong></p>
+<p class="last">This format can actually be output using the free finite element mesh generator <a class="reference external" href="https://gmsh.info">Gmsh</a>. The process is to create the appropriate mesh, export as a VTK file, and then remove everything except the format as specified above. <strong>Please make sure there are no blank lines in file.</strong></p>
 </div>
 <div class="admonition-ppiclf-solve-initwall-real-xp1-real-xp2-real-xp3 admonition">
-<p class="admonition-title">ppiclf_solve_InitWall(real <strong>xp1</strong>, real <strong>xp2</strong>, real <strong>xp3</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_InitWall(real <strong>xp1</strong>, real <strong>xp2</strong>, real <strong>xp3</strong>)</p>
 <p>The user manually sets a boundary. This is similar to ppiclf_io_ReadWallVTK, but the user may only want to manually set a single or few walls manually without a VTK file.</p>
-<ul class="simple">
-<li><p>The inputs are all vectors of length two (2D) or three (3D).</p></li>
-<li><p><strong>xp1</strong> stores coordinates (p1x, p1y, p1z) as in the VTK file.</p></li>
-<li><p><strong>xp2</strong> stores coordinates (p2x, p2y, p2z) as in the VTK file.</p></li>
-<li><p><strong>xp3</strong> stores coordinates (p3x, p3y, p3z) as in the VTK file.</p></li>
+<ul class="last simple">
+<li>The inputs are all vectors of length two (2D) or three (3D).</li>
+<li><strong>xp1</strong> stores coordinates (p1x, p1y, p1z) as in the VTK file.</li>
+<li><strong>xp2</strong> stores coordinates (p2x, p2y, p2z) as in the VTK file.</li>
+<li><strong>xp3</strong> stores coordinates (p3x, p3y, p3z) as in the VTK file.</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-initneighborbin-real-w admonition">
-<p class="admonition-title">ppiclf_solve_InitNeighborBin(real <strong>W</strong>)</p>
-<p>The user specifies <strong>W</strong> as the minimum interaction distance to resolve. See <a class="reference internal" href="../algorithms/particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>.</p>
+<p class="first admonition-title">ppiclf_solve_InitNeighborBin(real <strong>W</strong>)</p>
+<p class="last">The user specifies <strong>W</strong> as the minimum interaction distance to resolve. See <a class="reference internal" href="../algorithms/particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>.</p>
 </div>
 <div class="admonition-ppiclf-solve-initsuggesteddir-char-1-dir admonition">
-<p class="admonition-title">ppiclf_solve_InitSuggestedDir(char*1 <strong>dir</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_InitSuggestedDir(char*1 <strong>dir</strong>)</p>
 <p>The user inputs <strong>dir</strong> dimension which lets the bin generation algorithm attempt to create more bins in chosen dimension.</p>
-<ul class="simple">
-<li><p><strong>dir</strong> = ‘x’, ‘y’, or ‘z’.</p></li>
+<ul class="last simple">
+<li><strong>dir</strong> = ‘x’, ‘y’, or ‘z’.</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-initperiodicx-real-a-real-b admonition">
-<p class="admonition-title">ppiclf_solve_InitPeriodicX(real <strong>a</strong>, real <strong>b</strong>)</p>
-<ul class="simple">
-<li><p>The user sets periodicity in the y-z planes at x = <strong>a</strong> and x = <strong>b</strong>.</p></li>
-<li><p>Note: <strong>a</strong> &lt; <strong>b</strong>.</p></li>
+<p class="first admonition-title">ppiclf_solve_InitPeriodicX(real <strong>a</strong>, real <strong>b</strong>)</p>
+<ul class="last simple">
+<li>The user sets periodicity in the y-z planes at x = <strong>a</strong> and x = <strong>b</strong>.</li>
+<li>Note: <strong>a</strong> &lt; <strong>b</strong>.</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-initperiodicy-real-a-real-b admonition">
-<p class="admonition-title">ppiclf_solve_InitPeriodicY(real <strong>a</strong>, real <strong>b</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_InitPeriodicY(real <strong>a</strong>, real <strong>b</strong>)</p>
 <p>The user sets periodicity in the x-z planes at y = <strong>a</strong> and y = <strong>b</strong>.</p>
-<ul class="simple">
-<li><p><strong>a</strong> &lt; <strong>b</strong>.</p></li>
+<ul class="last simple">
+<li><strong>a</strong> &lt; <strong>b</strong>.</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-initperiodicz-real-a-real-b admonition">
-<p class="admonition-title">ppiclf_solve_InitPeriodicZ(real <strong>a</strong>, real <strong>b</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_InitPeriodicZ(real <strong>a</strong>, real <strong>b</strong>)</p>
 <p>The user sets periodicity in the x-y planes at z = <strong>a</strong> and z = <strong>b</strong>.</p>
-<ul class="simple">
-<li><p><strong>a</strong> &lt; <strong>b</strong>.</p></li>
+<ul class="last simple">
+<li><strong>a</strong> &lt; <strong>b</strong>.</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-initgaussianfilter-real-f-real-a-int-iflg admonition">
-<p class="admonition-title">ppiclf_solve_InitGaussianFilter(real <strong>f</strong>, real <strong>a</strong>, int <strong>iflg</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_InitGaussianFilter(real <strong>f</strong>, real <strong>a</strong>, int <strong>iflg</strong>)</p>
 <p>The Gaussian filter half-width for projection <span class="math notranslate nohighlight">\(\delta_f\)</span> is <strong>f</strong> (see <a class="reference internal" href="../algorithms/overlap_mesh.html#overlap-mesh"><span class="std std-ref">Overlap Mesh</span></a>). The value <strong>a</strong> is the percent of the r = 0 value that the Gaussian filter is computationally allowed to decay to. The flag <strong>iflg</strong> sets if particles should be mirrored and then projected across boundaries or not.</p>
-<ul class="simple">
-<li><p><strong>a</strong> &lt; 1.0.</p></li>
-<li><p><strong>iflg</strong> = 0 (no mirror) or 1 (mirror).</p></li>
+<ul class="last simple">
+<li><strong>a</strong> &lt; 1.0.</li>
+<li><strong>iflg</strong> = 0 (no mirror) or 1 (mirror).</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-initboxfilter-real-f-int-iflg admonition">
-<p class="admonition-title">ppiclf_solve_InitBoxFilter(real <strong>f</strong>, int <strong>iflg</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_InitBoxFilter(real <strong>f</strong>, int <strong>iflg</strong>)</p>
 <p>The box filter half-width for projection <span class="math notranslate nohighlight">\(\delta_f\)</span> is <strong>f</strong> (see <a class="reference internal" href="../algorithms/overlap_mesh.html#overlap-mesh"><span class="std std-ref">Overlap Mesh</span></a>). The flag <strong>iflg</strong> sets if particles should be mirrored and then projected across boundaries or not.</p>
-<ul class="simple">
-<li><p><strong>iflg</strong> = 0 (no mirror) or 1 (mirror).</p></li>
+<ul class="last simple">
+<li><strong>iflg</strong> = 0 (no mirror) or 1 (mirror).</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-initparticle-int-imethod-int-ndim-int-iendian-int-npart-real-y-real-rprop admonition">
-<p class="admonition-title">ppiclf_solve_InitParticle(int <strong>imethod</strong>, int <strong>ndim</strong>, int <strong>iendian</strong>, int <strong>npart</strong>, real <strong>y</strong>, real <strong>rprop</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_InitParticle(int <strong>imethod</strong>, int <strong>ndim</strong>, int <strong>iendian</strong>, int <strong>npart</strong>, real <strong>y</strong>, real <strong>rprop</strong>)</p>
 <p>The user also initializes <span class="math notranslate nohighlight">\(\mathbf{Y}_0\)</span>, which is the initial condition of <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> for the system of equations. The user also sets the integration method <strong>imethod</strong>, the problem dimension <strong>ndim</strong>, the byte ordering <strong>iendian</strong>, and the number of particles being initializied on the current rank <strong>npart</strong>.</p>
-<ul class="simple">
-<li><p><strong>imethod</strong> = +/-1 (RK3). When <strong>imethod</strong> is negative, the user is in chage of looping through both steps <strong>AND</strong> stages.</p></li>
-<li><p><strong>ndim</strong> = 2 or 3.</p></li>
-<li><p><strong>iendian</strong> = 0 (little endian) or 1 (big endian).</p></li>
-<li><p><strong>npart</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.</p></li>
+<ul class="last simple">
+<li><strong>imethod</strong> = +/-1 (RK3). When <strong>imethod</strong> is negative, the user is in chage of looping through both steps <strong>AND</strong> stages.</li>
+<li><strong>ndim</strong> = 2 or 3.</li>
+<li><strong>iendian</strong> = 0 (little endian) or 1 (big endian).</li>
+<li><strong>npart</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.</li>
 </ul>
 </div>
 </div>
@@ -366,20 +366,20 @@
 <h2>Solve Subroutines<a class="headerlink" href="#solve-subroutines" title="Permalink to this headline">¶</a></h2>
 <p>The following subroutines can be called at every time step. Note that every routine does not need to be called. The actual subroutines called at each time step are problem dependent. However, the subroutine <strong>ppiclf_solve_IntegrateParticle</strong> must be called at least once every time step for any opperations to be performed.</p>
 <div class="admonition-ppiclf-solve-interpfielduser-int-ifld-real-fld admonition">
-<p class="admonition-title">ppiclf_solve_InterpFieldUser(int <strong>ifld</strong>, real <strong>fld</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_InterpFieldUser(int <strong>ifld</strong>, real <strong>fld</strong>)</p>
 <p>The user sets which field array <strong>fld</strong> of same dimensions set in initialization call to ppiclf_comm_InitOverlapMesh routine is used to interpolate to index in property array ppiclf_rprop(<strong>ifld</strong>,i) for the i particle. This routine may be called multiple times to interpolate multiple fields.</p>
-<ul class="simple">
-<li><p><strong>ifld</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LRP.</p></li>
+<ul class="last simple">
+<li><strong>ifld</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LRP.</li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-integrateparticle-int-istep-int-iostep-real-dt-real-time admonition">
-<p class="admonition-title">ppiclf_solve_IntegrateParticle(int <strong>istep</strong>, int <strong>iostep</strong>, real <strong>dt</strong>, real <strong>time</strong>)</p>
+<p class="first admonition-title">ppiclf_solve_IntegrateParticle(int <strong>istep</strong>, int <strong>iostep</strong>, real <strong>dt</strong>, real <strong>time</strong>)</p>
 <p>This routine must be called every time step and uses the initial integration method to advance <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> in time. The inputs are the current <strong>time</strong>, the current time step <strong>dt</strong> to advance by, the current time step number <strong>istep</strong>, and will output solution files every <strong>iostep</strong> number of time steps. Note that the user must call this routine every time step for the system to be integrated. When <strong>imethod</strong> is initialized to be a negative number, this routine must also be called every stage as well.</p>
-<ul class="simple">
-<li><p><strong>istep</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.</p></li>
-<li><p><strong>iostep</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.</p></li>
-<li><p><strong>dt</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.0.</p></li>
-<li><p><strong>time</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.0.</p></li>
+<ul class="last simple">
+<li><strong>istep</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.</li>
+<li><strong>iostep</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.</li>
+<li><strong>dt</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.0.</li>
+<li><strong>time</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.0.</li>
 </ul>
 </div>
 </div>

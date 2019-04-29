@@ -181,8 +181,8 @@
 <span id="output"></span><h1>File Output<a class="headerlink" href="#file-output" title="Permalink to this headline">¶</a></h1>
 <p>Two different files are output for viewing the solution. The default names for these files are:</p>
 <ol class="arabic simple">
-<li><p>parXXXXX*.vtu,</p></li>
-<li><p>binXXXXX*.vtu,</p></li>
+<li>parXXXXX*.vtu,</li>
+<li>binXXXXX*.vtu,</li>
 </ol>
 <p>where XXXXX refers to a particular file output number ordered from 00001 to the number of output files in a simulation. Each file is in a combined binary/ASCII <a class="reference external" href="https://vtk.org">VTU</a> format.</p>
 <p>The par-prefixed file stores the solution <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> and property arrays of each particle according to the order in <a class="reference internal" href="hfile.html#hfile"><span class="std std-ref">The H-File</span></a>. Additionally, a three part tag is given to every particle and also stored in the par files so that any particle can be uniquely identified throughout a simulation. These files can be used to restart from a particular output step by calling the external interface routine ppiclf_io_ReadParticleVTU at initialization.</p>

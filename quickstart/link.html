@@ -181,17 +181,24 @@
 <p>In order to use the ppiclF library that was built in the last step (see <a class="reference internal" href="build.html#build"><span class="std std-ref">Build</span></a>), the library file source/libppiclF.a must be linked to your existing code. This will be specific to your exisiting code compilation. The process of linking will generally involve adding “-I LocalCodeDir/ppiclF/source” to the compiler flags and “-L LocalCodeDir/ppiclF/source -lppiclF” to the linking flags.</p>
 <p>Alternatively, ppiclF may be used on its own as well. Both a Fortran and C++ example of this is given in the simple MPI driver program example <a class="reference internal" href="../examples/stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a>. We will use the Fortran program to test the linking.</p>
 <p>First, create a working directory to run the test case. We will call this TestCaseDir, and it should be located outside of the cloned GitHub repository ppiclF:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir TestCaseDir
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">TestCaseDir</span>
 </pre></div>
 </div>
 <p>The example case can then be copied from the cloned GitHub code to TestCaseDir</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp -r LocalCodeDir/ppiclF/examples/stokes_2d/fortran/* TestCaseDir/
-<span class="nb">cd</span> TestCaseDir
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span> <span class="o">-</span><span class="n">r</span> <span class="n">LocalCodeDir</span><span class="o">/</span><span class="n">ppiclF</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">stokes_2d</span><span class="o">/</span><span class="n">fortran</span><span class="o">/*</span> <span class="n">TestCaseDir</span><span class="o">/</span>
+<span class="n">cd</span> <span class="n">TestCaseDir</span>
 </pre></div>
 </div>
 <p>Included in this test case is a Makefile and a driver program called test.f.</p>
-<p>The Makefile is simple and should be edited as needed. In particular, the variable PPICLF_LOCATION may need to be changed to match the location that was set as LocalCodeDir/ppiclF.</p>
-<p>The driver program test.f is explained in further detail in the <a class="reference internal" href="../examples/stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> example.</p>
+<p>This case may be compiled and linked to ppiclF by setting the variable <code class="code docutils literal notranslate"><span class="pre">PPICLF_LOCATION</span></code> in the Makefile to <code class="code docutils literal notranslate"><span class="pre">LocalCodeDir/ppiclF</span></code> and using the command</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span>
+</pre></div>
+</div>
+<p>The built executable test.out can then be run using your MPI wrapper. For example, the following may be used to run with 4 MPI ranks</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mpirun</span> <span class="o">-</span><span class="n">np</span> <span class="mi">4</span> <span class="n">test</span><span class="o">.</span><span class="n">out</span>
+</pre></div>
+</div>
+<p>Note the driver program test.f is explained in further detail in the <a class="reference internal" href="../examples/stokes_2d.html#stokes2d"><span class="std std-ref">Stokes 2D</span></a> example.</p>
 </div>
 
 
