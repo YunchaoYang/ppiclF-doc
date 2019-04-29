@@ -23,6 +23,16 @@ The example case can then be copied from the cloned GitHub code to TestCaseDir
 
 Included in this test case is a Makefile and a driver program called test.f.
 
-The Makefile is simple and should be edited as needed. In particular, the variable PPICLF_LOCATION may need to be changed to match the location that was set as LocalCodeDir/ppiclF.
+This case may be compiled and linked to ppiclF by setting the variable :code:`PPICLF_LOCATION` in the Makefile to :code:`LocalCodeDir/ppiclF` and using the command
 
-The driver program test.f is explained in further detail in the :ref:`stokes2d` example.
+.. code:: bash
+
+    make
+
+The built executable test.out can then be run using your MPI wrapper. For example, the following may be used to run with 4 MPI ranks
+
+.. code:: bash
+
+   mpirun -np 4 test.out
+
+Note the driver program test.f is explained in further detail in the :ref:`stokes2d` example.
