@@ -170,19 +170,19 @@
             
   <div class="section" id="a-parallel-particle-in-cell-library-in-fortran-ppiclf">
 <h1>A Parallel Particle-In-Cell Library in Fortran (<a class="reference external" href="https://github.com/dpzwick/ppiclF">ppiclF</a>)<a class="headerlink" href="#a-parallel-particle-in-cell-library-in-fortran-ppiclf" title="Permalink to this headline">¶</a></h1>
+<p>ppiclF is a parallel particle-in-cell library written in Fortran.</p>
+<p>Applications of ppilcF include element-based particle-in-cell simulations, such as Euler-Lagrange mutliphase flow simulation, immersed boundary methods, and even atomistic-scale modeling. At its essence, ppiclF’s main purpose is to provide a unified and scalable interface for a user to solve the following system of differential equations</p>
+<div class="math notranslate nohighlight">
+\[\frac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}}\]</div>
+<p>which are found in all of the previously given particle-in-cell applications. The library can be downloaded from <a class="reference external" href="https://github.com/dpzwick/ppiclF">ppiclF</a>. On this documentation website, you will find more details, theory, examples, questions, etc.</p>
 <div class="section" id="capabilities">
 <h2>Capabilities<a class="headerlink" href="#capabilities" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Integration for the system of equations:</li>
-</ul>
-<div class="math notranslate nohighlight">
-\[\dfrac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}}.\]</div>
-<ul class="simple">
-<li>Open MPI parallelization allows billions of equations to be solved.</li>
-<li>Load balances equations based on spatial position of particles.</li>
-<li>Links with both Fortran and C++ external code.</li>
-<li>Allows simple user input of external overlapping mesh for interactions between particles and external mesh, including interpolation and projection.</li>
-<li>Includes optional fast binned parallel nearest neighbor search between particles within a user defined distance.</li>
+<li>On-the-fly load-balancing of the system of equations across MPI processing ranks based on the coordinates associated with each particle.</li>
+<li>Simple user input of an external overlapping mesh for interactions between particles and their nearby cells.</li>
+<li>Optional fast binned parallel nearest neighbor search between particles within a user specified distance so that more sophisticated user-implemented right-hand-side forcing models can easily be evaluated.</li>
+<li>Algorithms have demonstrated scalability to 100,000 processors, allowing billions of equations to be solved simultaneously.</li>
+<li>Links to both Fortran and C++ external code as a library.</li>
 <li><a class="reference download internal" download="" href="_downloads/07feb3288133aaf76b581a8650f4f7fb/ppiclF_overview.pdf"><code class="xref download docutils literal notranslate"><span class="pre">Overview</span> <span class="pre">of</span> <span class="pre">ppiclF</span></code></a>.</li>
 </ul>
 </div>

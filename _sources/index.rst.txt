@@ -2,23 +2,28 @@
  A Parallel Particle-In-Cell Library in Fortran (`ppiclF <https://github.com/dpzwick/ppiclF>`_)
 ===============================================================================================
 
+ppiclF is a parallel particle-in-cell library written in Fortran. 
+
+Applications of ppilcF include element-based particle-in-cell simulations, such as Euler-Lagrange mutliphase flow simulation, immersed boundary methods, and even atomistic-scale modeling. At its essence, ppiclF's main purpose is to provide a unified and scalable interface for a user to solve the following system of differential equations
+
+           
+.. math::
+   \frac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}}
+
+which are found in all of the previously given particle-in-cell applications. The library can be downloaded from ppiclF_. On this documentation website, you will find more details, theory, examples, questions, etc.
+
 Capabilities
 ------------
 
-* Integration for the system of equations:
+* On-the-fly load-balancing of the system of equations across MPI processing ranks based on the coordinates associated with each particle. 
 
-.. math::
-   \dfrac{d \mathbf{Y}}{d t} = \dot{\mathbf{Y}}.
+* Simple user input of an external overlapping mesh for interactions between particles and their nearby cells.
 
-* Open MPI parallelization allows billions of equations to be solved.
-								           
-* Load balances equations based on spatial position of particles.
+* Optional fast binned parallel nearest neighbor search between particles within a user specified distance so that more sophisticated user-implemented right-hand-side forcing models can easily be evaluated. 
 
-* Links with both Fortran and C++ external code.
-									            
-* Allows simple user input of external overlapping mesh for interactions between particles and external mesh, including interpolation and projection.
-											       
-* Includes optional fast binned parallel nearest neighbor search between particles within a user defined distance.
+* Algorithms have demonstrated scalability to 100,000 processors, allowing billions of equations to be solved simultaneously. 
+
+* Links to both Fortran and C++ external code as a library.
 
 
 * :download:`Overview of ppiclF <ppiclF_overview.pdf>`.
