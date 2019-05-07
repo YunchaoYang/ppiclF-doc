@@ -16,11 +16,6 @@ Contributions
 ^^^^^^^^^^^^^
 There have been numerous suggestions and reworking of ppiclF over the past few years, including valuable input from the Nek5000_ and the UF-CCMT_ teams.
 
-.. admonition:: Recommended reading
-   :class: note
-
-   Zwick, D. *Scalable highly-resolved Euler-Lagrange multiphase flow simulation with applications to shock tubes.* Dissertation. University of Florida. 2019.
-
 .. _Nek5000: https://nek5000.mcs.anl.gov
 
 .. _UF-CCMT: https://www.eng.ufl.edu/ccmt
