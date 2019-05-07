@@ -25,13 +25,12 @@ Capabilities
 
 * Links to both Fortran and C++ external code as a library.
 
-
 * :download:`Overview of ppiclF <ppiclF_overview.pdf>`.
 
-.. .. admonition:: Recommended publication for citing
-   :class: tip
+.. admonition:: Recommended Citation
+   :class: note
 
-.. Zwick, D., Scalable highly-resolved Euler-Lagrange multiphase flow simulation with applications to shock tubes, PhD Thesis, University of Flordia, 2019.
+   Zwick, D. (2019). ppiclF: A Parallel Particle-In-Cell Library in Fortran. *Journal of Open Source Software.* 4(37), 1400. https://doi.org/10.21105/joss.01400
 
 Quickstart
 ----------

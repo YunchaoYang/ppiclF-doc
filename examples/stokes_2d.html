@@ -250,9 +250,9 @@
 <p>In this example, the do-loop loops through the total number of particles on each processor. The user computes the stokes drag force and weight in each direction for each particle. Then, the 4 equations are specified according to the system of equations defined in this case.</p>
 <p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur in a simple driver program in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/stokes_2d/fortran/test.f">test.f</a> with the minimum number of initialization and solve subroutines called. In this case:</p>
 <ul class="simple">
-<li>ppiclf_comm_InitMPI is called to initialize the communication,</li>
-<li>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</li>
-<li>ppiclf_solve_IntegrateParticle is called in a simple time step loop.</li>
+<li><p>ppiclf_comm_InitMPI is called to initialize the communication,</p></li>
+<li><p>ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,</p></li>
+<li><p>ppiclf_solve_IntegrateParticle is called in a simple time step loop.</p></li>
 </ul>
 </div>
 <div class="section" id="compiling-and-running">
