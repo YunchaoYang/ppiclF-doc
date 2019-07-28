@@ -23,9 +23,9 @@ copyright = u'2019, David Zwick'
 author = u'David Zwick'
 
 # The short X.Y version
-version = u'v1.0.0'
+version = u'v1.0.1'
 # The full version, including alpha/beta/rc tags
-release = u'v1.0.0'
+release = u'v1.0.1'
 
 
 # -- General configuration ---------------------------------------------------

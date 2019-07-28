@@ -108,12 +108,11 @@ The :ref:`external` calls for this example occur within the user initialization 
 * ppiclf_solve_InitWall is called which sets a wall for the particles at the bottom of the domain,
 * ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimension along the domain.
 
-Additionally, the solve routines are called every time step in the same file in the Nek5000 routine userchk. In this routine, 
+Additionally, the solve routines are called every time step in the same file in various Nek5000 user routines. In this example,
 
 * ppiclf_solve_InterpFieldUser is called three times to interpolate the fields :math:`\phi_p`, :math:`u_x`, and :math:`u_y` into the property array,
-* ppiclf_solve_IntegrateParticle is called to integrate the system at the current time step.
-
-Note that the projected fields in the array ppiclf_pro_fld are used to apply the projected forces to the fluid in the Nek5000 routine userf in the same file.
+* ppiclf_solve_IntegrateParticle is called to integrate the system at the current time step,
+* ppiclf_solve_GetProFldIJKEF is called to access the projected fields and use them locally in Nek5000 (force coupling and volume fraction effects).
 
 Also, note that ppiclF has been linked with Nek5000 in the Nek5000 makenek compilation file through the following lines:
 
