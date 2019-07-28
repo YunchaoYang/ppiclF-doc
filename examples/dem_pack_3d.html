@@ -260,7 +260,7 @@ git clone https://github.com/dpzwick/ppiclF.git       <span class="c1"># clone p
 mkdir TestCase                                        <span class="c1"># make test directory</span>
 <span class="nb">cd</span> TestCase
 cp ../ppiclF/examples/dem_pack_3d/fortran/* .         <span class="c1"># copy example files to test case</span>
-cp -r ../ppiclF/examples/dem_pack_3d/user_routines/ . <span class="c1"># copy example files to test case</span>
+cp -r ../ppiclF/examples/dem_pack_3d/user_routines . <span class="c1"># copy example files to test case</span>
 cp -r ../ppiclF/examples/dem_pack_3d/geometry/*.vtk . <span class="c1"># copy example files to test case</span>
 <span class="nb">cd</span> ../ppiclF                                          <span class="c1"># go to ppiclF code</span>
 cp ../TestCase/user_routines/* source/                <span class="c1"># copy ppiclf_user.f and PPICLF_USER.h to source</span>

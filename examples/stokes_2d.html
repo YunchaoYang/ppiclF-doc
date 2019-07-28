@@ -263,7 +263,7 @@ git clone https://github.com/dpzwick/ppiclF.git     <span class="c1"># clone ppi
 mkdir TestCase                                      <span class="c1"># make test directory</span>
 <span class="nb">cd</span> TestCase
 cp ../ppiclF/examples/stokes_2d/fortran/* .         <span class="c1"># copy example files to test case</span>
-cp -r ../ppiclF/examples/stokes_2d/user_routines/ . <span class="c1"># copy example files to test case</span>
+cp -r ../ppiclF/examples/stokes_2d/user_routines . <span class="c1"># copy example files to test case</span>
 <span class="nb">cd</span> ../ppiclF                                        <span class="c1"># go to ppiclF code</span>
 cp ../TestCase/user_routines/* source/              <span class="c1"># copy ppiclf_user.f and PPICLF_USER.h to source</span>
 make                                                <span class="c1"># build ppiclF</span>
