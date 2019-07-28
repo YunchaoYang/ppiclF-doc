@@ -113,7 +113,7 @@ This example can be tested by issuing the following commands:
    mkdir TestCase                                        # make test directory
    cd TestCase
    cp ../ppiclF/examples/dem_pack_3d/fortran/* .         # copy example files to test case
-   cp -r ../ppiclF/examples/dem_pack_3d/user_routines/ . # copy example files to test case
+   cp -r ../ppiclF/examples/dem_pack_3d/user_routines . # copy example files to test case
    cp -r ../ppiclF/examples/dem_pack_3d/geometry/*.vtk . # copy example files to test case
    cd ../ppiclF                                          # go to ppiclF code
    cp ../TestCase/user_routines/* source/                # copy ppiclf_user.f and PPICLF_USER.h to source
