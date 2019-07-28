@@ -51,7 +51,7 @@ The two blocks of lines denote the pre-defined and user-only directives. The pre
  !
        implicit none
  !
- #include "PPICLF.h"
+       include "PPICLF"
  !
  ! Internal:
  !

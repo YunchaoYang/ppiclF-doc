@@ -10,11 +10,11 @@ In what follows, the terms *int* and *real* refer to the Fortran integer*4 and r
 
 Common Variables
 ^^^^^^^^^^^^^^^^
-The following common variables are stored in memory and may be included by adding the following directive to the top of a routine.
+The following common variables are stored in memory internally. In the current verision, **ppiclf_pro_fld** may be accessed in an externally linked program through the calling of the subroutine **ppiclf_solve_GetProFldIJKEF()** as defined at the end of this section. However, the table below shows some of the key variables that can be used for internal development of the ppiclF library.
 
 .. code-block:: fortran
 
-   #include "PPICLF.h"
+   include "PPICLF"
 
 .. table:: Common variables used and their descriptions.
    :align: center
@@ -213,3 +213,14 @@ The following subroutines can be called at every time step. Note that every rout
    * **dt** :math:`\geq` 0.0.
    * **time** :math:`\geq` 0.0.
 
+..
+..
+.. admonition:: ppiclf_solve_GetProFldIJKEF(int **i**, int **j**, int **k**, int **e**, int **m**, real **fld**)
+
+   This routine may be called on the **i**, **j**, **k** grid point of the **e** element of the overlap mesh. The index **m** is the desired projected field index (which is user defined in the H-File) which is returned at the selected grid point in **fld**. This routine allows external access of the internal array **ppiclf_pro_fld**.
+ 
+   * **i** :math:`\leq` PPICLF_LEX
+   * **j** :math:`\leq` PPICLF_LEY
+   * **k** :math:`\leq` PPICLF_LEZ
+   * **e** :math:`\leq` PPICLF_NEE :math:`\leq` PPICLF_LEE
+   * **m** :math:`\leq` PPICLF_LRP_PRO

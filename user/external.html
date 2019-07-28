@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                v1.0.0
+                v1.0.1
               </div>
             
           
@@ -188,8 +188,8 @@
 <p>In what follows, the terms <em>int</em> and <em>real</em> refer to the Fortran integer*4 and real*8 types, which are also the types int and double in C.</p>
 <div class="section" id="common-variables">
 <h2>Common Variables<a class="headerlink" href="#common-variables" title="Permalink to this headline">¶</a></h2>
-<p>The following common variables are stored in memory and may be included by adding the following directive to the top of a routine.</p>
-<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="cp">#include &quot;PPICLF.h&quot;</span>
+<p>The following common variables are stored in memory internally. In the current verision, <strong>ppiclf_pro_fld</strong> may be accessed in an externally linked program through the calling of the subroutine <strong>ppiclf_solve_GetProFldIJKEF()</strong> as defined at the end of this section. However, the table below shows some of the key variables that can be used for internal development of the ppiclF library.</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">include</span> <span class="s2">&quot;PPICLF&quot;</span>
 </pre></div>
 </div>
 <table class="docutils align-center" id="id1">
@@ -380,6 +380,17 @@
 <li><p><strong>iostep</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.</p></li>
 <li><p><strong>dt</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.0.</p></li>
 <li><p><strong>time</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.0.</p></li>
+</ul>
+</div>
+<div class="admonition-ppiclf-solve-getprofldijkef-int-i-int-j-int-k-int-e-int-m-real-fld admonition">
+<p class="admonition-title">ppiclf_solve_GetProFldIJKEF(int <strong>i</strong>, int <strong>j</strong>, int <strong>k</strong>, int <strong>e</strong>, int <strong>m</strong>, real <strong>fld</strong>)</p>
+<p>This routine may be called on the <strong>i</strong>, <strong>j</strong>, <strong>k</strong> grid point of the <strong>e</strong> element of the overlap mesh. The index <strong>m</strong> is the desired projected field index (which is user defined in the H-File) which is returned at the selected grid point in <strong>fld</strong>. This routine allows external access of the internal array <strong>ppiclf_pro_fld</strong>.</p>
+<ul class="simple">
+<li><p><strong>i</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LEX</p></li>
+<li><p><strong>j</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LEY</p></li>
+<li><p><strong>k</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LEZ</p></li>
+<li><p><strong>e</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_NEE <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LEE</p></li>
+<li><p><strong>m</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LRP_PRO</p></li>
 </ul>
 </div>
 </div>
