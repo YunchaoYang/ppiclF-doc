@@ -131,11 +131,13 @@ The following subroutines are only to be called once at the begining of a simula
 
 ..
 ..
-.. admonition:: ppiclf_solve_InitSuggestedDir(char*1 **dir**)
+.. admonition:: ppiclf_solve_InitTargetBins(char*1 **dir**, int n, int balance)
 
-   The user inputs **dir** dimension which lets the bin generation algorithm attempt to create more bins in chosen dimension.
+   The user specifies that **n** bins be created in the **dir** dimension. When **balance** is set to 1, the bins are evenly distributed about the mean particle position in **dir**. If any rule is violated, such as there are too many bins or the bins are too small, the binning algorithm will change **n** so that the rules are not violated.
 
    * **dir** = 'x', 'y', or 'z'.
+   * **n** :math:`\geq` 1.
+   * **balance** = 0 or 1
 
 ..
 ..
@@ -181,13 +183,28 @@ The following subroutines are only to be called once at the begining of a simula
 ..
 .. admonition:: ppiclf_solve_InitParticle(int **imethod**, int **ndim**, int **iendian**, int **npart**, real **y**, real **rprop**)
 
-   The user also initializes :math:`\mathbf{Y}_0`, which is the initial condition of :math:`\mathbf{Y}` for the system of equations. The user also sets the integration method **imethod**, the problem dimension **ndim**, the byte ordering **iendian**, and the number of particles being initializied on the current rank **npart**.
+   The user also initializes :math:`\mathbf{Y}_0`, which is the initial condition of :math:`\mathbf{Y}` for the system of equations. The user also sets the integration method **imethod**, the problem dimension **ndim**, the byte ordering **iendian**, and the number of particles being initializied on the current rank **npart**. The arrays **y** and **rprop** must be ordered as ppiclf_y(j,i) and ppiclf_rprop(j,i) since they are internally copied when this routine is called.
  
    * **imethod** = +/-1 (RK3). When **imethod** is negative, the user is in chage of looping through both steps **AND** stages.
    * **ndim** = 2 or 3.
    * **iendian** = 0 (little endian) or 1 (big endian).
-   * **npart** :math:`\geq` 0.
+   * 0 :math:`\leq` **npart** :math:`\leq` PPICLF_LPART.
 
+..
+..
+.. admonition:: ppiclf_solve_AddParticles(int **npart**, real **y**, real **rprop**)
+
+   After ppiclf_solve_InitParticle has been called, this routine may be called to add particles into the current simulation at any time. The arrays **y** and **rprop** have the same interpretation as in ppiclf_solve_InitParticle.
+ 
+   * 0 :math:`\leq` **npart** :math:`\leq` PPICLF_LPART.
+
+..
+..
+.. admonition:: ppiclf_solve_MarkForRemoval(int **i**)
+
+   While particles are automatically removed when they are located outside of an overlap mesh when specified, this routine allows a user to forcibly remove a particle based on any critieria. Calling this routine during a simulation will remove the **i** particle from the arrays ppiclf_y(j,i) and ppiclf_rprop(j,i).
+ 
+   * 1 :math:`\leq` **i** :math:`\leq` ppiclf_npart
 
 
 Solve Subroutines

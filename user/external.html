@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                v1.0.1
+                v1.0.2
               </div>
             
           
@@ -308,11 +308,13 @@
 <p class="admonition-title">ppiclf_solve_InitNeighborBin(real <strong>W</strong>)</p>
 <p>The user specifies <strong>W</strong> as the minimum interaction distance to resolve. See <a class="reference internal" href="../algorithms/particle_storage.html#part-storage"><span class="std std-ref">Particle Storage</span></a>.</p>
 </div>
-<div class="admonition-ppiclf-solve-initsuggesteddir-char-1-dir admonition">
-<p class="admonition-title">ppiclf_solve_InitSuggestedDir(char*1 <strong>dir</strong>)</p>
-<p>The user inputs <strong>dir</strong> dimension which lets the bin generation algorithm attempt to create more bins in chosen dimension.</p>
+<div class="admonition-ppiclf-solve-inittargetbins-char-1-dir-int-n-int-balance admonition">
+<p class="admonition-title">ppiclf_solve_InitTargetBins(char*1 <strong>dir</strong>, int n, int balance)</p>
+<p>The user specifies that <strong>n</strong> bins be created in the <strong>dir</strong> dimension. When <strong>balance</strong> is set to 1, the bins are evenly distributed about the mean particle position in <strong>dir</strong>. If any rule is violated, such as there are too many bins or the bins are too small, the binning algorithm will change <strong>n</strong> so that the rules are not violated.</p>
 <ul class="simple">
 <li><p><strong>dir</strong> = ‘x’, ‘y’, or ‘z’.</p></li>
+<li><p><strong>n</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 1.</p></li>
+<li><p><strong>balance</strong> = 0 or 1</p></li>
 </ul>
 </div>
 <div class="admonition-ppiclf-solve-initperiodicx-real-a-real-b admonition">
@@ -353,12 +355,26 @@
 </div>
 <div class="admonition-ppiclf-solve-initparticle-int-imethod-int-ndim-int-iendian-int-npart-real-y-real-rprop admonition">
 <p class="admonition-title">ppiclf_solve_InitParticle(int <strong>imethod</strong>, int <strong>ndim</strong>, int <strong>iendian</strong>, int <strong>npart</strong>, real <strong>y</strong>, real <strong>rprop</strong>)</p>
-<p>The user also initializes <span class="math notranslate nohighlight">\(\mathbf{Y}_0\)</span>, which is the initial condition of <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> for the system of equations. The user also sets the integration method <strong>imethod</strong>, the problem dimension <strong>ndim</strong>, the byte ordering <strong>iendian</strong>, and the number of particles being initializied on the current rank <strong>npart</strong>.</p>
+<p>The user also initializes <span class="math notranslate nohighlight">\(\mathbf{Y}_0\)</span>, which is the initial condition of <span class="math notranslate nohighlight">\(\mathbf{Y}\)</span> for the system of equations. The user also sets the integration method <strong>imethod</strong>, the problem dimension <strong>ndim</strong>, the byte ordering <strong>iendian</strong>, and the number of particles being initializied on the current rank <strong>npart</strong>. The arrays <strong>y</strong> and <strong>rprop</strong> must be ordered as ppiclf_y(j,i) and ppiclf_rprop(j,i) since they are internally copied when this routine is called.</p>
 <ul class="simple">
 <li><p><strong>imethod</strong> = +/-1 (RK3). When <strong>imethod</strong> is negative, the user is in chage of looping through both steps <strong>AND</strong> stages.</p></li>
 <li><p><strong>ndim</strong> = 2 or 3.</p></li>
 <li><p><strong>iendian</strong> = 0 (little endian) or 1 (big endian).</p></li>
-<li><p><strong>npart</strong> <span class="math notranslate nohighlight">\(\geq\)</span> 0.</p></li>
+<li><p>0 <span class="math notranslate nohighlight">\(\leq\)</span> <strong>npart</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LPART.</p></li>
+</ul>
+</div>
+<div class="admonition-ppiclf-solve-addparticles-int-npart-real-y-real-rprop admonition">
+<p class="admonition-title">ppiclf_solve_AddParticles(int <strong>npart</strong>, real <strong>y</strong>, real <strong>rprop</strong>)</p>
+<p>After ppiclf_solve_InitParticle has been called, this routine may be called to add particles into the current simulation at any time. The arrays <strong>y</strong> and <strong>rprop</strong> have the same interpretation as in ppiclf_solve_InitParticle.</p>
+<ul class="simple">
+<li><p>0 <span class="math notranslate nohighlight">\(\leq\)</span> <strong>npart</strong> <span class="math notranslate nohighlight">\(\leq\)</span> PPICLF_LPART.</p></li>
+</ul>
+</div>
+<div class="admonition-ppiclf-solve-markforremoval-int-i admonition">
+<p class="admonition-title">ppiclf_solve_MarkForRemoval(int <strong>i</strong>)</p>
+<p>While particles are automatically removed when they are located outside of an overlap mesh when specified, this routine allows a user to forcibly remove a particle based on any critieria. Calling this routine during a simulation will remove the <strong>i</strong> particle from the arrays ppiclf_y(j,i) and ppiclf_rprop(j,i).</p>
+<ul class="simple">
+<li><p>1 <span class="math notranslate nohighlight">\(\leq\)</span> <strong>i</strong> <span class="math notranslate nohighlight">\(\leq\)</span> ppiclf_npart</p></li>
 </ul>
 </div>
 </div>
@@ -407,7 +423,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, David Zwick
+        &copy; Copyright 2019, D. Zwick
 
     </p>
   </div>

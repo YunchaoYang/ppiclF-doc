@@ -59,3 +59,5 @@ The bin-to-rank mapping, which determines which processing rank stores the data 
 
 .. math::
     n_{ID} = i + c(1) j + c(1)c(2)k.
+
+* :download:`Matlab script for new bin generation <bin_algorithm.m>`.
