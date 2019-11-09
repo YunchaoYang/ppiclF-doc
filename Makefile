@@ -19,6 +19,15 @@ help:
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
+clean: 
+	@echo "Cleaning..."
+	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+pdf:
+	make latex
+	cd build/latex && pdflatex ppiclF.tex && pdflatex ppiclF.tex 
+	cp build/latex/ppiclF.pdf .
+
 gh-pages:
 	git checkout -t origin/gh-pages
 	rm -rf build _sources _static
@@ -30,3 +39,5 @@ gh-pages:
 	touch .nojekyll
 	git add -A
 	git commit -m "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages
+	git checkout master
+	git branch -d gh-pages

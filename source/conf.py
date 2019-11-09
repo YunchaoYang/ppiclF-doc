@@ -19,13 +19,13 @@
 
 # -- Project information -----------------------------------------------------
 project = u'ppiclF'
-copyright = u'2019, David Zwick'
-author = u'David Zwick'
+copyright = u'2019, D. Zwick'
+author = u'D. Zwick'
 
 # The short X.Y version
-version = u'v1.0.1'
+version = u'v1.0.2'
 # The full version, including alpha/beta/rc tags
-release = u'v1.0.1'
+release = u'v1.0.2'
 
 
 # -- General configuration ---------------------------------------------------
@@ -144,7 +144,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'ppiclF.tex', u'ppiclF Documentation',
-     u'David Zwick', 'manual'),
+     u'D. Zwick', 'manual'),
 ]
 
 
