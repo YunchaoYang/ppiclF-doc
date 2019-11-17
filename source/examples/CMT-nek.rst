@@ -22,6 +22,20 @@ where, for each particle we have the position vector :math:`\mathbf{X}`, the vel
 
 The collision force in the same as in the :ref:`dem3d` example. The drag force is complicated so it is not detailed here. It is given by the model found in `Parmar et al. (2010) <https://doi.org/10.2514/1.J050161>`_.
 
+The pressure gradient force is given by
+
+.. math::
+   \mathbf{F}_{pg} = - V_p \nabla p
+
+where :math:`V_p` is the particle volume and :math:`p` is the fluid pressure at each particle's position. The added-mass force is given by
+
+.. math::
+   \mathbf{F}_{am} = V_p C_M \left( -\nabla p - \dfrac{ d (\rho_f \mathbf{V})}{d t} \right)
+
+where :math:`C_M` is an added mass coefficient given by the Mach number corrections of `Parmar et al. (2008) <https://doi.org/10.1098/rsta.2008.0027>`_ and the volume fraction corrections of `Zuber (1964) <https://doi.org/10.1016/0009-2509(64)85067-3>`_. For simplicity, we assume that the density of the fluid at each particle's location :math:`\rho_f` is relatively constant in time so that it can be pulled out of the time derivative.
+
+The quasi-steady heat transfer is given by
+
 .. Current place...
 
 The fluid equations that Nek5000 solves in this example are
