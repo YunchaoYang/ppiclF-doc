@@ -13,9 +13,9 @@ This is an example that illustrates a two-dimensional multiphase shock tube. Thi
 The core particle equations being solved in this case are
 
 .. math::
-   \dfrac{d \mathbf{X}}{d t} &= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &= \mathbf{F}_{qs} + \mathbf{F}_{pg} + \mathbf{F}_{am} + \mathbf{F}_{c}, \\ C_{v,p} M_p \dfrac{d T}{d t} &= Q_{qs}
+   \dfrac{d \mathbf{X}}{d t} &= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &= \mathbf{F}_{qs} + \mathbf{F}_{pg} + \mathbf{F}_{am} + \mathbf{F}_{c}, \\ C_{p} M_p \dfrac{d T}{d t} &= Q_{qs}
 
-where, for each particle we have the position vector :math:`\mathbf{X}`, the velocity vector :math:`\mathbf{V}`, the particle temperature :math:`T`, the viscous drag force :math:`\mathbf{F}_{qs}`, the pressure gradient force :math:`\mathbf{F}_{pg}`, the added-mass force :math:`\mathbf{F}_{am}`, the collision force :math:`\mathbf{F}_{c}`, and the quasi-steady heat transfer :math:`Q_{qs}`. The position and velocity vectors are given by
+where, for each particle we have the position vector :math:`\mathbf{X}`, the velocity vector :math:`\mathbf{V}`, the particle temperature :math:`T`, the particle mass :math:`M_p`, the particle specific heat :math:`C_p`, the viscous drag force :math:`\mathbf{F}_{qs}`, the pressure gradient force :math:`\mathbf{F}_{pg}`, the added-mass force :math:`\mathbf{F}_{am}`, the collision force :math:`\mathbf{F}_{c}`, and the quasi-steady heat transfer :math:`Q_{qs}`. The position and velocity vectors are given by
 
 .. math::
    \mathbf{X} = \begin{bmatrix}X \\ Y \end{bmatrix},\quad \mathbf{V} = \begin{bmatrix}V_x \\ V_y \end{bmatrix}.
@@ -36,6 +36,30 @@ where :math:`C_M` is an added mass coefficient given by the Mach number correcti
 
 The quasi-steady heat transfer is given by
 
+.. math::
+   Q_{qs} = 2 \pi \kappa D_p (T_f - T) \Phi_{qs}
+
+where :math:`\kappa = C_{p,f}/Pr`, :math:`C_{p,f}` is the specific heat at constant pressure of the fluid at the particle's location, :math:`Pr` is the Prandtl number of the fluid at the particle's position, :math:`T_f` is the fluid temperature at the particle's position, and :math:`\Phi_{qs}` is a correction factor for the heat transfer that is a function of the particle Reynolds number and the Prandtl number.
+
+With some manipulation, the final form of the particle equations which are being solved are
+
+.. math::
+   \dfrac{d \mathbf{X}}{d t} &= \mathbf{V}, \\ (C_M V_p \rho_f+ M_p) \dfrac{d \mathbf{V}}{d t} &= \mathbf{F}_{qs} - V_p (1 + C_M) \nabla p + \mathbf{F}_{c}, \\ C_{p} M_p \dfrac{d T}{d t} &= Q_{qs}
+
+The hydrodynamic forces must be projected so that they are correctly coupled to the fluid. In this case, the coupled hydrodynamic forces are the added mass and the quasi-steady force. Since in the above form the added mass force isn't directly avaiable, we save :math:`d \mathbf{V}/dt` before computing the new :math:`\dot{Y}` so that the entire added mass force may be computed.
+
+CMT-nek without particles solves the following equations
+
+.. math::
+   \dfrac{\partial \rho_f}{\partial t} + \nabla \cdot (\rho_f \mathbf{u}) &= 0, \\ \dfrac{\partial (\rho_f \mathbf{u})}{\partial t} + \nabla \cdot (\rho \mathbf{u} \mathbf{u} + p \mathbf{I} ) &= 0, \\ \dfrac{\partial (\rho_f E)}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} E + \mathbf{u} p) &= 0
+
+The governing multiphase equations are
+
+.. math::
+   \dfrac{\partial \phi_f \rho_f}{\partial t} + \nabla \cdot (\rho_f \phi_f \mathbf{u}) &= 0, \\ \phi_f \rho_f \left( \dfrac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u}\right) + \nabla p &= \mathbf{f}_{pf}, \\ \phi_f \rho_f \left( \dfrac{\partial E}{\partial t} + \mathbf{u} \cdot \nabla E \right) + \nabla \cdot ( \phi_f \mathbf{u} p + \phi_p \mathbf{v} p) &= e_{pf}
+
+which can be arranged to yield the equations
+   
 .. Current place...
 
 The fluid equations that Nek5000 solves in this example are
