@@ -74,7 +74,7 @@ where the asterisk on the terms :math:`\mathbf{f}_{pf}^*` and :math:`g_{pf}^*` i
 .. math::
    A = \rho_f \left( \dfrac{\partial \phi_f}{\partial t} + \mathbf{u} \cdot \nabla \phi_f \right).
 
-In the above form, it is clear that the original CMT-nek solver can be used with minimal modification when including multiphase coupling from ppiclF, since every particle contribution can be included in the formulation through volumetric source terms only.
+Note in the present application, the term :math:`\partial \phi_f/\partial t` isn't included, but may be incorporated with minimal effort. In the above form, it is clear that the original CMT-nek solver can be used with minimal modification when including multiphase coupling from ppiclF, since every particle contribution can be included in the formulation through volumetric source terms only.
 
 User Interface
 ^^^^^^^^^^^^^^
@@ -116,7 +116,6 @@ User Interface
    #define PPICLF_P_JPHIPU 4
    #define PPICLF_P_JPHIPV 5
    #define PPICLF_P_JE 6
-
 
 The first block of lines denote the pre-defined directives. These directives are the maximum number of particles per processor, the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the number of projected fields.
 
