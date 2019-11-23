@@ -4,6 +4,12 @@
 `CMT-nek Case <https://github.com/dpzwick/ppiclF/tree/master/examples/CMT-nek>`_
 --------------------------------------------------------------------------------
 
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 10.00%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/JxWYpAv1CsM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+
 Background
 ^^^^^^^^^^
 This is an example that illustrates a two-dimensional multiphase shock tube. This example also illustrates linking ppiclF to the compressible Discontinuous Galerkin solver CMT-nek_.
@@ -46,96 +52,102 @@ With some manipulation, the final form of the particle equations which are being
 .. math::
    \dfrac{d \mathbf{X}}{d t} &= \mathbf{V}, \\ (C_M V_p \rho_f+ M_p) \dfrac{d \mathbf{V}}{d t} &= \mathbf{F}_{qs} - V_p (1 + C_M) \nabla p + \mathbf{F}_{c}, \\ C_{p} M_p \dfrac{d T}{d t} &= Q_{qs}
 
-The hydrodynamic forces must be projected so that they are correctly coupled to the fluid. In this case, the coupled hydrodynamic forces are the added mass and the quasi-steady force. Since in the above form the added mass force isn't directly avaiable, we save :math:`d \mathbf{V}/dt` before computing the new :math:`\dot{Y}` so that the entire added mass force may be computed.
-
-CMT-nek without particles solves the following equations
+As a compressible fluid solver, CMT-nek without particles solves the Euler equations given by
 
 .. math::
-   \dfrac{\partial \rho_f}{\partial t} + \nabla \cdot (\rho_f \mathbf{u}) &= 0, \\ \dfrac{\partial (\rho_f \mathbf{u})}{\partial t} + \nabla \cdot (\rho \mathbf{u} \mathbf{u} + p \mathbf{I} ) &= 0, \\ \dfrac{\partial (\rho_f E)}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} E + \mathbf{u} p) &= 0
+   \dfrac{\partial \rho_f}{\partial t} + \nabla \cdot (\rho_f \mathbf{u}) &= 0, \\ \dfrac{\partial (\rho_f \mathbf{u})}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} \mathbf{u} + p \mathbf{I} ) &= 0, \\ \dfrac{\partial (\rho_f E)}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} E + \mathbf{u} p) &= 0,
 
-The governing multiphase equations are
+where :math:`\rho_f` is the fluid density, :math:`\mathbf{u}` is the fluid velocity, :math:`E` is the total energy of the fluid, and :math:`\mathbf{I}` is the identity tensor. 
 
-.. math::
-   \dfrac{\partial \phi_f \rho_f}{\partial t} + \nabla \cdot (\rho_f \phi_f \mathbf{u}) &= 0, \\ \phi_f \rho_f \left( \dfrac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u}\right) + \nabla p &= \mathbf{f}_{pf}, \\ \phi_f \rho_f \left( \dfrac{\partial E}{\partial t} + \mathbf{u} \cdot \nabla E \right) + \nabla \cdot ( \phi_f \mathbf{u} p + \phi_p \mathbf{v} p) &= e_{pf}
-
-which can be arranged to yield the equations
-   
-.. Current place...
-
-The fluid equations that Nek5000 solves in this example are
+Similarly, the governing multiphase equations are given by `Ling et al. (2016) <https://doi.org/10.1063/1.4942184>`_ and are
 
 .. math::
-   \nabla \cdot \mathbf{u} &= - \dfrac{1}{\phi_f} \dfrac{D \phi_f}{D t}, \\ \rho_f \dfrac{D \mathbf{u}}{D t} &= \nabla \cdot \mathbf{\sigma}_f + \dfrac{\mathbf{f}_{pf}}{\phi_f},
+   \dfrac{\partial (\phi_f \rho_f)}{\partial t} + \nabla \cdot (\rho_f \phi_f \mathbf{u}) &= 0, \\ \phi_f \rho_f \left( \dfrac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u}\right) + \nabla p &= \mathbf{f}_{pf}, \\ \phi_f \rho_f \left( \dfrac{\partial E}{\partial t} + \mathbf{u} \cdot \nabla E \right) + \nabla \cdot ( \phi_f \mathbf{u} p + \phi_p \mathbf{v} p) &= g_{pf} + e_{pf}.
 
-where :math:`\mathbf{u}` is the fluid velocity, :math:`\rho_f` is the fluid density, :math:`\mathbf{\sigma}_f` is the Navier-Stokes fluid stress tensor, :math:`\phi_f` is the fluid volume fraction, and :math:`\phi_p` is the particle volume fraction (:math:`\phi_f + \phi_p = 1`), and :math:`\mathbf{f}_{pf}` is a particle-fluid coupling force.
+Here, :math:`\phi_f` is the fluid volume fraction, :math:`\mathbf{f}_{pf}` is the total hydrodynamic force from the particles on the fluid, :math:`g_{pf}` is the energy removed from the fluid by the work done by that force, and :math:`e_{pf}` is heat transfered directly from the particles to the fluid. Following a similar process as `Ling et al. (2016) <https://doi.org/10.1063/1.4942184>`_, these equations can be rearranged to yield
 
-The solution to these equations reside on a mesh within Nek5000. Since the particles are solved in the Lagrangian reference frame, their contributions on the mesh must be accounted for. Most notably, the explicit particle contributions from ppiclF to Nek5000 are :math:`\phi_p` (and as a result :math:`\phi_f`) and :math:`\mathbf{f}_{pf}`. The method by which these fields are obtained is :ref:`projection`.
+.. math::
+   \dfrac{\partial \rho_f}{\partial t} + \nabla \cdot (\rho_f \mathbf{u}) =& \dfrac{A}{\phi_f}, \\ \dfrac{\partial (\rho_f \mathbf{u})}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} \mathbf{u} + p \mathbf{I} ) =& \mathbf{u} \dfrac{A}{\phi_f} + \dfrac{\mathbf{f}_{pf}^*}{\phi_f}, \\ \dfrac{\partial (\rho_f E)}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} E + \mathbf{u} p) =& \dfrac{E A}{\phi_f} - \dfrac{p}{\phi_f} \mathbf{u} \cdot \nabla \phi_f \\ &- \dfrac{p}{\phi_f} \nabla \cdot (\phi_p \mathbf{v}) + \dfrac{g_{pf}^*}{\phi_f} + \dfrac{e_{pf}}{\phi_f},
+
+where the asterisk on the terms :math:`\mathbf{f}_{pf}^*` and :math:`g_{pf}^*` indicate that they pressure gradient force is no longer explicitly included in the hydrodynamic coupling as it is accounted for implicitly. Additionally, we have
+
+.. math::
+   A = \rho_f \left( \dfrac{\partial \phi_f}{\partial t} + \mathbf{u} \cdot \nabla \phi_f \right).
+
+In the above form, it is clear that the original CMT-nek solver can be used with minimal modification when including multiphase coupling from ppiclF, since every particle contribution can be included in the formulation through volumetric source terms only.
 
 User Interface
 ^^^^^^^^^^^^^^
-:ref:`hfile` for this case (`Nek5000 H-File <https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/user_routines/PPICLF_USER.h>`_) is given below and corresponds to the equations being solved and the property being stored for each particle. Note that since :math:`g` is constant, we do not included in in the list of properties.
+:ref:`hfile` for this case (`CMT-nek H-File <https://github.com/dpzwick/ppiclf/tree/master/examples/CMT-nek/user_routines/PPICLF_USER.h>`_) is given below and corresponds to the equations being solved and the property being stored for each particle. 
 
 .. code-block:: c
 
-   #define PPICLF_LRS 4
-   #define PPICLF_LRP 6
-   #define PPICLF_LEE 1000
-   #define PPICLF_LEX 6
-   #define PPICLF_LEY 6
-   #define PPICLF_LRP_INT 3
-   #define PPICLF_LRP_PRO 3
+   #define PPICLF_LPART 1500
+   #define PPICLF_LRS 5
+   #define PPICLF_LRP 12
+   #define PPICLF_LEE 2700
+   #define PPICLF_LEX 5
+   #define PPICLF_LEY 5
+   #define PPICLF_LRP_INT 8
+   #define PPICLF_LRP_PRO 6
    
    #define PPICLF_JX 1
    #define PPICLF_JY 2
    #define PPICLF_JVX 3
    #define PPICLF_JVY 4
+   #define PPICLF_JT 5
+   
    #define PPICLF_R_JRHOP 1
-   #define PPICLF_R_JDP 2
-   #define PPICLF_R_JVOLP 3
-   #define PPICLF_R_JPHIP 4
-   #define PPICLF_R_JUX 5
-   #define PPICLF_R_JUY 6
+   #define PPICLF_R_JRHOF 2
+   #define PPICLF_R_JDP 3
+   #define PPICLF_R_JVOLP 4
+   #define PPICLF_R_JPHIP 5
+   #define PPICLF_R_JUX 6
+   #define PPICLF_R_JUY 7
+   #define PPICLF_R_JDPDX 8
+   #define PPICLF_R_JDPDY 9
+   #define PPICLF_R_JCS 10
+   #define PPICLF_R_JT 11
+   #define PPICLF_R_JE 12
+   
    #define PPICLF_P_JPHIP 1
    #define PPICLF_P_JFX 2
    #define PPICLF_P_JFY 3
+   #define PPICLF_P_JPHIPU 4
+   #define PPICLF_P_JPHIPV 5
+   #define PPICLF_P_JE 6
 
-The two blocks of lines denote the pre-defined and user-only directives. The pre-defined directives are in the top block and are the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the number of projected fields. The user-only directives are in the bottom block.
 
-:ref:`ffile` for this case (`Nek5000 F-File <https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/user_routines/ppiclf_user.f>`_) has meaningful information in every routine. The routine ppiclf_user_SetYdot is nearly the same as the :ref:`dem3d` example but with an added drag model evaluation that is slightly more complicated than the :ref:`stokes2d` example. Also, the ppiclf_user_EvalNearestNeighbor routine is similar to the :ref:`dem3d` example. The new addition is the mapping of particle properties to be projected in ppiclf_user_MapProjPart. With some study, it can be found that the three fields being projected in 2D are:
+The first block of lines denote the pre-defined directives. These directives are the maximum number of particles per processor, the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the number of projected fields.
 
+The remaining blocks of lines indicate the index names of the particle variables being solved for, the property names for each particle, and the projected field names.
+
+:ref:`ffile` for this case (`CMT-nek F-File <https://github.com/dpzwick/ppiclf/tree/master/examples/CMT-nek/user_routines/ppiclf_user.f>`_) has meaningful information in every routine. For this case, the routines are similar to those defined in the :ref:`Nek5000_example`. The routine ppiclf_user_SetYDot is more complicated due to the more involved force and heat transfer models described previously. Additionally, the routine ppiclf_user_MapProjPart includes six fields being projected, which are given in the table below:
 
 .. table:: Projection mapping in ppiclf_user_MapProjPart.
    :align: center
 
-   +----------------------------------------+-------------------------------------+
-   | Projected Field (:math:`a(\mathbf{x})`)| Particle Property (:math:`A^{(i)}`) |
-   +========================================+=====================================+
-   | :math:`\phi_p(\mathbf{x})`             | :math:`V_p/D_p`                     |
-   +----------------------------------------+-------------------------------------+
-   | :math:`f_{pf,x}(\mathbf{x})`           | :math:`-F_{qs,x}/D_p`               |
-   +----------------------------------------+-------------------------------------+
-   | :math:`f_{pf,y}(\mathbf{x})`           | :math:`-F_{qs,y}/D_p`               |
-   +----------------------------------------+-------------------------------------+
+   +------------------------------------------+-----------------------------------------------------------------------------------------+
+   | Projected Field (:math:`a(\mathbf{x})`)  | Particle Property (:math:`A^{(i)}`)                                                     |
+   +==========================================+=========================================================================================+
+   | :math:`\phi_p`                           | :math:`V_p/D_p`                                                                         |
+   +------------------------------------------+-----------------------------------------------------------------------------------------+
+   | :math:`f_{pf,x}^*`                       | :math:`-(F_{qs,x}+F_{am,x})/D_p`                                                        |
+   +------------------------------------------+-----------------------------------------------------------------------------------------+
+   | :math:`f_{pf,y}^*`                       | :math:`-(F_{qs,y}+F_{am,y})/D_p`                                                        |
+   +------------------------------------------+-----------------------------------------------------------------------------------------+
+   | :math:`e_{pf} + g_{pf}^*`                | :math:`-(Q_{qs}+\mathbf{F}_{qs}\cdot\mathbf{V} + \mathbf{F}_{am}\cdot\mathbf{U}) /D_p`  |
+   +------------------------------------------+-----------------------------------------------------------------------------------------+
+   | :math:`\phi_{p} v_x`                     | :math:`V_p V_x/D_p`                                                                     |
+   +------------------------------------------+-----------------------------------------------------------------------------------------+
+   | :math:`\phi_{p} v_y`                     | :math:`V_p V_y/D_p`                                                                     |
+   +------------------------------------------+-----------------------------------------------------------------------------------------+
 
-where :math:`D_p` has been used to normalize the values in 2D. Note that the negative signs of the components of :math:`\mathbf{F}_{qs}` were added when the forces were stored in the storage array ppiclf_ydotc at the end of the routine ppiclf_user_SetYdot.
+As mentioned previously, the projected forces  are the added mass and the quasi-steady forces. Since in added mass force isn't directly computed in the final rearranged form of the particle equations, we save :math:`d \mathbf{V}/dt` before computing the new :math:`\dot{Y}` so that the entire added mass force may be computed. Additionally, the work done by the hydrodynamic forces and the heat transfer are stored in the same projected field. Similar to the :ref:`Nek5000_example`, the projected fields are normalized by :math:`D_p` in 2D. In 3D, this factor would not be included.
 
-The :ref:`external` calls for this example occur within the user initialization Nek5000 routine usrdat2 in the file `uniform.usr <https://github.com/dpzwick/ppiclf/tree/master/examples/Nek5000/uniform.usr>`_ with the minimum number of initialization and solve subroutines called. In this case:
+The :ref:`external` calls for this example occur within the user initialization Nek5000 routine usrdat2 in the file `mstube.usr <https://github.com/dpzwick/ppiclf/tree/master/examples/CMT-nek/mstube.usr>`_ with the minimum number of initialization and solve subroutines called. The majority of the solve routines are found in the routine cntchk, which is called every RK stage. The called ppiclF routines are nearly identical to the :ref:`Nek5000_example`, but with different initial conditions for the particle placement. Additionally, the extra volumetric source terms are computed in cmtchk and added as forcing in the routine userf.
 
-* ppiclf_comm_InitMPI is called to initialize the communication, 
-* ppiclf_comm_InitParticle is called with initial properites and conditions for the particles,
-* ppiclf_solve_InitGaussianFilter is called to initialize the fitler for projection to the overlap mesh,
-* ppiclf_comm_InitOverlapMesh is called to initialize the overlap mesh from Nek5000,
-* ppiclf_solve_InitNeighborBin is called with minimum interaction distance of the largest particle size,
-* ppiclf_solve_InitWall is called which sets a wall for the particles at the bottom of the domain,
-* ppiclf_solve_InitPeriodicX is called which sets periodicity in the x dimension along the domain.
-
-Additionally, the solve routines are called every time step in the same file in various Nek5000 user routines. In this example,
-
-* ppiclf_solve_InterpFieldUser is called three times to interpolate the fields :math:`\phi_p`, :math:`u_x`, and :math:`u_y` into the property array,
-* ppiclf_solve_IntegrateParticle is called to integrate the system at the current time step,
-* ppiclf_solve_GetProFldIJKEF is called to access the projected fields and use them locally in Nek5000 (force coupling and volume fraction effects).
-
-Also, note that ppiclF has been linked with Nek5000 in the Nek5000 makenek compilation file through the following lines:
+Similar to :ref:`Nek5000_example`, ppiclF has been linked with Nek5000 in the Nek5000 makenek compilation file through the following lines:
 
 .. code-block:: make
 
@@ -145,20 +157,26 @@ Also, note that ppiclF has been linked with Nek5000 in the Nek5000 makenek compi
 
 Compiling and Running
 ^^^^^^^^^^^^^^^^^^^^^
-This example can be tested with Nek5000 by issuing the following commands:
+This example can be tested with CMT-nek by issuing the following commands:
 
 .. code-block:: bash
 
    cd ~
-   git clone https://github.com/dpzwick/ppiclF.git            # clone ppiclF
-   git clone https://github.com/Nek5000/Nek5000.git           # clone Nek5000
-   mkdir TestCase                                             # make test directory
+   git clone https://github.com/dpzwick/ppiclF.git           # clone ppiclF
+   git clone -b jason https://github.com/dpzwick/Nek5000.git # clone CMT-nek
+   mkdir TestCase                                            # make test directory
    cd TestCase
-   cp -r ../ppiclF/examples/Nek5000/* .                       # copy example files to test case
-   cd ../ppiclF                                               # go to ppiclF code
-   cp ../TestCase/user_routines/* source/                     # copy ppiclf_user.f and PPICLF_USER.h to source
-   make                                                       # build ppiclF
+   cp -r ../ppiclF/examples/CMT-nek/* .                      # copy example files to test case
+   cd ../ppiclF                                              # go to ppiclF code
+   cp ../TestCase/user_routines/* source/                    # copy ppiclf_user.f and PPICLF_USER.h to source
+   make                                                      # build ppiclF
    cd ../TestCase
-   ./makenek uniform                                          # build Nek5000 and link with ppiclF
-   echo uniform > SESSION.NAME && echo `pwd`/ >> SESSION.NAME # create Nek5000 necessary file
-   mpirun -np 4 nek5000                                       # run case with 4 processors
+   ./makenek mstube                                          # build CMT-nek and link with ppiclF
+   echo mstube > SESSION.NAME && echo `pwd`/ >> SESSION.NAME # create CMT-nek necessary file
+   mpirun -np 4 nek5000                                      # run case with 4 processors
+
+Simulation Output
+^^^^^^^^^^^^^^^^^
+Previous work has been done with legacy codes and experiments for this setup. In this problem, a Mach 1.66 shock impacts a particle curtain of 2 mm at 20% volume fraction. The results can be found in `Ling et al. (2016) <https://doi.org/10.1063/1.4942184>`_. The upstream and downstream fronts of the particle curtain from ppiclF/CMT-nek can be compared to the legacy code and experiments. For ppiclF, the upstream and downstream fronts are taken by simply computing the maximum and minimum particle positions. 
+
+.. The scaled particle front postions in time are shown in the figure below (used with permission from).
