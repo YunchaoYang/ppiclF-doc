@@ -9,3 +9,4 @@ In this section, example cases are given demonstrating the use of ppiclF in diff
    examples/stokes_2d
    examples/dem_pack_3d
    examples/Nek5000
+   examples/CMT-nek

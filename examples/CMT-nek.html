@@ -1,0 +1,377 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CMT-nek Case &mdash; ppiclF Documentation</title>
+  
+
+  
+  
+  
+  
+    <link rel="canonical" href="https://dpzwick.github.io/ppiclF-doc/examples/CMT-nek.html"/>
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing" href="../contribute.html" />
+    <link rel="prev" title="Nek5000 Case" href="Nek5000.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ppiclF
+          
+
+          
+            
+            <img src="../_static/ppiclF.gif" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                v1.0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user.html">User Interface</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="stokes_2d.html">Stokes 2D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dem_pack_3d.html">DEM Packing 3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Nek5000.html">Nek5000 Case</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">CMT-nek Case</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-interface">User Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-and-running">Compiling and Running</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#simulation-output">Simulation Output</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../acknowledge.html">Acknowledgements</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ppiclF</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../examples.html">Examples</a> &raquo;</li>
+        
+      <li>CMT-nek Case</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cmt-nek-example">
+<span id="id1"></span><h1><a class="reference external" href="https://github.com/dpzwick/ppiclF/tree/master/examples/CMT-nek">CMT-nek Case</a><a class="headerlink" href="#cmt-nek-example" title="Permalink to this headline">¶</a></h1>
+<div style="position: relative; padding-bottom: 10.00%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/JxWYpAv1CsM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div><div class="section" id="background">
+<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
+<p>This is an example that illustrates a two-dimensional multiphase shock tube. This example also illustrates linking ppiclF to the compressible Discontinuous Galerkin solver <a class="reference external" href="https://github.com/dpzwick/Nek5000/tree/jason">CMT-nek</a>.</p>
+<p>The core particle equations being solved in this case are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\dfrac{d \mathbf{X}}{d t} &amp;= \mathbf{V}, \\ M_p \dfrac{d \mathbf{V}}{d t} &amp;= \mathbf{F}_{qs} + \mathbf{F}_{pg} + \mathbf{F}_{am} + \mathbf{F}_{c}, \\ C_{p} M_p \dfrac{d T}{d t} &amp;= Q_{qs}\end{split}\]</div>
+<p>where, for each particle we have the position vector <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>, the velocity vector <span class="math notranslate nohighlight">\(\mathbf{V}\)</span>, the particle temperature <span class="math notranslate nohighlight">\(T\)</span>, the particle mass <span class="math notranslate nohighlight">\(M_p\)</span>, the particle specific heat <span class="math notranslate nohighlight">\(C_p\)</span>, the viscous drag force <span class="math notranslate nohighlight">\(\mathbf{F}_{qs}\)</span>, the pressure gradient force <span class="math notranslate nohighlight">\(\mathbf{F}_{pg}\)</span>, the added-mass force <span class="math notranslate nohighlight">\(\mathbf{F}_{am}\)</span>, the collision force <span class="math notranslate nohighlight">\(\mathbf{F}_{c}\)</span>, and the quasi-steady heat transfer <span class="math notranslate nohighlight">\(Q_{qs}\)</span>. The position and velocity vectors are given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbf{X} = \begin{bmatrix}X \\ Y \end{bmatrix},\quad \mathbf{V} = \begin{bmatrix}V_x \\ V_y \end{bmatrix}.\end{split}\]</div>
+<p>The collision force in the same as in the <a class="reference internal" href="dem_pack_3d.html#dem3d"><span class="std std-ref">DEM Packing 3D</span></a> example. The drag force is complicated so it is not detailed here. It is given by the model found in <a class="reference external" href="https://doi.org/10.2514/1.J050161">Parmar et al. (2010)</a>.</p>
+<p>The pressure gradient force is given by</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{F}_{pg} = - V_p \nabla p\]</div>
+<p>where <span class="math notranslate nohighlight">\(V_p\)</span> is the particle volume and <span class="math notranslate nohighlight">\(p\)</span> is the fluid pressure at each particle’s position. The added-mass force is given by</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{F}_{am} = V_p C_M \left( -\nabla p - \dfrac{ d (\rho_f \mathbf{V})}{d t} \right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(C_M\)</span> is an added mass coefficient given by the Mach number corrections of <a class="reference external" href="https://doi.org/10.1098/rsta.2008.0027">Parmar et al. (2008)</a> and the volume fraction corrections of <a class="reference external" href="https://doi.org/10.1016/0009-2509(64)85067-3">Zuber (1964)</a>. For simplicity, we assume that the density of the fluid at each particle’s location <span class="math notranslate nohighlight">\(\rho_f\)</span> is relatively constant in time so that it can be pulled out of the time derivative.</p>
+<p>The quasi-steady heat transfer is given by</p>
+<div class="math notranslate nohighlight">
+\[Q_{qs} = 2 \pi \kappa D_p (T_f - T) \Phi_{qs}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\kappa = C_{p,f}/Pr\)</span>, <span class="math notranslate nohighlight">\(C_{p,f}\)</span> is the specific heat at constant pressure of the fluid at the particle’s location, <span class="math notranslate nohighlight">\(Pr\)</span> is the Prandtl number of the fluid at the particle’s position, <span class="math notranslate nohighlight">\(T_f\)</span> is the fluid temperature at the particle’s position, and <span class="math notranslate nohighlight">\(\Phi_{qs}\)</span> is a correction factor for the heat transfer that is a function of the particle Reynolds number and the Prandtl number.</p>
+<p>With some manipulation, the final form of the particle equations which are being solved are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\dfrac{d \mathbf{X}}{d t} &amp;= \mathbf{V}, \\ (C_M V_p \rho_f+ M_p) \dfrac{d \mathbf{V}}{d t} &amp;= \mathbf{F}_{qs} - V_p (1 + C_M) \nabla p + \mathbf{F}_{c}, \\ C_{p} M_p \dfrac{d T}{d t} &amp;= Q_{qs}\end{split}\]</div>
+<p>As a compressible fluid solver, CMT-nek without particles solves the Euler equations given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\dfrac{\partial \rho_f}{\partial t} + \nabla \cdot (\rho_f \mathbf{u}) &amp;= 0, \\ \dfrac{\partial (\rho_f \mathbf{u})}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} \mathbf{u} + p \mathbf{I} ) &amp;= 0, \\ \dfrac{\partial (\rho_f E)}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} E + \mathbf{u} p) &amp;= 0,\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho_f\)</span> is the fluid density, <span class="math notranslate nohighlight">\(\mathbf{u}\)</span> is the fluid velocity, <span class="math notranslate nohighlight">\(E\)</span> is the total energy of the fluid, and <span class="math notranslate nohighlight">\(\mathbf{I}\)</span> is the identity tensor.</p>
+<p>Similarly, the governing multiphase equations are given by <a class="reference external" href="https://doi.org/10.1063/1.4942184">Ling et al. (2016)</a> and are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\dfrac{\partial (\phi_f \rho_f)}{\partial t} + \nabla \cdot (\rho_f \phi_f \mathbf{u}) &amp;= 0, \\ \phi_f \rho_f \left( \dfrac{\partial \mathbf{u}}{\partial t} + \mathbf{u} \cdot \nabla \mathbf{u}\right) + \nabla p &amp;= \mathbf{f}_{pf}, \\ \phi_f \rho_f \left( \dfrac{\partial E}{\partial t} + \mathbf{u} \cdot \nabla E \right) + \nabla \cdot ( \phi_f \mathbf{u} p + \phi_p \mathbf{v} p) &amp;= g_{pf} + e_{pf}.\end{split}\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(\phi_f\)</span> is the fluid volume fraction, <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}\)</span> is the total hydrodynamic force from the particles on the fluid, <span class="math notranslate nohighlight">\(g_{pf}\)</span> is the energy removed from the fluid by the work done by that force, and <span class="math notranslate nohighlight">\(e_{pf}\)</span> is heat transfered directly from the particles to the fluid. Following a similar process as <a class="reference external" href="https://doi.org/10.1063/1.4942184">Ling et al. (2016)</a>, these equations can be rearranged to yield</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\dfrac{\partial \rho_f}{\partial t} + \nabla \cdot (\rho_f \mathbf{u}) =&amp; \dfrac{A}{\phi_f}, \\ \dfrac{\partial (\rho_f \mathbf{u})}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} \mathbf{u} + p \mathbf{I} ) =&amp; \mathbf{u} \dfrac{A}{\phi_f} + \dfrac{\mathbf{f}_{pf}^*}{\phi_f}, \\ \dfrac{\partial (\rho_f E)}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} E + \mathbf{u} p) =&amp; \dfrac{E A}{\phi_f} - \dfrac{p}{\phi_f} \mathbf{u} \cdot \nabla \phi_f \\ &amp;- \dfrac{p}{\phi_f} \nabla \cdot (\phi_p \mathbf{v}) + \dfrac{g_{pf}^*}{\phi_f} + \dfrac{e_{pf}}{\phi_f},\end{split}\]</div>
+<p>where the asterisk on the terms <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}^*\)</span> and <span class="math notranslate nohighlight">\(g_{pf}^*\)</span> indicate that they pressure gradient force is no longer explicitly included in the hydrodynamic coupling as it is accounted for implicitly. Additionally, we have</p>
+<div class="math notranslate nohighlight">
+\[A = \rho_f \left( \dfrac{\partial \phi_f}{\partial t} + \mathbf{u} \cdot \nabla \phi_f \right).\]</div>
+<p>In the above form, it is clear that the original CMT-nek solver can be used with minimal modification when including multiphase coupling from ppiclF, since every particle contribution can be included in the formulation through volumetric source terms only.</p>
+</div>
+<div class="section" id="user-interface">
+<h2>User Interface<a class="headerlink" href="#user-interface" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../user/hfile.html#hfile"><span class="std std-ref">The H-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/CMT-nek/user_routines/PPICLF_USER.h">CMT-nek H-File</a>) is given below and corresponds to the equations being solved and the property being stored for each particle.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define PPICLF_LPART 1500</span>
+<span class="cp">#define PPICLF_LRS 5</span>
+<span class="cp">#define PPICLF_LRP 12</span>
+<span class="cp">#define PPICLF_LEE 2700</span>
+<span class="cp">#define PPICLF_LEX 5</span>
+<span class="cp">#define PPICLF_LEY 5</span>
+<span class="cp">#define PPICLF_LRP_INT 8</span>
+<span class="cp">#define PPICLF_LRP_PRO 6</span>
+
+<span class="cp">#define PPICLF_JX 1</span>
+<span class="cp">#define PPICLF_JY 2</span>
+<span class="cp">#define PPICLF_JVX 3</span>
+<span class="cp">#define PPICLF_JVY 4</span>
+<span class="cp">#define PPICLF_JT 5</span>
+
+<span class="cp">#define PPICLF_R_JRHOP 1</span>
+<span class="cp">#define PPICLF_R_JRHOF 2</span>
+<span class="cp">#define PPICLF_R_JDP 3</span>
+<span class="cp">#define PPICLF_R_JVOLP 4</span>
+<span class="cp">#define PPICLF_R_JPHIP 5</span>
+<span class="cp">#define PPICLF_R_JUX 6</span>
+<span class="cp">#define PPICLF_R_JUY 7</span>
+<span class="cp">#define PPICLF_R_JDPDX 8</span>
+<span class="cp">#define PPICLF_R_JDPDY 9</span>
+<span class="cp">#define PPICLF_R_JCS 10</span>
+<span class="cp">#define PPICLF_R_JT 11</span>
+<span class="cp">#define PPICLF_R_JE 12</span>
+
+<span class="cp">#define PPICLF_P_JPHIP 1</span>
+<span class="cp">#define PPICLF_P_JFX 2</span>
+<span class="cp">#define PPICLF_P_JFY 3</span>
+<span class="cp">#define PPICLF_P_JPHIPU 4</span>
+<span class="cp">#define PPICLF_P_JPHIPV 5</span>
+<span class="cp">#define PPICLF_P_JE 6</span>
+</pre></div>
+</div>
+<p>The first block of lines denote the pre-defined directives. These directives are the maximum number of particles per processor, the number of equations, the number of properties, the sizes of the overlap mesh, the number of interpolated fields, and the number of projected fields.</p>
+<p>The remaining blocks of lines indicate the index names of the particle variables being solved for, the property names for each particle, and the projected field names.</p>
+<p><a class="reference internal" href="../user/ffile.html#ffile"><span class="std std-ref">The F-File</span></a> for this case (<a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/CMT-nek/user_routines/ppiclf_user.f">CMT-nek F-File</a>) has meaningful information in every routine. For this case, the routines are similar to those defined in the <a class="reference internal" href="Nek5000.html#nek5000-example"><span class="std std-ref">Nek5000 Case</span></a>. The routine ppiclf_user_SetYDot is more complicated due to the more involved force and heat transfer models described previously. Additionally, the routine ppiclf_user_MapProjPart includes six fields being projected, which are given in the table below:</p>
+<table class="docutils align-center" id="id4">
+<caption><span class="caption-text">Projection mapping in ppiclf_user_MapProjPart.</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Projected Field (<span class="math notranslate nohighlight">\(a(\mathbf{x})\)</span>)</p></th>
+<th class="head"><p>Particle Property (<span class="math notranslate nohighlight">\(A^{(i)}\)</span>)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\phi_p\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(V_p/D_p\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f_{pf,x}^*\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(-(F_{qs,x}+F_{am,x})/D_p\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(f_{pf,y}^*\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(-(F_{qs,y}+F_{am,y})/D_p\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(e_{pf} + g_{pf}^*\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(-(Q_{qs}+\mathbf{F}_{qs}\cdot\mathbf{V} + \mathbf{F}_{am}\cdot\mathbf{U}) /D_p\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\phi_{p} v_x\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(V_p V_x/D_p\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\phi_{p} v_y\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(V_p V_y/D_p\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>As mentioned previously, the projected forces  are the added mass and the quasi-steady forces. Since in added mass force isn’t directly computed in the final rearranged form of the particle equations, we save <span class="math notranslate nohighlight">\(d \mathbf{V}/dt\)</span> before computing the new <span class="math notranslate nohighlight">\(\dot{Y}\)</span> so that the entire added mass force may be computed. Additionally, the work done by the hydrodynamic forces and the heat transfer are stored in the same projected field. Similar to the <a class="reference internal" href="Nek5000.html#nek5000-example"><span class="std std-ref">Nek5000 Case</span></a>, the projected fields are normalized by <span class="math notranslate nohighlight">\(D_p\)</span> in 2D. In 3D, this factor would not be included.</p>
+<p>The <a class="reference internal" href="../user/external.html#external"><span class="std std-ref">External Interface</span></a> calls for this example occur within the user initialization Nek5000 routine usrdat2 in the file <a class="reference external" href="https://github.com/dpzwick/ppiclf/tree/master/examples/CMT-nek/mstube.usr">mstube.usr</a> with the minimum number of initialization and solve subroutines called. The majority of the solve routines are found in the routine cntchk, which is called every RK stage. The called ppiclF routines are nearly identical to the <a class="reference internal" href="Nek5000.html#nek5000-example"><span class="std std-ref">Nek5000 Case</span></a>, but with different initial conditions for the particle placement. Additionally, the extra volumetric source terms are computed in cmtchk and added as forcing in the routine userf.</p>
+<p>Similar to <a class="reference internal" href="Nek5000.html#nek5000-example"><span class="std std-ref">Nek5000 Case</span></a>, ppiclF has been linked with Nek5000 in the Nek5000 makenek compilation file through the following lines:</p>
+<div class="highlight-make notranslate"><div class="highlight"><pre><span></span><span class="nv">SOURCE_ROOT_PPICLF</span><span class="o">=</span><span class="nv">$HOME</span>/libraries/ppiclF/source
+<span class="nv">FFLAGS</span><span class="o">=</span><span class="s2">&quot; -I</span><span class="nv">$SOURCE_ROOT_PPICLF</span><span class="s2">&quot;</span>
+<span class="nv">USR_LFLAGS</span><span class="o">+=</span><span class="s2">&quot; -L</span><span class="nv">$SOURCE_ROOT_PPICLF</span><span class="s2"> -lppiclF&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="compiling-and-running">
+<h2>Compiling and Running<a class="headerlink" href="#compiling-and-running" title="Permalink to this headline">¶</a></h2>
+<p>This example can be tested with CMT-nek by issuing the following commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~
+git clone https://github.com/dpzwick/ppiclF.git           <span class="c1"># clone ppiclF</span>
+git clone -b jason https://github.com/dpzwick/Nek5000.git <span class="c1"># clone CMT-nek</span>
+mkdir TestCase                                            <span class="c1"># make test directory</span>
+<span class="nb">cd</span> TestCase
+cp -r ../ppiclF/examples/CMT-nek/* .                      <span class="c1"># copy example files to test case</span>
+<span class="nb">cd</span> ../ppiclF                                              <span class="c1"># go to ppiclF code</span>
+cp ../TestCase/user_routines/* source/                    <span class="c1"># copy ppiclf_user.f and PPICLF_USER.h to source</span>
+make                                                      <span class="c1"># build ppiclF</span>
+<span class="nb">cd</span> ../TestCase
+./makenek mstube                                          <span class="c1"># build CMT-nek and link with ppiclF</span>
+<span class="nb">echo</span> mstube &gt; SESSION.NAME <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/ &gt;&gt; SESSION.NAME <span class="c1"># create CMT-nek necessary file</span>
+mpirun -np <span class="m">4</span> nek5000                                      <span class="c1"># run case with 4 processors</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="simulation-output">
+<h2>Simulation Output<a class="headerlink" href="#simulation-output" title="Permalink to this headline">¶</a></h2>
+<p>Previous work has been done with legacy codes and experiments for this setup. In this problem, a Mach 1.66 shock impacts a particle curtain of 2 mm at 20% volume fraction. The results can be found in <a class="reference external" href="https://doi.org/10.1063/1.4942184">Ling et al. (2016)</a>. The upstream and downstream fronts of the particle curtain from ppiclF/CMT-nek can be compared to the legacy code and experiments. For ppiclF, the upstream and downstream fronts are taken by simply computing the maximum and minimum particle positions.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, D. Zwick
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
