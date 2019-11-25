@@ -72,7 +72,7 @@ Here, :math:`\phi_f` is the fluid volume fraction, :math:`\mathbf{f}_{pf}` is th
 where the asterisk on the terms :math:`\mathbf{f}_{pf}^*` and :math:`g_{pf}^*` indicate that they pressure gradient force is no longer explicitly included in the hydrodynamic coupling as it is accounted for implicitly. Additionally, we have
 
 .. math::
-   A = \rho_f \left( \dfrac{\partial \phi_f}{\partial t} + \mathbf{u} \cdot \nabla \phi_f \right).
+   A = - \rho_f \left( \dfrac{\partial \phi_f}{\partial t} + \mathbf{u} \cdot \nabla \phi_f \right).
 
 Note in the present application, the term :math:`\partial \phi_f/\partial t` isn't included, but may be incorporated with minimal effort. In the above form, it is clear that the original CMT-nek solver can be used with minimal modification when including multiphase coupling from ppiclF, since every particle contribution can be included in the formulation through volumetric source terms only.
 
