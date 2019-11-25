@@ -223,7 +223,7 @@
 \[\begin{split}\dfrac{\partial \rho_f}{\partial t} + \nabla \cdot (\rho_f \mathbf{u}) =&amp; \dfrac{A}{\phi_f}, \\ \dfrac{\partial (\rho_f \mathbf{u})}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} \mathbf{u} + p \mathbf{I} ) =&amp; \mathbf{u} \dfrac{A}{\phi_f} + \dfrac{\mathbf{f}_{pf}^*}{\phi_f}, \\ \dfrac{\partial (\rho_f E)}{\partial t} + \nabla \cdot (\rho_f \mathbf{u} E + \mathbf{u} p) =&amp; \dfrac{E A}{\phi_f} - \dfrac{p}{\phi_f} \mathbf{u} \cdot \nabla \phi_f \\ &amp;- \dfrac{p}{\phi_f} \nabla \cdot (\phi_p \mathbf{v}) + \dfrac{g_{pf}^*}{\phi_f} + \dfrac{e_{pf}}{\phi_f},\end{split}\]</div>
 <p>where the asterisk on the terms <span class="math notranslate nohighlight">\(\mathbf{f}_{pf}^*\)</span> and <span class="math notranslate nohighlight">\(g_{pf}^*\)</span> indicate that they pressure gradient force is no longer explicitly included in the hydrodynamic coupling as it is accounted for implicitly. Additionally, we have</p>
 <div class="math notranslate nohighlight">
-\[A = \rho_f \left( \dfrac{\partial \phi_f}{\partial t} + \mathbf{u} \cdot \nabla \phi_f \right).\]</div>
+\[A = - \rho_f \left( \dfrac{\partial \phi_f}{\partial t} + \mathbf{u} \cdot \nabla \phi_f \right).\]</div>
 <p>Note in the present application, the term <span class="math notranslate nohighlight">\(\partial \phi_f/\partial t\)</span> isn’t included, but may be incorporated with minimal effort. In the above form, it is clear that the original CMT-nek solver can be used with minimal modification when including multiphase coupling from ppiclF, since every particle contribution can be included in the formulation through volumetric source terms only.</p>
 </div>
 <div class="section" id="user-interface">
