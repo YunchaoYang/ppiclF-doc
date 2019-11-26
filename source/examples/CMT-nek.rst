@@ -176,6 +176,10 @@ This example can be tested with CMT-nek by issuing the following commands:
 
 Simulation Output
 ^^^^^^^^^^^^^^^^^
-Previous work has been done with legacy codes and experiments for this setup. In this problem, a Mach 1.66 shock impacts a particle curtain of 2 mm at 20% volume fraction. The results can be found in `Ling et al. (2016) <https://doi.org/10.1063/1.4942184>`_. The upstream and downstream fronts of the particle curtain from ppiclF/CMT-nek can be compared to the legacy code and experiments. For ppiclF, the upstream and downstream fronts are taken by simply computing the maximum and minimum particle positions. 
+Previous work has been done with legacy codes and experiments for this setup. In this problem, a Mach 1.66 shock impacts a particle curtain of 2 mm at 20% volume fraction. Previous experiments and simulations (not ppiclF) can be found in `Ling et al. (2016) <https://doi.org/10.1063/1.4942184>`_. The upstream and downstream fronts of the particle curtain from ppiclF/CMT-nek can be compared to the legacy code and experiments. For ppiclF, the upstream and downstream fronts are taken by simply computing the maximum and minimum particle positions. The figure below shows a good comparison.
 
-.. The scaled particle front postions in time are shown in the figure below (used with permission from).
+.. figure:: ling_compare.png
+   :align: center
+   :figclass: align-center
+
+   Comparison of ppiclF/CMT-nek to previous experiments and a legacy code. ppiclF/CMT-nek is shown in the magenta curve. The background image is reproduced from Figure 14 from Ling, Y., et al. "Interaction of a planar shock wave with a dense particle curtain: Modeling and experiments." Physics of Fluids 24.11 (2012): 113301, with the permission of AIP Publishing.
